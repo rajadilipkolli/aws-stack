@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/<rajadileepkolli/aws-stack/branch/master/graph/badge.svg)](https://codecov.io/gh/rajadileepkolli/aws-stack)
+[![codecov](https://codecov.io/gh/rajadileepkolli/aws-stack/branch/main/graph/badge.svg?token=V1TAITDKBK)](https://codecov.io/gh/rajadileepkolli/aws-stack)
 
 
 # Getting Started

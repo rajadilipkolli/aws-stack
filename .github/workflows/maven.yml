@@ -31,3 +31,8 @@ jobs:
 
       - name: Build with Maven
         run: ./mvnw clean install
+      - name: Upload coverage to Codecov  
+        uses: codecov/codecov-action@v1.5.0
+          with:
+            token: ${{ secrets.CODECOV_TOKEN }}
+

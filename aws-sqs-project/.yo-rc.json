@@ -1,0 +1,14 @@
+{
+  "generator-springboot": {
+    "appName": "myfirstawsproject",
+    "packageName": "com.learning.awspring",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "liquibase",
+    "features": [
+      "localstack"
+    ],
+    "buildTool": "maven",
+    "packageFolder": "com/learning/awspring",
+    "liquibaseMigrationCounter": 2
+  }
+}

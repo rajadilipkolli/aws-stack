@@ -10,14 +10,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 @ActiveProfiles({PROFILE_TEST, PROFILE_IT})
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@ContextConfiguration(initializers = {DBContainerInitializer.class})
-@Import(LocalStackConfig.class)
+@Import({LocalStackConfig.class, DBContainerInitializer.class})
 @AutoConfigureMockMvc
+@Testcontainers
 public abstract class AbstractIntegrationTest {
 
     @Autowired protected MockMvc mockMvc;

@@ -1,4 +1,4 @@
-# myfirstawsproject
+# aws-sqs-project
 
 ### Run tests
 `$ ./mvnw clean verify`

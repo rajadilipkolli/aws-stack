@@ -12,8 +12,8 @@
 	<groupId>com.learning.awspring</groupId>
 	<artifactId>aws-sqs-project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>myfirstawsproject</name>
-	<description>myfirstawsproject</description>
+	<name>aws-sqs-project</name>
+	<description>Spring Boot Integration with AWS SQS</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

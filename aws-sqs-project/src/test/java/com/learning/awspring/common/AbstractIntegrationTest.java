@@ -11,14 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 @ActiveProfiles({PROFILE_TEST, PROFILE_IT})
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@Import({LocalStackConfig.class, DBContainerInitializer.class})
+@Import({LocalStackConfig.class})
 @AutoConfigureMockMvc
-@Testcontainers
-public abstract class AbstractIntegrationTest {
+public abstract class AbstractIntegrationTest extends DBContainerInitializer {
 
     @Autowired protected MockMvc mockMvc;
 

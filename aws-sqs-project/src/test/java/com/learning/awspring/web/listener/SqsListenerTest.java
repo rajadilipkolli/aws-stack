@@ -1,4 +1,4 @@
-package com.learning.awspring;
+package com.learning.awspring.web.listener;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

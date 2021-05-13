@@ -41,6 +41,7 @@ jobs:
           name: dockertmt/aws-stack
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          workdir: aws-sqs-project
           tags: "latest"
           buildoptions: "--compress --force-rm"
 

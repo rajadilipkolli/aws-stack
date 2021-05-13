@@ -42,7 +42,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       
-      - name: Create docker loadbalancer image
+      - name: Create docker aws-sqs-project image
         run: docker build -t docker.io/dockertmt/aws-sqs-project:latest -t docker.io/dockertmt/aws-sqs-project:$SHA8 ./aws-sqs-project
 
       - name: Push docker images

@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Run Unit & Integration Tests
+    name: Run Unit, Integration Tests & Push to Docker Registry
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: dockertmt/aws-stack
+          name: dockertmt/aws-sqs-project
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           workdir: aws-sqs-project

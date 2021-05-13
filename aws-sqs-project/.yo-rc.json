@@ -1,6 +1,6 @@
 {
   "generator-springboot": {
-    "appName": "myfirstawsproject",
+    "appName": "aws-sqs-project",
     "packageName": "com.learning.awspring",
     "databaseType": "postgresql",
     "dbMigrationTool": "liquibase",

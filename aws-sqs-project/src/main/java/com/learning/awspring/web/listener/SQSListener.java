@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -27,16 +28,20 @@ public class SQSListener {
     // Here in this example we are printing the message on the console and the message will be
     // deleted from the queue once it is successfully delivered.
     @SqsListener(value = AppConstants.QUEUE, deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
-    public void readMessageFromSqs(@Valid Message message, @Header("MessageId") String messageId) {
+    public void readMessageFromSqs(@Valid Message message, @Header("MessageId") String messageId)
+            throws JsonProcessingException {
         log.info("Received message= {} with messageId= {}", message, messageId);
 
+        saveMessageToDatabase(message, messageId);
+    }
+
+    @Async
+    private void saveMessageToDatabase(Message message, String messageId)
+            throws JsonProcessingException {
         InBoundLog inboundLog = new InBoundLog();
         inboundLog.setCreatedDate(LocalDateTime.now());
-        try {
-            inboundLog.setReceivedJson(this.objectMapper.writeValueAsString(message));
-        } catch (JsonProcessingException e) {
-            log.error("Unable to parse received message ", e);
-        }
+        inboundLog.setMessageId(messageId);
+        inboundLog.setReceivedJson(this.objectMapper.writeValueAsString(message));
         this.inBoundLogRepository.save(inboundLog);
     }
 }

@@ -29,7 +29,7 @@ public class LocalStackConfig {
     public static final AWSCredentials TEST_CREDENTIALS =
             new BasicAWSCredentials(TEST_ACCESS_KEY, TEST_SECRET_KEY);
 
-    static LocalStackContainer localStackContainer;
+    static final LocalStackContainer localStackContainer;
 
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");

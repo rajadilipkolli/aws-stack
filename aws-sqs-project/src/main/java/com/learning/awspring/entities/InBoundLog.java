@@ -33,6 +33,9 @@ public class InBoundLog {
             allocationSize = 5)
     private Long id;
 
+    @Column(nullable = false, name = "message_id")
+    private String messageId;
+
     @Type(type = "json")
     @Column(columnDefinition = "jsonb", name = "received_json")
     private String receivedJson;

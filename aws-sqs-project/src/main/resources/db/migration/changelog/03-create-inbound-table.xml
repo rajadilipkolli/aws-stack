@@ -10,6 +10,9 @@
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="inbound_log_pkey"/>
             </column>
+            <column name="message_id" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
             <column name="received_json" type="JSONB"/>
             <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </createTable>

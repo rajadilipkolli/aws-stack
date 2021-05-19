@@ -20,6 +20,13 @@ jobs:
 
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
+        
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache local Maven repository
         uses: actions/cache@v2
@@ -29,8 +36,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build with Maven
-        run: ./mvnw clean install
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./mvnw -B clean install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
       - name: Upload coverage to Codecov  
         uses: codecov/codecov-action@v1.5.0
         with:

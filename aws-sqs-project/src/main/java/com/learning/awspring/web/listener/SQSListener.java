@@ -38,7 +38,7 @@ public class SQSListener {
     @Async
     private void saveMessageToDatabase(Message message, String messageId)
             throws JsonProcessingException {
-        InBoundLog inboundLog = new InBoundLog();
+        var inboundLog = new InBoundLog();
         inboundLog.setCreatedDate(LocalDateTime.now());
         inboundLog.setMessageId(messageId);
         inboundLog.setReceivedJson(this.objectMapper.writeValueAsString(message));

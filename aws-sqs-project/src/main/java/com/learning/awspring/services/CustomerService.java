@@ -32,7 +32,7 @@ public class CustomerService {
     }
 
     public Customer saveCustomer(CustomerDTO customerDTO) {
-        Customer customer = this.customerMapper.toEntity(customerDTO);
+        var customer = this.customerMapper.toEntity(customerDTO);
         return customerRepository.save(customer);
     }
 
@@ -44,7 +44,7 @@ public class CustomerService {
         return findCustomerById(id)
                 .map(
                         customerObj -> {
-                            Customer customer = this.customerMapper.toEntity(customerDTO);
+                            var customer = this.customerMapper.toEntity(customerDTO);
                             customer.setId(customerObj.getId());
                             return customerRepository.save(customer);
                         });

@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.learning.awspring.common.AbstractIntegrationTest;
+import com.learning.awspring.domain.CustomerDTO;
 import com.learning.awspring.entities.Customer;
 import com.learning.awspring.repositories.CustomerRepository;
 import java.util.ArrayList;
@@ -58,14 +59,14 @@ class CustomerControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldCreateNewCustomer() throws Exception {
-        Customer customer = new Customer(null, "New Customer");
+        CustomerDTO customerDTO = new CustomerDTO("New Customer");
         this.mockMvc
                 .perform(
                         post("/api/customers")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customer)))
+                                .content(objectMapper.writeValueAsString(customerDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.text", is(customer.getText())));
+                .andExpect(jsonPath("$.text", is(customerDTO.getText())));
     }
 
     @Test
@@ -94,15 +95,15 @@ class CustomerControllerIT extends AbstractIntegrationTest {
     @Test
     void shouldUpdateCustomer() throws Exception {
         Customer customer = customerList.get(0);
-        customer.setText("Updated Customer");
+        CustomerDTO customerDTO = new CustomerDTO("Updated Customer");
 
         this.mockMvc
                 .perform(
                         put("/api/customers/{id}", customer.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customer)))
+                                .content(objectMapper.writeValueAsString(customerDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text", is(customer.getText())));
+                .andExpect(jsonPath("$.text", is(customerDTO.getText())));
     }
 
     @Test

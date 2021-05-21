@@ -1,5 +1,6 @@
 package com.learning.awspring.web.controllers;
 
+import com.learning.awspring.domain.CustomerDTO;
 import com.learning.awspring.entities.Customer;
 import com.learning.awspring.services.CustomerService;
 import java.util.List;
@@ -43,20 +44,16 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer createCustomer(@RequestBody @Validated Customer customer) {
-        return customerService.saveCustomer(customer);
+    public Customer createCustomer(@RequestBody @Validated CustomerDTO customerDTO) {
+        return customerService.saveCustomer(customerDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(
-            @PathVariable Long id, @RequestBody Customer customer) {
+            @PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         return customerService
-                .findCustomerById(id)
-                .map(
-                        customerObj -> {
-                            customer.setId(id);
-                            return ResponseEntity.ok(customerService.saveCustomer(customer));
-                        })
+                .updateCustomer(id, customerDTO)
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 

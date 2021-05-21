@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.learning.awspring.domain.CustomerDTO;
 import com.learning.awspring.entities.Customer;
 import com.learning.awspring.services.CustomerService;
 import java.util.ArrayList;
@@ -88,10 +89,10 @@ class CustomerControllerTest {
 
     @Test
     void shouldCreateNewCustomer() throws Exception {
-        given(customerService.saveCustomer(any(Customer.class)))
-                .willAnswer((invocation) -> invocation.getArgument(0));
+        given(customerService.saveCustomer(any(CustomerDTO.class)))
+                .willReturn(new Customer(1L, "some text"));
 
-        Customer customer = new Customer(1L, "some text");
+        CustomerDTO customer = new CustomerDTO("some text");
         this.mockMvc
                 .perform(
                         post("/api/customers")
@@ -128,16 +129,16 @@ class CustomerControllerTest {
     @Test
     void shouldUpdateCustomer() throws Exception {
         Long customerId = 1L;
+        CustomerDTO customerDTO = new CustomerDTO("Updated text");
         Customer customer = new Customer(customerId, "Updated text");
-        given(customerService.findCustomerById(customerId)).willReturn(Optional.of(customer));
-        given(customerService.saveCustomer(any(Customer.class)))
-                .willAnswer((invocation) -> invocation.getArgument(0));
+        given(customerService.updateCustomer(customerId, customerDTO))
+                .willReturn(Optional.of(customer));
 
         this.mockMvc
                 .perform(
-                        put("/api/customers/{id}", customer.getId())
+                        put("/api/customers/{id}", customerId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customer)))
+                                .content(objectMapper.writeValueAsString(customerDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text", is(customer.getText())));
     }

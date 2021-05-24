@@ -10,27 +10,33 @@ jobs:
   build:
     name: Run Unit, Integration Tests & Push to Docker Registry
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 11, 15 ]
+
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
-      - name: Set up JDK 11
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          distribution: 'adopt'
+          java-version: ${{ matrix.java-version }}
 
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
         
       - name: Cache SonarCloud packages
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.0
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache local Maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -41,11 +47,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw -B clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+
       - name: Upload coverage to Codecov  
         uses: codecov/codecov-action@v1.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:

@@ -1,9 +1,9 @@
 package com.learning.awspring.web.controllers;
 
+import com.learning.awspring.domain.CustomerDTO;
 import com.learning.awspring.entities.Customer;
 import com.learning.awspring.services.CustomerService;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/customers")
-@Slf4j
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -45,20 +44,16 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer createCustomer(@RequestBody @Validated Customer customer) {
-        return customerService.saveCustomer(customer);
+    public Customer createCustomer(@RequestBody @Validated CustomerDTO customerDTO) {
+        return customerService.saveCustomer(customerDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(
-            @PathVariable Long id, @RequestBody Customer customer) {
+            @PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         return customerService
-                .findCustomerById(id)
-                .map(
-                        customerObj -> {
-                            customer.setId(id);
-                            return ResponseEntity.ok(customerService.saveCustomer(customer));
-                        })
+                .updateCustomer(id, customerDTO)
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 

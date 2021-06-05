@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration(proxyBeanMethods = false)
-public class AwsSQSTemplateConfig {
+public class AwsMessagingConfig {
 
     // @Bean annotation tells that a method produces a bean that is to be managed by the spring
     // container.

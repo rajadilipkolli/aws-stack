@@ -11,8 +11,8 @@ services:
       - "5432:5432"
 
   localstack:
-    image: localstack/localstack:latest
-    environment: 
+    image: localstack/localstack-light
+    environment:
       - AWS_DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566
       - SERVICES=sqs
@@ -21,4 +21,3 @@ services:
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-    

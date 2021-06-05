@@ -1,12 +1,10 @@
 package com.learning.awspring.common;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 
-@Slf4j
 public class DBContainerInitializer {
 
     @Container
@@ -21,7 +19,7 @@ public class DBContainerInitializer {
     }
 
     @DynamicPropertySource
-    public void setPostGreSQLValues(DynamicPropertyRegistry dynamicPropertyRegistry) {
+    public static void setPostGreSQLValues(DynamicPropertyRegistry dynamicPropertyRegistry) {
         dynamicPropertyRegistry.add("spring.datasource.url", sqlContainer::getJdbcUrl);
         dynamicPropertyRegistry.add("spring.datasource.username", sqlContainer::getUsername);
         dynamicPropertyRegistry.add("spring.datasource.password", sqlContainer::getPassword);

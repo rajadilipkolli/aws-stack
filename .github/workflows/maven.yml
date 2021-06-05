@@ -1,4 +1,4 @@
-name: Main Branch CI
+name: Java CI
 
 on:
   push:
@@ -10,38 +10,56 @@ jobs:
   build:
     name: Run Unit, Integration Tests & Push to Docker Registry
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 11, 15 ]
+
     steps:
       - uses: actions/checkout@v2
-      
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+     
       - name: Set SHA8
         run: echo "$(git log --oneline -1 | awk '{print $1}')" >> GITHUB_SHA8
       
       - name: Test SHA
         run: echo $GITHUB_SHA8
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
+      - name: Set up JDK
+        uses: actions/setup-java@v2.1.0
         with:
-          java-version: 11
+          distribution: 'adopt'
+          java-version: ${{ matrix.java-version }}
 
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
+        
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache local Maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build with Maven
-        run: ./mvnw clean install
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+
       - name: Upload coverage to Codecov  
         uses: codecov/codecov-action@v1.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      
+     
       - name: Create docker aws-sqs-project image
         run: docker build -t docker.io/dockertmt/aws-sqs-project:latest -t docker.io/dockertmt/aws-sqs-project:$SHA8 ./aws-sqs-project
 

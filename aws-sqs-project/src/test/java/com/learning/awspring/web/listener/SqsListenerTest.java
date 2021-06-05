@@ -1,4 +1,4 @@
-package com.learning.awspring;
+package com.learning.awspring.web.listener;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @Import({LocalStackConfig.class})
 @ImportAutoConfiguration({SqsAutoConfiguration.class})
-public class SqsListenerTest {
+class SqsListenerTest {
 
     @Autowired private AmazonSQSAsync amazonSQS;
 

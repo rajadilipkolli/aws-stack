@@ -1,10 +1,15 @@
 # aws-sqs-project
 
+## Pre Requisites
+* Amazon cli (Only for local)
+* Docker Desktop
 ### Run tests
 `$ ./mvnw clean verify`
 
 ### Run locally
-`$ ./mvnw docker:start spring-boot:run`
+Start Infra and then issue below command
+
+`$ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local`
 
 
 ### Useful Links
@@ -23,8 +28,11 @@ set region by issuing command by providing below value
  
 ```
 
-* aws configure
-* aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name spring-boot-amazon-sqs
+> aws configure
+> aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name spring-boot-amazon-sqs
 
 ### List SQSQueues
-* aws --endpoint-url=http://localhost:4566 sqs list-queues
+> aws --endpoint-url=http://localhost:4566 sqs list-queues
+
+## command to remove docker
+> docker system prune -a -f --volumes

@@ -1,0 +1,18 @@
+application:
+  endpoint-uri: http://localhost:4566
+  region: us-east-1
+cloud:
+  aws:
+    region:
+      static: us-east-1
+    sqs:
+      listener:
+        autoStartup: true
+    stack:
+      auto: false
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: secret
+    url: jdbc:postgresql://localhost:5432/appdb
+    username: siva

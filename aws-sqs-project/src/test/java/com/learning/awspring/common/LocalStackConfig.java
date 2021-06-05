@@ -11,6 +11,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
+import com.amazonaws.services.sqs.model.AmazonSQSException;
+import com.amazonaws.services.sqs.model.CreateQueueRequest;
+import com.learning.awspring.utils.AppConstants;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -26,15 +29,38 @@ public class LocalStackConfig {
     public static final AWSCredentials TEST_CREDENTIALS =
             new BasicAWSCredentials(TEST_ACCESS_KEY, TEST_SECRET_KEY);
 
-    static LocalStackContainer localStackContainer;
+    static final LocalStackContainer localStackContainer;
 
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack"))
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack"), false)
                         .withServices(S3, SQS)
                         .withExposedPorts(4566);
         localStackContainer.start();
+        createQueue();
+    }
+
+    // Dirty Hack to create Queue if not exists for SQSListener
+    private static void createQueue() {
+        CreateQueueRequest createQueueRequest =
+                new CreateQueueRequest(AppConstants.QUEUE)
+                        .addAttributesEntry("MessageRetentionPeriod", "86400");
+
+        try {
+            amazonSQSAsync().createQueue(createQueueRequest);
+        } catch (AmazonSQSException e) {
+            if (!e.getErrorCode().equals("QueueAlreadyExists")) {
+                throw e;
+            }
+        }
+    }
+
+    private static AmazonSQSAsync amazonSQSAsync() {
+        return AmazonSQSAsyncClientBuilder.standard()
+                .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(SQS))
+                .withCredentials(getCredentialsProvider())
+                .build();
     }
 
     @Bean
@@ -50,13 +76,10 @@ public class LocalStackConfig {
     @Bean
     @Primary
     public AmazonSQSAsync localstackAmazonSQSAsync() {
-        return AmazonSQSAsyncClientBuilder.standard()
-                .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(SQS))
-                .withCredentials(getCredentialsProvider())
-                .build();
+        return amazonSQSAsync();
     }
 
-    private AWSCredentialsProvider getCredentialsProvider() {
+    private static AWSCredentialsProvider getCredentialsProvider() {
         return new AWSStaticCredentialsProvider(TEST_CREDENTIALS);
     }
 }

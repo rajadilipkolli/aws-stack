@@ -46,11 +46,8 @@ public class AwsLocalConfig {
     @Primary
     public AmazonSQSAsync amazonSQSAsync() {
         AmazonSQSAsyncClientBuilder builder = AmazonSQSAsyncClientBuilder.standard();
-        if (properties.getEndpointUri() != null
-                && properties.getEndpointUri().trim().length() != 0) {
-            builder.withEndpointConfiguration(getEndpointConfiguration());
-            builder.withCredentials(getCredentialsProvider());
-        }
+        builder.withEndpointConfiguration(getEndpointConfiguration());
+        builder.withCredentials(getCredentialsProvider());
         return builder.build();
     }
 

@@ -1,7 +1,7 @@
 version: '3.8'
 services:
 
-  myfirstawsproject:
+  aws-sqs-project:
     build: ..
     ports:
       - "18080:8080"
@@ -9,6 +9,7 @@ services:
     restart: always
     depends_on:
       - postgresqldb
+      - localstack
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.5</version>
+		<version>2.5.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.learning.awspring</groupId>
@@ -20,24 +20,22 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<java.version>11</java.version>
-		<spring-cloud.version>2020.0.2</spring-cloud.version>
+		<spring-cloud.version>2020.0.3</spring-cloud.version>
 		<problem-spring-web.version>0.26.2</problem-spring-web.version>
 		<swagger.version>3.0.0</swagger.version>
-		<commons-lang3.version>3.10</commons-lang3.version>
-		<commons-io.version>2.8.0</commons-io.version>
+		<commons-io.version>2.9.0</commons-io.version>
         <aws.version>2.3.1</aws.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 
 		<testcontainers.version>1.15.3</testcontainers.version>
-		<awaitility.version>4.0.3</awaitility.version>
 
 		<project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
 		<maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
 		<maven-pmd-plugin.version>3.14.0</maven-pmd-plugin.version>
-		<spotless.version>2.11.0</spotless.version>
-		<dependency-check-maven.version>6.1.6</dependency-check-maven.version>
+		<spotless.version>2.11.1</spotless.version>
+		<dependency-check-maven.version>6.2.0</dependency-check-maven.version>
 		<properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
 		<maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
-		<fabric8-docker-maven.version>0.35.0</fabric8-docker-maven.version>
 		<sonar-maven-plugin.version>3.9.0.2155</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
 		<jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
@@ -82,6 +80,11 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>io.awspring.cloud</groupId>
 			<artifactId>spring-cloud-starter-aws-messaging</artifactId>
@@ -118,8 +121,13 @@
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>com.vladmihalcea</groupId>
+            <artifactId>hibernate-types-52</artifactId>
+            <version>2.11.1</version>
+        </dependency>
 
-		<dependency>
+        <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -193,6 +201,34 @@
                     </excludes>
                 </configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <dependency>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </dependency>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <compilerArg>
+                            -Amapstruct.defaultComponentModel=spring
+                        </compilerArg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
@@ -216,7 +252,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
 					<runOrder>alphabetical</runOrder>
 					<reportsDirectory>${junit.utReportFolder}</reportsDirectory>
@@ -282,7 +317,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.42</version>
+                        <version>8.43</version>
                     </dependency>
                 </dependencies>
 				<configuration>
@@ -417,29 +452,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>io.fabric8</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<version>${fabric8-docker-maven.version}</version>
-				<configuration>
-					<verbose>true</verbose>
-					<images>
-						<image>
-							<external>
-								<type>compose</type>
-								<basedir>docker</basedir>
-								<composeFile>docker-compose.yml</composeFile>
-							</external>
-							<run>
-								<wait>
-									<time>5000</time>
-									<!--<log>Docker databases are ready to accept connections</log> -->
-								</wait>
-							</run>
-						</image>
-					</images>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.owasp</groupId>

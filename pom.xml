@@ -9,7 +9,13 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>
-
+	
+    <properties>
+      <sonar.projectKey>rajadileepkolli_aws-stack</sonar.projectKey>
+      <sonar.organization>rajadileepkolli</sonar.organization>
+      <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    </properties>
+         
     <modules>
         <module>aws-sqs-project</module>
     </modules>

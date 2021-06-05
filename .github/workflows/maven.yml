@@ -11,7 +11,6 @@ env:
 
 jobs:
   build:
-    name: Run Unit, Integration Tests & Push to Docker Registry
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -19,6 +18,7 @@ jobs:
     strategy:
       matrix:
         java-version: [ 11, 15 ]
+    name: Run Tests using Java ${{ matrix.java-version }} & Push to Docker Registry
 
     steps:
       - uses: actions/checkout@v2
@@ -53,7 +53,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: ./mvnw -B clean install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
 
       - name: Upload coverage to Codecov  
         uses: codecov/codecov-action@v1.5.0

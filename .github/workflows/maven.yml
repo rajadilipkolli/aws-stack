@@ -19,11 +19,8 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
      
-      - name: Set SHA8
-        run: echo "$(git log --oneline -1 | awk '{print $1}')" >> GITHUB_SHA8
-      
       - name: Test SHA
-        run: echo $GITHUB_SHA8
+        run: echo $GITHUB_REF
 
       - name: Set up JDK
         uses: actions/setup-java@v2.1.0
@@ -61,11 +58,11 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
      
       - name: Create docker aws-sqs-project image
-        run: docker build -t docker.io/dockertmt/aws-sqs-project:latest -t docker.io/dockertmt/aws-sqs-project:$SHA8 ./aws-sqs-project
+        run: docker build -t docker.io/dockertmt/aws-sqs-project:latest -t docker.io/dockertmt/aws-sqs-project:$GITHUB_REF ./aws-sqs-project
 
       - name: Push docker images
         run: |
           docker push docker.io/dockertmt/aws-sqs-project:latest
-          docker push docker.io/dockertmt/aws-sqs-project:$GITHUB_SHA8
+          docker push docker.io/dockertmt/aws-sqs-project:$$GITHUB_REF
 
 

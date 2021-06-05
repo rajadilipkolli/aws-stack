@@ -64,11 +64,11 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
      
       - name: Create docker aws-sqs-project image
-        run: docker build -t docker.io/dockertmt/aws-sqs-project:latest -t docker.io/dockertmt/aws-sqs-project:$GITHUB_REF ./aws-sqs-project
+        run: docker build -t docker.io/dockertmt/aws-sqs-project:latest -t docker.io/dockertmt/aws-sqs-project:${{ github.sha }} ./aws-sqs-project
 
       - name: Push docker images
         run: |
           docker push docker.io/dockertmt/aws-sqs-project:latest
-          docker push docker.io/dockertmt/aws-sqs-project:$$GITHUB_REF
+          docker push docker.io/dockertmt/aws-sqs-project:${{ github.sha }}
 
 

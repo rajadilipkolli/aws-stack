@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
      
       - name: Test SHA
-        run: echo $GITHUB_REF
+        run: echo $GITHUB_SHA
 
       - name: Set up JDK
         uses: actions/setup-java@v2.1.0
@@ -56,6 +56,12 @@ jobs:
         uses: codecov/codecov-action@v1.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          
+      - name: Login to GitHub Registry Container
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
      
       - name: Create docker aws-sqs-project image
         run: docker build -t docker.io/dockertmt/aws-sqs-project:latest -t docker.io/dockertmt/aws-sqs-project:$GITHUB_REF ./aws-sqs-project

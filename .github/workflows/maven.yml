@@ -61,7 +61,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           
       - name: Build aws-sqs image
-        run: docker build . --file aws-sqs-project/Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        run: docker build . --file aws-sqs-project/GlobalDockerFile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
       - name: Log into registry
         # This is where you will update the PAT to GITHUB_TOKEN

@@ -1,4 +1,4 @@
-name: Main Branch CI
+name: Java CI
 
 on:
   push:
@@ -57,7 +57,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: dockertmt/aws-sqs-project
+          name: dockertmt/aws-sqs-project-java-${{ matrix.java-version }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           workdir: aws-sqs-project

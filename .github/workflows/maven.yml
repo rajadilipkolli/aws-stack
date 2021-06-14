@@ -17,7 +17,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        java-version: [ 11, 15 ]
+        java-version: [ 11 ]
     name: Run Tests using Java ${{ matrix.java-version }} & Push to Docker Registry
 
     steps:

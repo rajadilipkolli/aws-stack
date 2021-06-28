@@ -18,5 +18,6 @@
          
     <modules>
         <module>aws-sqs-project</module>
+        <module>aws-s3-project</module>
     </modules>
 </project>

@@ -1,0 +1,19 @@
+application:
+  endpoint-uri: http://localhost:4566
+  region: us-east-1
+cloud:
+  aws:
+    region:
+      static: us-east-1
+    sqs:
+      listener:
+        autoStartup: true
+    stack:
+      auto: false
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error

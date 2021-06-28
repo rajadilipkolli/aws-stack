@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        APPLICATION_NAME = 'aws-sqs-project'
+        APPLICATION_NAME = 'aws-s3-project'
     }
 
     stages {

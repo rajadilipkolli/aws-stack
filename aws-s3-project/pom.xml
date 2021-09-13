@@ -22,7 +22,7 @@
         <problem-spring-web.version>0.26.2</problem-spring-web.version>
         <swagger.version>3.0.0</swagger.version>
         <commons-io.version>2.11.0</commons-io.version>
-        <aws.version>2.3.1</aws.version>
+        <aws.version>2.3.2</aws.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 
         <testcontainers.version>1.16.0</testcontainers.version>

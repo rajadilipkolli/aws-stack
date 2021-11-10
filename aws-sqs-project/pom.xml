@@ -36,7 +36,7 @@
 		<dependency-check-maven.version>6.5.0</dependency-check-maven.version>
 		<properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
 		<maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
-		<sonar-maven-plugin.version>3.9.0.2155</sonar-maven-plugin.version>
+		<sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
 		<jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
 		<jacoco.utReportFolder>${project.build.directory}/jacoco/test</jacoco.utReportFolder>

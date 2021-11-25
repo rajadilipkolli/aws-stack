@@ -22,7 +22,6 @@
 		<java.version>11</java.version>
 		<spring-cloud.version>2020.0.4</spring-cloud.version>
 		<problem-spring-web.version>0.27.0</problem-spring-web.version>
-		<swagger.version>3.0.0</swagger.version>
 		<commons-io.version>2.11.0</commons-io.version>
         <aws.version>2.3.2</aws.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
@@ -108,9 +107,9 @@
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-boot-starter</artifactId>
-			<version>${swagger.version}</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.5.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

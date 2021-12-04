@@ -10,6 +10,10 @@ cloud:
         autoStartup: true
     stack:
       auto: false
+      enabled: false
+    credentials:
+      secretKey: ABC
+      accessKey: XYZ
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver

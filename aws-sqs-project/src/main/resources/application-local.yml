@@ -1,17 +1,17 @@
 cloud:
   aws:
-    sqs:
-      endpoint: http://localhost:4566
-      listener:
-        autoStartup: true
+    credentials:
+      secretKey: test
+      accessKey: test
     region:
       static: us-east-1
     stack:
       auto: false
       enabled: false
-    credentials:
-      secretKey: test
-      accessKey: test
+    sqs:
+      endpoint: http://localhost:4566
+      listener:
+        autoStartup: true
 spring:
   datasource:
     password: secret

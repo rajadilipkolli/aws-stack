@@ -2,6 +2,8 @@ cloud:
   aws:
     sqs:
       endpoint: http://localhost:4566
+      listener:
+        autoStartup: true
     region:
       static: us-east-1
     stack:

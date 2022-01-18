@@ -1,4 +1,6 @@
 logging:
+  file:
+    name: logs/aws-sqs-project.log
   level:
     com:
       amazonaws:

@@ -14,6 +14,15 @@ on:
       - reopened
 
 jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 # v2 minimum required
+      - name: Google Java Format
+        uses: axel-op/googlejavaformat-action@3.5.0
+        with:
+          version: "1.12.0"
+          commitMessage: "Formatted using Google Java Format"
   build:
     name: Run Unit & Integration Tests
     runs-on: ubuntu-latest

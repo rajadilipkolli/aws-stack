@@ -1,3 +1,4 @@
 databaseChangeLog:
-  - include:
-      file: db/changelog/liquibase-changelog.xml
+  - includeAll:
+      path: migration/
+      relativeToChangelogFile: true

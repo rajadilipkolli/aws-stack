@@ -2,9 +2,9 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:14.1
+    image: postgres:latest
     environment:
-      - POSTGRES_USER=siva
+      - POSTGRES_USER=user
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=appdb
     ports:
@@ -15,9 +15,10 @@ services:
     environment:
       - AWS_DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566
-      - SERVICES=sqs,s3
+      - SERVICES=sqs
     ports:
       - '4566:4566'
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - '../.localstack:/docker-entrypoint-initaws.d'

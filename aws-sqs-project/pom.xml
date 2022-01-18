@@ -20,7 +20,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<java.version>11</java.version>
-		<spring-cloud.version>2021.0.0</spring-cloud.version>
 		<problem-spring-web.version>0.27.0</problem-spring-web.version>
 		<commons-io.version>2.11.0</commons-io.version>
         <aws.version>2.3.3</aws.version>
@@ -155,13 +154,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
 			<dependency>
 				<groupId>org.testcontainers</groupId>
 				<artifactId>testcontainers-bom</artifactId>

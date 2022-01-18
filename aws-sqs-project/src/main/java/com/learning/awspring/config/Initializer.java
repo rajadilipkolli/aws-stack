@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 @Component
 @RequiredArgsConstructor
@@ -14,6 +15,7 @@ public class Initializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        Assert.isNull(properties.getRegion(), () -> "region should be null");
         log.info("Running Initializer.....");
     }
 }

@@ -21,12 +21,6 @@ management:
       exposure:
         include: configprops,env,health,info,logfile,loggers,metrics
 
-
-server:
-  port: 8080
-  shutdown: graceful
-
-
 spring:
   application:
     name: aws-sqs-project
@@ -60,5 +54,3 @@ spring:
           fail_on_pagination_over_collection_fetch: true
           in_clause_parameter_padding: true
     show-sql: true
-  liquibase:
-    change-log: classpath:/db/migration/liquibase-changelog.xml

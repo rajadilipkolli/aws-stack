@@ -1,15 +1,15 @@
-application:
-  endpoint-uri: http://localhost:4566
-  region: us-east-1
 cloud:
   aws:
+    sqs:
+      endpoint: http://localhost:4566
     region:
       static: us-east-1
-    sqs:
-      listener:
-        autoStartup: true
     stack:
       auto: false
+      enabled: false
+    credentials:
+      secretKey: test
+      accessKey: test
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver

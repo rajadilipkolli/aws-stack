@@ -19,33 +19,33 @@ import org.springframework.context.annotation.Profile;
 @Profile(PROFILE_LOCAL)
 public class AwsLocalConfig {
 
-    public static final String TEST_ACCESS_KEY = "test";
-    public static final String TEST_SECRET_KEY = "test";
+  public static final String TEST_ACCESS_KEY = "test";
+  public static final String TEST_SECRET_KEY = "test";
 
-    public static final AWSCredentials TEST_CREDENTIALS =
-            new BasicAWSCredentials(TEST_ACCESS_KEY, TEST_SECRET_KEY);
+  public static final AWSCredentials TEST_CREDENTIALS =
+      new BasicAWSCredentials(TEST_ACCESS_KEY, TEST_SECRET_KEY);
 
-    @Autowired private ApplicationProperties properties;
+  @Autowired private ApplicationProperties properties;
 
-    static {
-        System.setProperty("com.amazonaws.sdk.disableCbor", "true");
-    }
+  static {
+    System.setProperty("com.amazonaws.sdk.disableCbor", "true");
+  }
 
-    @Bean
-    @Primary
-    public AmazonS3 amazonS3Client() {
-        AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard().enablePathStyleAccess();
-        builder.withEndpointConfiguration(getEndpointConfiguration());
-        builder.withCredentials(getCredentialsProvider());
-        return builder.build();
-    }
+  @Bean
+  @Primary
+  public AmazonS3 amazonS3Client() {
+    AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard().enablePathStyleAccess();
+    builder.withEndpointConfiguration(getEndpointConfiguration());
+    builder.withCredentials(getCredentialsProvider());
+    return builder.build();
+  }
 
-    private AWSCredentialsProvider getCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(TEST_CREDENTIALS);
-    }
+  private AWSCredentialsProvider getCredentialsProvider() {
+    return new AWSStaticCredentialsProvider(TEST_CREDENTIALS);
+  }
 
-    private AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {
-        return new AwsClientBuilder.EndpointConfiguration(
-                properties.getEndpointUri(), properties.getRegion());
-    }
+  private AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {
+    return new AwsClientBuilder.EndpointConfiguration(
+        properties.getEndpointUri(), properties.getRegion());
+  }
 }

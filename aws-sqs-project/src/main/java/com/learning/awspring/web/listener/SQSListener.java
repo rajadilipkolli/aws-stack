@@ -21,27 +21,27 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SQSListener {
 
-    private final InBoundLogRepository inBoundLogRepository;
-    private final ObjectMapper objectMapper;
+  private final InBoundLogRepository inBoundLogRepository;
+  private final ObjectMapper objectMapper;
 
-    // @SqsListener listens to the message from the specified queue.
-    // Here in this example we are printing the message on the console and the message will be
-    // deleted from the queue once it is successfully delivered.
-    @SqsListener(value = AppConstants.QUEUE, deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
-    public void readMessageFromSqs(@Valid Message message, @Header("MessageId") String messageId)
-            throws JsonProcessingException {
-        log.info("Received message= {} with messageId= {}", message, messageId);
+  // @SqsListener listens to the message from the specified queue.
+  // Here in this example we are printing the message on the console and the message will be
+  // deleted from the queue once it is successfully delivered.
+  @SqsListener(value = AppConstants.QUEUE, deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
+  public void readMessageFromSqs(@Valid Message message, @Header("MessageId") String messageId)
+      throws JsonProcessingException {
+    log.info("Received message= {} with messageId= {}", message, messageId);
 
-        saveMessageToDatabase(message, messageId);
-    }
+    saveMessageToDatabase(message, messageId);
+  }
 
-    @Async
-    private void saveMessageToDatabase(Message message, String messageId)
-            throws JsonProcessingException {
-        var inboundLog = new InBoundLog();
-        inboundLog.setCreatedDate(LocalDateTime.now());
-        inboundLog.setMessageId(messageId);
-        inboundLog.setReceivedJson(this.objectMapper.writeValueAsString(message));
-        this.inBoundLogRepository.save(inboundLog);
-    }
+  @Async
+  private void saveMessageToDatabase(Message message, String messageId)
+      throws JsonProcessingException {
+    var inboundLog = new InBoundLog();
+    inboundLog.setCreatedDate(LocalDateTime.now());
+    inboundLog.setMessageId(messageId);
+    inboundLog.setReceivedJson(this.objectMapper.writeValueAsString(message));
+    this.inBoundLogRepository.save(inboundLog);
+  }
 }

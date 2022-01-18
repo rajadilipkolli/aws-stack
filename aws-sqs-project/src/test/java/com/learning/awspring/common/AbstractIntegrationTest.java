@@ -25,37 +25,37 @@ import org.testcontainers.utility.DockerImageName;
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest {
 
-    @Container
-    static LocalStackContainer localStack =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.13.0"))
-                    .withServices(SQS);
+  @Container
+  static LocalStackContainer localStack =
+      new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.13.0"))
+          .withServices(SQS);
 
-    @Container
-    private static final PostgreSQLContainer<?> sqlContainer =
-            new PostgreSQLContainer<>("postgres:latest")
-                    .withDatabaseName("integration-tests-db")
-                    .withUsername("username")
-                    .withPassword("password");
+  @Container
+  private static final PostgreSQLContainer<?> sqlContainer =
+      new PostgreSQLContainer<>("postgres:latest")
+          .withDatabaseName("integration-tests-db")
+          .withUsername("username")
+          .withPassword("password");
 
-    static {
-        localStack.start();
-        sqlContainer.start();
-    }
+  static {
+    localStack.start();
+    sqlContainer.start();
+  }
 
-    @DynamicPropertySource
-    static void overrideConfiguration(DynamicPropertyRegistry registry)
-            throws UnsupportedOperationException, IOException, InterruptedException {
-        localStack.execInContainer(
-                "awslocal", "sqs", "create-queue", "--queue-name", AppConstants.QUEUE);
-        registry.add("cloud.aws.sqs.endpoint", () -> localStack.getEndpointOverride(SQS));
-        registry.add("cloud.aws.credentials.access-key", localStack::getAccessKey);
-        registry.add("cloud.aws.credentials.secret-key", localStack::getSecretKey);
-        registry.add("spring.datasource.url", sqlContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", sqlContainer::getUsername);
-        registry.add("spring.datasource.password", sqlContainer::getPassword);
-    }
+  @DynamicPropertySource
+  static void overrideConfiguration(DynamicPropertyRegistry registry)
+      throws UnsupportedOperationException, IOException, InterruptedException {
+    localStack.execInContainer(
+        "awslocal", "sqs", "create-queue", "--queue-name", AppConstants.QUEUE);
+    registry.add("cloud.aws.sqs.endpoint", () -> localStack.getEndpointOverride(SQS));
+    registry.add("cloud.aws.credentials.access-key", localStack::getAccessKey);
+    registry.add("cloud.aws.credentials.secret-key", localStack::getSecretKey);
+    registry.add("spring.datasource.url", sqlContainer::getJdbcUrl);
+    registry.add("spring.datasource.username", sqlContainer::getUsername);
+    registry.add("spring.datasource.password", sqlContainer::getPassword);
+  }
 
-    @Autowired protected MockMvc mockMvc;
+  @Autowired protected MockMvc mockMvc;
 
-    @Autowired protected ObjectMapper objectMapper;
+  @Autowired protected ObjectMapper objectMapper;
 }

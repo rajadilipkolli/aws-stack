@@ -13,20 +13,20 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Slf4j
 public class SpringAsyncConfig implements AsyncConfigurer {
 
-    @Override
-    public Executor getAsyncExecutor() {
-        return new ThreadPoolTaskExecutor();
-    }
+  @Override
+  public Executor getAsyncExecutor() {
+    return new ThreadPoolTaskExecutor();
+  }
 
-    // To handle exception when the return type is void
-    @Override
-    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-        return (throwable, method, params) -> {
-            log.error("Exception message - " + throwable.getMessage());
-            log.error("Method name - " + method.getName());
-            for (Object param : params) {
-                log.error("Parameter value - " + param);
-            }
-        };
-    }
+  // To handle exception when the return type is void
+  @Override
+  public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+    return (throwable, method, params) -> {
+      log.error("Exception message - " + throwable.getMessage());
+      log.error("Method name - " + method.getName());
+      for (Object param : params) {
+        log.error("Parameter value - " + param);
+      }
+    };
+  }
 }

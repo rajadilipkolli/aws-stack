@@ -10,7 +10,7 @@ logging:
           EC2MetadataUtils: ERROR
     sql: INFO
     web: INFO
-    
+
 
 management:
   endpoint:
@@ -20,20 +20,16 @@ management:
     web:
       exposure:
         include: configprops,env,health,info,logfile,loggers,metrics
-        
+
 
 server:
   port: 8080
   shutdown: graceful
-  
+
 
 spring:
   application:
     name: aws-sqs-project
-  data:
-    jpa:
-      repositories:
-        bootstrap-mode: deferred
   datasource:
     hikari:
       auto-commit: false
@@ -66,5 +62,3 @@ spring:
     show-sql: true
   liquibase:
     change-log: classpath:/db/migration/liquibase-changelog.xml
-  main:
-    allow-bean-definition-overriding: true

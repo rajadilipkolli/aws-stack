@@ -23,7 +23,7 @@
         <aws.version>2.3.3</aws.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 
-        <testcontainers.version>1.16.2</testcontainers.version>
+        <testcontainers.version>1.16.3</testcontainers.version>
 
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>

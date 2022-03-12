@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Google Java Format
-        uses: axel-op/googlejavaformat-action@3.5.0
+        uses: axel-op/googlejavaformat-action@v3.6.0
         with:
           version: "1.12.0"
           commitMessage: "Formatted using Google Java Format"

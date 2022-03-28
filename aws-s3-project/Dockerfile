@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM openjdk:19-jdk-slim
 VOLUME /tmp
 ADD target/aws-s3-project-0.0.1-SNAPSHOT.jar app.jar
 RUN sh -c 'touch /app.jar'

@@ -2,7 +2,7 @@ package com.learning.awspring.utils;
 
 import com.learning.awspring.web.model.Message;
 import lombok.experimental.UtilityClass;
-import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 @UtilityClass
 public class FakeObjectCreator {

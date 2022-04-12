@@ -35,7 +35,7 @@ jobs:
         uses: actions/setup-java@v3.1.1
         with:
           java-version: 18
-          distribution: 'adopt'
+          distribution: 'zulu'
           cache: 'maven'
 
       - name: Build and analyze

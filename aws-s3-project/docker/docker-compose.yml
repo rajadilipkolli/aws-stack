@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:14.2
+    image: postgres:latest
     environment:
       - POSTGRES_USER=siva
       - POSTGRES_PASSWORD=secret
@@ -15,7 +15,7 @@ services:
     environment:
       - AWS_DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566
-      - SERVICES=sqs,s3
+      - SERVICES=s3
     ports:
       - '4566:4566'
     volumes:

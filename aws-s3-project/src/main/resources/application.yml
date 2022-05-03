@@ -1,13 +1,26 @@
 application:
   endpoint-uri: http://localhost:4566
   region: us-east-1
+
+spring:
+  datasource:
+    password: secret
+    url: jdbc:postgresql://localhost:5432/appdb
+    username: user
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
 cloud:
   aws:
     region:
       static: us-east-1
-    sqs:
-      listener:
-        autoStartup: true
+    s3:
+      url: http://127.0.0.1:4566
+      bucket-name: testbucket
+      access-key: localstack
+      secret-key: localstack
     stack:
       auto: false
 

@@ -1,0 +1,6 @@
+databaseChangeLog:
+  - include:
+      id: "1"
+      author: "raja" 
+      file: init-db.sql
+      relativeToChangelogFile: true

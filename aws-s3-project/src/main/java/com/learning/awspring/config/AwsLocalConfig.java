@@ -10,6 +10,7 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -19,17 +20,13 @@ import org.springframework.context.annotation.Profile;
 @Profile(PROFILE_LOCAL)
 public class AwsLocalConfig {
 
-  public static final String TEST_ACCESS_KEY = "test";
-  public static final String TEST_SECRET_KEY = "test";
+  @Value("${config.aws.s3.access-key}")
+  private String accessKey;
 
-  public static final AWSCredentials TEST_CREDENTIALS =
-      new BasicAWSCredentials(TEST_ACCESS_KEY, TEST_SECRET_KEY);
+  @Value("${config.aws.s3.secret-key}")
+  private String secretKey;
 
   @Autowired private ApplicationProperties properties;
-
-  static {
-    System.setProperty("com.amazonaws.sdk.disableCbor", "true");
-  }
 
   @Bean
   @Primary
@@ -41,7 +38,11 @@ public class AwsLocalConfig {
   }
 
   private AWSCredentialsProvider getCredentialsProvider() {
-    return new AWSStaticCredentialsProvider(TEST_CREDENTIALS);
+    return new AWSStaticCredentialsProvider(getBasicAWSCredentials());
+  }
+
+  private AWSCredentials getBasicAWSCredentials() {
+    return new BasicAWSCredentials(accessKey, secretKey);
   }
 
   private AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {

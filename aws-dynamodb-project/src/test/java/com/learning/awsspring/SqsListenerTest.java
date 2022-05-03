@@ -24,41 +24,39 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ImportAutoConfiguration({SqsAutoConfiguration.class})
 public class SqsListenerTest {
 
-    @Autowired private AmazonSQSAsync amazonSQS;
+  @Autowired private AmazonSQSAsync amazonSQS;
 
-    @Test
-    void shouldSendAndReceiveSqsMessage() {
-        String queueName = "test_queue";
-        this.createQueue(queueName);
+  @Test
+  void shouldSendAndReceiveSqsMessage() {
+    String queueName = "test_queue";
+    this.createQueue(queueName);
 
-        QueueMessagingTemplate queueMessagingTemplate = new QueueMessagingTemplate(amazonSQS);
-        queueMessagingTemplate.convertAndSend(queueName, "test message");
+    QueueMessagingTemplate queueMessagingTemplate = new QueueMessagingTemplate(amazonSQS);
+    queueMessagingTemplate.convertAndSend(queueName, "test message");
 
-        String queueUrl = amazonSQS.getQueueUrl(queueName).getQueueUrl();
+    String queueUrl = amazonSQS.getQueueUrl(queueName).getQueueUrl();
 
-        Awaitility.given()
-                .atMost(Duration.ofSeconds(30))
-                .pollInterval(Duration.ofSeconds(3))
-                .await()
-                .untilAsserted(
-                        () -> {
-                            List<Message> messages =
-                                    amazonSQS.receiveMessage(queueUrl).getMessages();
-                            assertThat(messages).isNotEmpty();
-                        });
+    Awaitility.given()
+        .atMost(Duration.ofSeconds(30))
+        .pollInterval(Duration.ofSeconds(3))
+        .await()
+        .untilAsserted(
+            () -> {
+              List<Message> messages = amazonSQS.receiveMessage(queueUrl).getMessages();
+              assertThat(messages).isNotEmpty();
+            });
+  }
+
+  private void createQueue(String queueName) {
+    CreateQueueRequest createQueueRequest =
+        new CreateQueueRequest(queueName).addAttributesEntry("MessageRetentionPeriod", "86400");
+
+    try {
+      amazonSQS.createQueue(createQueueRequest);
+    } catch (AmazonSQSException e) {
+      if (!e.getErrorCode().equals("QueueAlreadyExists")) {
+        throw e;
+      }
     }
-
-    private void createQueue(String queueName) {
-        CreateQueueRequest createQueueRequest =
-                new CreateQueueRequest(queueName)
-                        .addAttributesEntry("MessageRetentionPeriod", "86400");
-
-        try {
-            amazonSQS.createQueue(createQueueRequest);
-        } catch (AmazonSQSException e) {
-            if (!e.getErrorCode().equals("QueueAlreadyExists")) {
-                throw e;
-            }
-        }
-    }
+  }
 }

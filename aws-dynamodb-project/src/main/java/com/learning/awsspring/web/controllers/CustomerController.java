@@ -23,54 +23,54 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class CustomerController {
 
-    private final CustomerService customerService;
+  private final CustomerService customerService;
 
-    @Autowired
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
+  @Autowired
+  public CustomerController(CustomerService customerService) {
+    this.customerService = customerService;
+  }
 
-    @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.findAllCustomers();
-    }
+  @GetMapping
+  public List<Customer> getAllCustomers() {
+    return customerService.findAllCustomers();
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
-        return customerService
-                .findCustomerById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+    return customerService
+        .findCustomerById(id)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Customer createCustomer(@RequestBody @Validated Customer customer) {
-        return customerService.saveCustomer(customer);
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public Customer createCustomer(@RequestBody @Validated Customer customer) {
+    return customerService.saveCustomer(customer);
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(
-            @PathVariable Long id, @RequestBody Customer customer) {
-        return customerService
-                .findCustomerById(id)
-                .map(
-                        customerObj -> {
-                            customer.setId(id);
-                            return ResponseEntity.ok(customerService.saveCustomer(customer));
-                        })
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+  @PutMapping("/{id}")
+  public ResponseEntity<Customer> updateCustomer(
+      @PathVariable Long id, @RequestBody Customer customer) {
+    return customerService
+        .findCustomerById(id)
+        .map(
+            customerObj -> {
+              customer.setId(id);
+              return ResponseEntity.ok(customerService.saveCustomer(customer));
+            })
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Customer> deleteCustomer(@PathVariable Long id) {
-        return customerService
-                .findCustomerById(id)
-                .map(
-                        customer -> {
-                            customerService.deleteCustomerById(id);
-                            return ResponseEntity.ok(customer);
-                        })
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Customer> deleteCustomer(@PathVariable Long id) {
+    return customerService
+        .findCustomerById(id)
+        .map(
+            customer -> {
+              customerService.deleteCustomerById(id);
+              return ResponseEntity.ok(customer);
+            })
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 }

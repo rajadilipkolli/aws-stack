@@ -10,6 +10,17 @@
             "projectName": "aws-s3-project",
             "args": "--spring.profiles.active=local",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-Application<aws-dynamodb-project>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.learning.awsspring.Application",
+            "projectName": "aws-dynamodb-project",
+            "args": "--spring.profiles.active=local",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

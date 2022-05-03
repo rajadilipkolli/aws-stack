@@ -1,7 +1,6 @@
 package com.learning.awsspring.web.controllers;
 
 import static com.learning.awsspring.utils.AppConstants.PROFILE_TEST;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;

@@ -1,35 +1,58 @@
 package com.learning.awsspring.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.util.UUID;
+
 import javax.validation.constraints.NotEmpty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
-@Entity
-@Table(name = "customers")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamoDbBean
 public class Customer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_id_generator")
-    @SequenceGenerator(
-        name = "customer_id_generator",
-        sequenceName = "customer_id_seq",
-        allocationSize = 100)
-    private Long id;
+    private UUID id;
 
-    @Column(nullable = false)
-    @NotEmpty(message = "Text cannot be empty")
-    private String text;
+    @NotEmpty(message = "Name cannot be empty")
+    private String name;
+
+    @NotEmpty(message = "Email cannot be empty")
+    private String email;
+
+    // Partition key
+    @DynamoDbPartitionKey
+    @DynamoDbAttribute("id")
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    @DynamoDbAttribute("name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @DynamoDbSortKey
+    @DynamoDbAttribute("email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

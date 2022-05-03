@@ -4,7 +4,7 @@ services:
   postgresqldb:
     image: postgres:latest
     environment:
-      - POSTGRES_USER=siva
+      - POSTGRES_USER=user
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=appdb
     ports:
@@ -16,6 +16,7 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566
       - SERVICES=s3
+      - AWS_CBOR_DISABLE=1
     ports:
       - '4566:4566'
     volumes:

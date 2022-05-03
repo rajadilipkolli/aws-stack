@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Data
@@ -17,7 +20,10 @@ import javax.persistence.Table;
 @Entity
 public class FileInfo {
 
-  @Id private Integer id;
+  @Id
+  @SequenceGenerator(allocationSize = 1, name = "sequenceGenerator")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+  private Integer id;
   private String fileName;
   private String fileUrl;
   private boolean isUploadSuccessFull;

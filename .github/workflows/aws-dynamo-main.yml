@@ -1,0 +1,45 @@
+name: aws-dynamodb-project
+
+on:
+  push:
+    paths:
+      - "aws-dynamodb-project/**"
+    branches: [ main ]
+  pull_request:
+    paths:
+      - "aws-dynamodb-project/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Google Java Format
+        uses: axel-op/googlejavaformat-action@v3.6.0
+        with:
+          version: "1.12.0"
+          commitMessage: "Formatted using Google Java Format"
+  build:
+    name: Run Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Set up JDK 18
+        uses: actions/setup-java@v3.2.0
+        with:
+          java-version: 18
+          distribution: 'zulu'
+          cache: 'maven'
+
+      - name: Build and analyze
+        run: |
+          cd aws-dynamodb-project
+          chmod +x mvnw
+          ./mvnw clean package

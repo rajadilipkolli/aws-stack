@@ -1,0 +1,16 @@
+{
+  "generator-springboot": {
+    "appName": "aws-dynamodb-project",
+    "packageName": "com.learning.awsspring",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "liquibase",
+    "features": [
+      "elk",
+      "monitoring",
+      "localstack"
+    ],
+    "buildTool": "maven",
+    "packageFolder": "com/learning/awsspring",
+    "liquibaseMigrationCounter": 2
+  }
+}

@@ -1,7 +1,6 @@
 package com.learning.awspring.common;
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -30,7 +29,7 @@ public class LocalStackConfig {
     System.setProperty("com.amazonaws.sdk.disableCbor", "true");
     localStackContainer =
         new LocalStackContainer(DockerImageName.parse("localstack/localstack"), false)
-            .withServices(S3, SQS)
+            .withServices(S3)
             .withExposedPorts(4566);
     localStackContainer.start();
   }
@@ -40,7 +39,7 @@ public class LocalStackConfig {
   public AmazonS3 localstackAmazonS3() {
     return AmazonS3ClientBuilder.standard()
         .enablePathStyleAccess()
-        .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(SQS))
+        .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(S3))
         .withCredentials(getCredentialsProvider())
         .build();
   }

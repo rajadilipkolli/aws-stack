@@ -17,7 +17,7 @@ cloud:
     region:
       static: us-east-1
     s3:
-      url: http://127.0.0.1:4566
+      endpoint-url: http://127.0.0.1:4566
       bucket-name: testbucket
       access-key: localstack
       secret-key: localstack

@@ -16,17 +16,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration(proxyBeanMethods = false)
 @Profile(PROFILE_LOCAL)
+@RequiredArgsConstructor
 public class AwsLocalConfig {
 
-  @Value("${config.aws.s3.access-key}")
-  private String accessKey;
-
-  @Value("${config.aws.s3.secret-key}")
-  private String secretKey;
-
-  @Autowired private ApplicationProperties properties;
+  private final ApplicationProperties properties;
+  private final AwsS3Config awsS3Config;
 
   @Bean
   @Primary
@@ -42,7 +40,7 @@ public class AwsLocalConfig {
   }
 
   private AWSCredentials getBasicAWSCredentials() {
-    return new BasicAWSCredentials(accessKey, secretKey);
+    return new BasicAWSCredentials(awsS3Config.getAccessKey(), awsS3Config.getSecretKey());
   }
 
   private AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {

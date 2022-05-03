@@ -57,12 +57,12 @@ public class AwsS3Service {
       }
 
     public FileInfo uploadObjectToS3(MultipartFile multipartFile) throws AmazonServiceException, SdkClientException, IOException {
-        String fileName = multipartFile.getName();
+        String fileName = multipartFile.getOriginalFilename();
         log.info("Uploading file '{}' to bucket: '{}' ", fileName, awsS3Config.getBucketName());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getResource().contentLength());
         String fileUrl =
-            awsS3Config.getS3EndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
+            awsS3Config.getEndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
         PutObjectResult putObjectResult =
             amazonS3.putObject(
                 awsS3Config.getBucketName(), fileName, multipartFile.getInputStream(), objectMetadata);

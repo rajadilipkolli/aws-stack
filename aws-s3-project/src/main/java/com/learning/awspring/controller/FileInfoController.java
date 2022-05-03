@@ -9,6 +9,8 @@ import com.learning.awspring.domain.FileInfo;
 import com.learning.awspring.service.AwsS3Service;
 import com.learning.awspring.service.FileInfoService;
 
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -20,17 +22,19 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class FileInfoController {
-    
+
     private final AwsS3Service awsS3Service;
     private final FileInfoService fileInfoService;
 
-    @PostMapping("/s3/upload")
-    FileInfo uploadFileToS3(@RequestPart(name = "file") MultipartFile multipartFile) throws AmazonServiceException, SdkClientException, IOException{
+    @PostMapping(value = "/s3/upload", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = {
+            MediaType.APPLICATION_JSON_VALUE })
+    FileInfo uploadFileToS3(@RequestPart(name = "file") MultipartFile multipartFile)
+            throws AmazonServiceException, SdkClientException, IOException {
         return awsS3Service.uploadObjectToS3(multipartFile);
     }
 
     @GetMapping("/s3/view-all-db")
-    List<FileInfo> viewAllFilesFromDb(){
+    List<FileInfo> viewAllFilesFromDb() {
         return fileInfoService.findAllFiles();
     }
 

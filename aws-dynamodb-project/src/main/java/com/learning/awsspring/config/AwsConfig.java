@@ -19,40 +19,42 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile({PROFILE_NOT_TEST})
 public class AwsConfig {
-  @Autowired private ApplicationProperties properties;
+    @Autowired private ApplicationProperties properties;
 
-  static {
-    System.setProperty("com.amazonaws.sdk.disableCbor", "true");
-  }
-
-  @Bean
-  @Primary
-  public AmazonS3 amazonS3Client() {
-    AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard().enablePathStyleAccess();
-    if (properties.getEndpointUri() != null && properties.getEndpointUri().trim().length() != 0) {
-      builder.withEndpointConfiguration(getEndpointConfiguration());
-      builder.withCredentials(getCredentialsProvider());
+    static {
+        System.setProperty("com.amazonaws.sdk.disableCbor", "true");
     }
-    return builder.build();
-  }
 
-  @Bean
-  @Primary
-  public AmazonSQSAsync amazonSQSAsync() {
-    AmazonSQSAsyncClientBuilder builder = AmazonSQSAsyncClientBuilder.standard();
-    if (properties.getEndpointUri() != null && properties.getEndpointUri().trim().length() != 0) {
-      builder.withEndpointConfiguration(getEndpointConfiguration());
-      builder.withCredentials(getCredentialsProvider());
+    @Bean
+    @Primary
+    public AmazonS3 amazonS3Client() {
+        AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard().enablePathStyleAccess();
+        if (properties.getEndpointUri() != null
+                && properties.getEndpointUri().trim().length() != 0) {
+            builder.withEndpointConfiguration(getEndpointConfiguration());
+            builder.withCredentials(getCredentialsProvider());
+        }
+        return builder.build();
     }
-    return builder.build();
-  }
 
-  private AWSCredentialsProvider getCredentialsProvider() {
-    return new AWSStaticCredentialsProvider(new BasicAWSCredentials("test", "test"));
-  }
+    @Bean
+    @Primary
+    public AmazonSQSAsync amazonSQSAsync() {
+        AmazonSQSAsyncClientBuilder builder = AmazonSQSAsyncClientBuilder.standard();
+        if (properties.getEndpointUri() != null
+                && properties.getEndpointUri().trim().length() != 0) {
+            builder.withEndpointConfiguration(getEndpointConfiguration());
+            builder.withCredentials(getCredentialsProvider());
+        }
+        return builder.build();
+    }
 
-  private AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {
-    return new AwsClientBuilder.EndpointConfiguration(
-        properties.getEndpointUri(), properties.getRegion());
-  }
+    private AWSCredentialsProvider getCredentialsProvider() {
+        return new AWSStaticCredentialsProvider(new BasicAWSCredentials("test", "test"));
+    }
+
+    private AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {
+        return new AwsClientBuilder.EndpointConfiguration(
+                properties.getEndpointUri(), properties.getRegion());
+    }
 }

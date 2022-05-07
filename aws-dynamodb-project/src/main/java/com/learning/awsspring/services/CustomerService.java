@@ -12,26 +12,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CustomerService {
 
-  private final CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-  @Autowired
-  public CustomerService(CustomerRepository customerRepository) {
-    this.customerRepository = customerRepository;
-  }
+    @Autowired
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
-  public List<Customer> findAllCustomers() {
-    return customerRepository.findAll();
-  }
+    public List<Customer> findAllCustomers() {
+        return customerRepository.findAll();
+    }
 
-  public Optional<Customer> findCustomerById(Long id) {
-    return customerRepository.findById(id);
-  }
+    public Optional<Customer> findCustomerById(Long id) {
+        return customerRepository.findById(id);
+    }
 
-  public Customer saveCustomer(Customer customer) {
-    return customerRepository.save(customer);
-  }
+    public Customer saveCustomer(Customer customer) {
+        return customerRepository.save(customer);
+    }
 
-  public void deleteCustomerById(Long id) {
-    customerRepository.deleteById(id);
-  }
+    public void deleteCustomerById(Long id) {
+        customerRepository.deleteById(id);
+    }
 }

@@ -22,12 +22,11 @@
         <commons-io.version>2.11.0</commons-io.version>
         <aws.version>2.4.1</aws.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
-
+        <spotless.version>2.22.4</spotless.version>
         <testcontainers.version>1.17.1</testcontainers.version>
 
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-        <maven-pmd-plugin.version>3.16.0</maven-pmd-plugin.version>
         <dependency-check-maven.version>7.1.0</dependency-check-maven.version>
         <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M6</maven-failsafe-plugin.version>
@@ -327,19 +326,22 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven-pmd-plugin.version}</version>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.version}</version>
                 <configuration>
-                    <rulesets>
-                        <ruleset>build-config/pmd/pmd-ruleset.xml</ruleset>
-                    </rulesets>
+                    <java>
+                        <googleJavaFormat>
+                            <version>1.15.0</version>
+                            <style>AOSP</style>
+                        </googleJavaFormat>
+                    </java>
                 </configuration>
                 <executions>
                     <execution>
+                        <phase>compile</phase>
                         <goals>
                             <goal>check</goal>
-                            <goal>cpd-check</goal>
                         </goals>
                     </execution>
                 </executions>

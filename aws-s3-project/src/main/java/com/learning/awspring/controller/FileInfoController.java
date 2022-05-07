@@ -23,31 +23,31 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class FileInfoController {
 
-  private final AwsS3Service awsS3Service;
-  private final FileInfoService fileInfoService;
+    private final AwsS3Service awsS3Service;
+    private final FileInfoService fileInfoService;
 
-  @PostMapping(
-      value = "/s3/upload",
-      consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
-      produces = {MediaType.APPLICATION_JSON_VALUE})
-  FileInfo uploadFileToS3(@RequestPart(name = "file") MultipartFile multipartFile)
-      throws AmazonServiceException, SdkClientException, IOException {
-    return awsS3Service.uploadObjectToS3(multipartFile);
-  }
+    @PostMapping(
+            value = "/s3/upload",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    FileInfo uploadFileToS3(@RequestPart(name = "file") MultipartFile multipartFile)
+            throws AmazonServiceException, SdkClientException, IOException {
+        return awsS3Service.uploadObjectToS3(multipartFile);
+    }
 
-  @GetMapping("/s3/download/{name}")
-  S3ObjectInputStream downloadFromS3Route(@PathVariable(name = "name") String fileName)
-      throws FileNotFoundException {
-    return awsS3Service.downloadFileFromS3Bucket(fileName);
-  }
+    @GetMapping("/s3/download/{name}")
+    S3ObjectInputStream downloadFromS3Route(@PathVariable(name = "name") String fileName)
+            throws FileNotFoundException {
+        return awsS3Service.downloadFileFromS3Bucket(fileName);
+    }
 
-  @GetMapping("/s3/view-all")
-  List<S3ObjectSummary> viewAllFromS3Route() {
-    return awsS3Service.listObjects();
-  }
+    @GetMapping("/s3/view-all")
+    List<S3ObjectSummary> viewAllFromS3Route() {
+        return awsS3Service.listObjects();
+    }
 
-  @GetMapping("/s3/view-all-db")
-  List<FileInfo> viewAllFilesFromDb() {
-    return fileInfoService.findAllFiles();
-  }
+    @GetMapping("/s3/view-all-db")
+    List<FileInfo> viewAllFilesFromDb() {
+        return fileInfoService.findAllFiles();
+    }
 }

@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class S3ApplicationTest extends AbstractIntegrationTest {
 
-  @Autowired FileInfoRepository fileInfoRepository;
+    @Autowired FileInfoRepository fileInfoRepository;
 
-  @Test
-  void contextLoads() {
-    assertThat(fileInfoRepository.existsByFileName("fileName")).isFalse();
-  }
+    @Test
+    void contextLoads() {
+        assertThat(fileInfoRepository.existsByFileName("fileName")).isFalse();
+    }
 }

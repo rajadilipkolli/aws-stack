@@ -20,28 +20,28 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 public class AwsLocalConfig {
 
-  private final ApplicationProperties properties;
-  private final AwsS3Config awsS3Config;
+    private final ApplicationProperties properties;
+    private final AwsS3Config awsS3Config;
 
-  @Bean
-  @Primary
-  public AmazonS3 amazonS3Client() {
-    AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard().enablePathStyleAccess();
-    builder.withEndpointConfiguration(getEndpointConfiguration());
-    builder.withCredentials(getCredentialsProvider());
-    return builder.build();
-  }
+    @Bean
+    @Primary
+    public AmazonS3 amazonS3Client() {
+        AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard().enablePathStyleAccess();
+        builder.withEndpointConfiguration(getEndpointConfiguration());
+        builder.withCredentials(getCredentialsProvider());
+        return builder.build();
+    }
 
-  private AWSCredentialsProvider getCredentialsProvider() {
-    return new AWSStaticCredentialsProvider(getBasicAWSCredentials());
-  }
+    private AWSCredentialsProvider getCredentialsProvider() {
+        return new AWSStaticCredentialsProvider(getBasicAWSCredentials());
+    }
 
-  private AWSCredentials getBasicAWSCredentials() {
-    return new BasicAWSCredentials(awsS3Config.getAccessKey(), awsS3Config.getSecretKey());
-  }
+    private AWSCredentials getBasicAWSCredentials() {
+        return new BasicAWSCredentials(awsS3Config.getAccessKey(), awsS3Config.getSecretKey());
+    }
 
-  private AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {
-    return new AwsClientBuilder.EndpointConfiguration(
-        properties.getEndpointUri(), properties.getRegion());
-  }
+    private AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {
+        return new AwsClientBuilder.EndpointConfiguration(
+                properties.getEndpointUri(), properties.getRegion());
+    }
 }

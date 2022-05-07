@@ -14,39 +14,39 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CustomerService {
 
-  private final CustomerRepository customerRepository;
-  private final CustomerMapper customerMapper;
+    private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-  @Autowired
-  public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
-    this.customerRepository = customerRepository;
-    this.customerMapper = customerMapper;
-  }
+    @Autowired
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+        this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
+    }
 
-  public List<Customer> findAllCustomers() {
-    return customerRepository.findAll();
-  }
+    public List<Customer> findAllCustomers() {
+        return customerRepository.findAll();
+    }
 
-  public Optional<Customer> findCustomerById(Long id) {
-    return customerRepository.findById(id);
-  }
+    public Optional<Customer> findCustomerById(Long id) {
+        return customerRepository.findById(id);
+    }
 
-  public Customer saveCustomer(CustomerDTO customerDTO) {
-    var customer = this.customerMapper.toEntity(customerDTO);
-    return customerRepository.save(customer);
-  }
+    public Customer saveCustomer(CustomerDTO customerDTO) {
+        var customer = this.customerMapper.toEntity(customerDTO);
+        return customerRepository.save(customer);
+    }
 
-  public void deleteCustomerById(Long id) {
-    customerRepository.deleteById(id);
-  }
+    public void deleteCustomerById(Long id) {
+        customerRepository.deleteById(id);
+    }
 
-  public Optional<Customer> updateCustomer(Long id, CustomerDTO customerDTO) {
-    return findCustomerById(id)
-        .map(
-            customerObj -> {
-              var customer = this.customerMapper.toEntity(customerDTO);
-              customer.setId(customerObj.getId());
-              return customerRepository.save(customer);
-            });
-  }
+    public Optional<Customer> updateCustomer(Long id, CustomerDTO customerDTO) {
+        return findCustomerById(id)
+                .map(
+                        customerObj -> {
+                            var customer = this.customerMapper.toEntity(customerDTO);
+                            customer.setId(customerObj.getId());
+                            return customerRepository.save(customer);
+                        });
+    }
 }

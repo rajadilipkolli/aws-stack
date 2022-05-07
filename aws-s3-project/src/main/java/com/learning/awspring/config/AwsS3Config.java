@@ -7,11 +7,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("cloud.aws.s3")
 public class AwsS3Config {
 
-  private String bucketName;
+    private String bucketName;
 
-  private String endpointUrl;
+    private String endpointUrl;
 
-  private String accessKey;
+    private String accessKey;
 
-  private String secretKey;
+    private String secretKey;
 }

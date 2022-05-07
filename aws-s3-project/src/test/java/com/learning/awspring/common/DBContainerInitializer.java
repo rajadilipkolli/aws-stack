@@ -7,21 +7,21 @@ import org.testcontainers.junit.jupiter.Container;
 
 public class DBContainerInitializer {
 
-  @Container
-  private static final PostgreSQLContainer<?> sqlContainer =
-      new PostgreSQLContainer<>("postgres:latest")
-          .withDatabaseName("integration-tests-db")
-          .withUsername("username")
-          .withPassword("password");
+    @Container
+    private static final PostgreSQLContainer<?> sqlContainer =
+            new PostgreSQLContainer<>("postgres:latest")
+                    .withDatabaseName("integration-tests-db")
+                    .withUsername("username")
+                    .withPassword("password");
 
-  static {
-    sqlContainer.start();
-  }
+    static {
+        sqlContainer.start();
+    }
 
-  @DynamicPropertySource
-  public static void setPostGreSQLValues(DynamicPropertyRegistry dynamicPropertyRegistry) {
-    dynamicPropertyRegistry.add("spring.datasource.url", sqlContainer::getJdbcUrl);
-    dynamicPropertyRegistry.add("spring.datasource.username", sqlContainer::getUsername);
-    dynamicPropertyRegistry.add("spring.datasource.password", sqlContainer::getPassword);
-  }
+    @DynamicPropertySource
+    public static void setPostGreSQLValues(DynamicPropertyRegistry dynamicPropertyRegistry) {
+        dynamicPropertyRegistry.add("spring.datasource.url", sqlContainer::getJdbcUrl);
+        dynamicPropertyRegistry.add("spring.datasource.username", sqlContainer::getUsername);
+        dynamicPropertyRegistry.add("spring.datasource.password", sqlContainer::getPassword);
+    }
 }

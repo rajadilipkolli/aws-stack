@@ -13,10 +13,10 @@ import org.springframework.context.annotation.Profile;
 @Profile({PROFILE_PROD})
 public class AwsConfig {
 
-  @Bean
-  @Primary
-  public AmazonS3 amazonS3Client() {
-    AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
-    return builder.build();
-  }
+    @Bean
+    @Primary
+    public AmazonS3 amazonS3Client() {
+        AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
+        return builder.build();
+    }
 }

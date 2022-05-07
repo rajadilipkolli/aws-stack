@@ -5,6 +5,6 @@ import org.junit.jupiter.api.Test;
 
 class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
-  @Test
-  void contextLoads() {}
+    @Test
+    void contextLoads() {}
 }

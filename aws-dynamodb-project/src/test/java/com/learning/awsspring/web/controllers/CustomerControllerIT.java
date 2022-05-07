@@ -22,93 +22,96 @@ import org.springframework.http.MediaType;
 
 class CustomerControllerIT extends AbstractIntegrationTest {
 
-  @Autowired private CustomerRepository customerRepository;
+    @Autowired private CustomerRepository customerRepository;
 
-  private List<Customer> customerList = null;
+    private List<Customer> customerList = null;
 
-  @BeforeEach
-  void setUp() {
-    customerRepository.deleteAll();
+    @BeforeEach
+    void setUp() {
+        customerRepository.deleteAll();
 
-    customerList = new ArrayList<>();
-    customerList.add(new Customer(1L, "First Customer"));
-    customerList.add(new Customer(2L, "Second Customer"));
-    customerList.add(new Customer(3L, "Third Customer"));
-    customerList = customerRepository.saveAll(customerList);
-  }
+        customerList = new ArrayList<>();
+        customerList.add(new Customer(1L, "First Customer"));
+        customerList.add(new Customer(2L, "Second Customer"));
+        customerList.add(new Customer(3L, "Third Customer"));
+        customerList = customerRepository.saveAll(customerList);
+    }
 
-  @Test
-  void shouldFetchAllCustomers() throws Exception {
-    this.mockMvc
-        .perform(get("/api/customers"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.size()", is(customerList.size())));
-  }
+    @Test
+    void shouldFetchAllCustomers() throws Exception {
+        this.mockMvc
+                .perform(get("/api/customers"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(customerList.size())));
+    }
 
-  @Test
-  void shouldFindCustomerById() throws Exception {
-    Customer customer = customerList.get(0);
-    Long customerId = customer.getId();
+    @Test
+    void shouldFindCustomerById() throws Exception {
+        Customer customer = customerList.get(0);
+        Long customerId = customer.getId();
 
-    this.mockMvc
-        .perform(get("/api/customers/{id}", customerId))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.text", is(customer.getText())));
-  }
+        this.mockMvc
+                .perform(get("/api/customers/{id}", customerId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.text", is(customer.getText())));
+    }
 
-  @Test
-  void shouldCreateNewCustomer() throws Exception {
-    Customer customer = new Customer(null, "New Customer");
-    this.mockMvc
-        .perform(
-            post("/api/customers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(customer)))
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.text", is(customer.getText())));
-  }
+    @Test
+    void shouldCreateNewCustomer() throws Exception {
+        Customer customer = new Customer(null, "New Customer");
+        this.mockMvc
+                .perform(
+                        post("/api/customers")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.text", is(customer.getText())));
+    }
 
-  @Test
-  void shouldReturn400WhenCreateNewCustomerWithoutText() throws Exception {
-    Customer customer = new Customer(null, null);
+    @Test
+    void shouldReturn400WhenCreateNewCustomerWithoutText() throws Exception {
+        Customer customer = new Customer(null, null);
 
-    this.mockMvc
-        .perform(
-            post("/api/customers")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(customer)))
-        .andExpect(status().isBadRequest())
-        .andExpect(header().string("Content-Type", is("application/problem+json")))
-        .andExpect(jsonPath("$.type", is("https://zalando.github.io/problem/constraint-violation")))
-        .andExpect(jsonPath("$.title", is("Constraint Violation")))
-        .andExpect(jsonPath("$.status", is(400)))
-        .andExpect(jsonPath("$.violations", hasSize(1)))
-        .andExpect(jsonPath("$.violations[0].field", is("text")))
-        .andExpect(jsonPath("$.violations[0].message", is("Text cannot be empty")))
-        .andReturn();
-  }
+        this.mockMvc
+                .perform(
+                        post("/api/customers")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("Content-Type", is("application/problem+json")))
+                .andExpect(
+                        jsonPath(
+                                "$.type",
+                                is("https://zalando.github.io/problem/constraint-violation")))
+                .andExpect(jsonPath("$.title", is("Constraint Violation")))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.violations", hasSize(1)))
+                .andExpect(jsonPath("$.violations[0].field", is("text")))
+                .andExpect(jsonPath("$.violations[0].message", is("Text cannot be empty")))
+                .andReturn();
+    }
 
-  @Test
-  void shouldUpdateCustomer() throws Exception {
-    Customer customer = customerList.get(0);
-    customer.setText("Updated Customer");
+    @Test
+    void shouldUpdateCustomer() throws Exception {
+        Customer customer = customerList.get(0);
+        customer.setText("Updated Customer");
 
-    this.mockMvc
-        .perform(
-            put("/api/customers/{id}", customer.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(customer)))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.text", is(customer.getText())));
-  }
+        this.mockMvc
+                .perform(
+                        put("/api/customers/{id}", customer.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.text", is(customer.getText())));
+    }
 
-  @Test
-  void shouldDeleteCustomer() throws Exception {
-    Customer customer = customerList.get(0);
+    @Test
+    void shouldDeleteCustomer() throws Exception {
+        Customer customer = customerList.get(0);
 
-    this.mockMvc
-        .perform(delete("/api/customers/{id}", customer.getId()))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.text", is(customer.getText())));
-  }
+        this.mockMvc
+                .perform(delete("/api/customers/{id}", customer.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.text", is(customer.getText())));
+    }
 }

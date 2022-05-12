@@ -1,0 +1,15 @@
+{
+  "generator-springboot": {
+    "appName": "aws-ses-project",
+    "packageName": "com.example.awsspring",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "none",
+    "features": [
+      "elk",
+      "monitoring",
+      "localstack"
+    ],
+    "buildTool": "maven",
+    "packageFolder": "com/example/awsspring"
+  }
+}

@@ -1,11 +1,5 @@
 #!/bin/bash
 
-awslocal s3 mb s3://testbucket
-echo "List of S3 buckets:"
+echo "Registering ses:"
+awslocal ses verify-email-identity --email-address sender@example.com --endpoint-url=http://localhost:4566
 echo "-------------------------------"
-awslocal s3 ls
-
-awslocal sqs create-queue --queue-name test_queue
-echo "List of SQS Queues:"
-echo "-------------------------------"
-awslocal sqs list-queues

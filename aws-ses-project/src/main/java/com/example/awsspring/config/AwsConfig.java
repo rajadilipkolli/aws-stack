@@ -8,11 +8,17 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
+import io.awspring.cloud.ses.SimpleEmailServiceJavaMailSender;
+import io.awspring.cloud.ses.SimpleEmailServiceMailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSender;
 
 @Configuration
 @Profile({PROFILE_NOT_TEST})
@@ -26,6 +32,7 @@ public class AwsConfig {
     @Bean
     @Primary
     public AmazonS3 amazonS3Client() {
+
         AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard().enablePathStyleAccess();
         if (properties.getEndpointUri() != null
                 && properties.getEndpointUri().trim().length() != 0) {
@@ -33,6 +40,30 @@ public class AwsConfig {
             builder.withCredentials(getCredentialsProvider());
         }
         return builder.build();
+    }
+
+    @Bean
+    @Primary
+    public AmazonSimpleEmailService amazonSimpleEmailService() {
+
+        AmazonSimpleEmailServiceClientBuilder builder =
+                AmazonSimpleEmailServiceClientBuilder.standard();
+        if (properties.getEndpointUri() != null
+                && properties.getEndpointUri().trim().length() != 0) {
+            builder.withEndpointConfiguration(getEndpointConfiguration());
+            builder.withCredentials(getCredentialsProvider());
+        }
+        return builder.build();
+    }
+
+    @Bean
+    public JavaMailSender javaMailSender(AmazonSimpleEmailService amazonSimpleEmailService) {
+        return new SimpleEmailServiceJavaMailSender(amazonSimpleEmailService);
+    }
+
+    @Bean
+    public MailSender mailSender(AmazonSimpleEmailService amazonSimpleEmailService) {
+        return new SimpleEmailServiceMailSender(amazonSimpleEmailService);
     }
 
     private AWSCredentialsProvider getCredentialsProvider() {

@@ -1,11 +1,9 @@
 #!/bin/bash
 
-awslocal s3 mb s3://testbucket
-echo "List of S3 buckets:"
-echo "-------------------------------"
-awslocal s3 ls
+# -- > Create DynamoDb Table
+echo Creating  DynamoDb \'messages\' table ...
+awslocal dynamodb create-table --cli-input-json '{"TableName":"Customer","KeySchema":[{"AttributeName":"id","KeyType":"HASH"}],"AttributeDefinitions":[{"AttributeName":"id","AttributeType":"S"}],"ProvisionedThroughput":{"ReadCapacityUnits":5,"WriteCapacityUnits":5},"Tags":[{"Key":"Owner","Value":"localstack"}]}'
 
-awslocal sqs create-queue --queue-name test_queue
-echo "List of SQS Queues:"
-echo "-------------------------------"
-awslocal sqs list-queues
+# --> List DynamoDb Tables
+echo Listing tables ...
+awslocal dynamodb list-tables

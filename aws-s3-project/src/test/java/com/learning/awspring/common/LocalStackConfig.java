@@ -17,34 +17,34 @@ import org.testcontainers.utility.DockerImageName;
 @TestConfiguration
 public class LocalStackConfig {
 
-  public static final String TEST_ACCESS_KEY = "test";
-  public static final String TEST_SECRET_KEY = "test";
+    public static final String TEST_ACCESS_KEY = "test";
+    public static final String TEST_SECRET_KEY = "test";
 
-  public static final AWSCredentials TEST_CREDENTIALS =
-      new BasicAWSCredentials(TEST_ACCESS_KEY, TEST_SECRET_KEY);
+    public static final AWSCredentials TEST_CREDENTIALS =
+            new BasicAWSCredentials(TEST_ACCESS_KEY, TEST_SECRET_KEY);
 
-  static final LocalStackContainer localStackContainer;
+    static final LocalStackContainer localStackContainer;
 
-  static {
-    System.setProperty("com.amazonaws.sdk.disableCbor", "true");
-    localStackContainer =
-        new LocalStackContainer(DockerImageName.parse("localstack/localstack"), false)
-            .withServices(S3)
-            .withExposedPorts(4566);
-    localStackContainer.start();
-  }
+    static {
+        System.setProperty("com.amazonaws.sdk.disableCbor", "true");
+        localStackContainer =
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack"), false)
+                        .withServices(S3)
+                        .withExposedPorts(4566);
+        localStackContainer.start();
+    }
 
-  @Bean
-  @Primary
-  public AmazonS3 localstackAmazonS3() {
-    return AmazonS3ClientBuilder.standard()
-        .enablePathStyleAccess()
-        .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(S3))
-        .withCredentials(getCredentialsProvider())
-        .build();
-  }
+    @Bean
+    @Primary
+    public AmazonS3 localstackAmazonS3() {
+        return AmazonS3ClientBuilder.standard()
+                .enablePathStyleAccess()
+                .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(S3))
+                .withCredentials(getCredentialsProvider())
+                .build();
+    }
 
-  private static AWSCredentialsProvider getCredentialsProvider() {
-    return new AWSStaticCredentialsProvider(TEST_CREDENTIALS);
-  }
+    private static AWSCredentialsProvider getCredentialsProvider() {
+        return new AWSStaticCredentialsProvider(TEST_CREDENTIALS);
+    }
 }

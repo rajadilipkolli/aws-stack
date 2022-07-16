@@ -26,39 +26,42 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class AwsS3Service {
 
-  private final AmazonS3 amazonS3;
-  private final AwsS3Config awsS3Config;
-  private final FileInfoRepository fileInfoRepository;
+    private final AmazonS3 amazonS3;
+    private final AwsS3Config awsS3Config;
+    private final FileInfoRepository fileInfoRepository;
 
-  public S3ObjectInputStream downloadFileFromS3Bucket(final String fileName)
-      throws FileNotFoundException {
-    log.info("Downloading file '{}' from bucket: '{}' ", fileName, awsS3Config.getBucketName());
-    if (this.fileInfoRepository.existsByFileName(fileName)) {
-      final S3Object s3Object = amazonS3.getObject(awsS3Config.getBucketName(), fileName);
-      return s3Object.getObjectContent();
-    } else {
-      throw new FileNotFoundException(fileName);
+    public S3ObjectInputStream downloadFileFromS3Bucket(final String fileName)
+            throws FileNotFoundException {
+        log.info("Downloading file '{}' from bucket: '{}' ", fileName, awsS3Config.getBucketName());
+        if (this.fileInfoRepository.existsByFileName(fileName)) {
+            final S3Object s3Object = amazonS3.getObject(awsS3Config.getBucketName(), fileName);
+            return s3Object.getObjectContent();
+        } else {
+            throw new FileNotFoundException(fileName);
+        }
     }
-  }
 
-  public List<S3ObjectSummary> listObjects() {
-    log.info("Retrieving object summaries for bucket '{}'", awsS3Config.getBucketName());
-    ObjectListing objectListing = amazonS3.listObjects(awsS3Config.getBucketName());
-    return objectListing.getObjectSummaries();
-  }
+    public List<S3ObjectSummary> listObjects() {
+        log.info("Retrieving object summaries for bucket '{}'", awsS3Config.getBucketName());
+        ObjectListing objectListing = amazonS3.listObjects(awsS3Config.getBucketName());
+        return objectListing.getObjectSummaries();
+    }
 
-  public FileInfo uploadObjectToS3(MultipartFile multipartFile)
-      throws AmazonServiceException, SdkClientException, IOException {
-    String fileName = multipartFile.getOriginalFilename();
-    log.info("Uploading file '{}' to bucket: '{}' ", fileName, awsS3Config.getBucketName());
-    ObjectMetadata objectMetadata = new ObjectMetadata();
-    objectMetadata.setContentLength(multipartFile.getResource().contentLength());
-    String fileUrl =
-        awsS3Config.getEndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
-    PutObjectResult putObjectResult =
-        amazonS3.putObject(
-            awsS3Config.getBucketName(), fileName, multipartFile.getInputStream(), objectMetadata);
-    var fileInfo = new FileInfo(fileName, fileUrl, Objects.nonNull(putObjectResult));
-    return fileInfoRepository.save(fileInfo);
-  }
+    public FileInfo uploadObjectToS3(MultipartFile multipartFile)
+            throws AmazonServiceException, SdkClientException, IOException {
+        String fileName = multipartFile.getOriginalFilename();
+        log.info("Uploading file '{}' to bucket: '{}' ", fileName, awsS3Config.getBucketName());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(multipartFile.getResource().contentLength());
+        String fileUrl =
+                awsS3Config.getEndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
+        PutObjectResult putObjectResult =
+                amazonS3.putObject(
+                        awsS3Config.getBucketName(),
+                        fileName,
+                        multipartFile.getInputStream(),
+                        objectMetadata);
+        var fileInfo = new FileInfo(fileName, fileUrl, Objects.nonNull(putObjectResult));
+        return fileInfoRepository.save(fileInfo);
+    }
 }

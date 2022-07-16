@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties({ApplicationProperties.class, AwsS3Config.class})
 public class S3Application {
 
-  public static void main(String[] args) {
-    SpringApplication.run(S3Application.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(S3Application.class, args);
+    }
 }

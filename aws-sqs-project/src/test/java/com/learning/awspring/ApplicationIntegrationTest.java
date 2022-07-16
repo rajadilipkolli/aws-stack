@@ -19,23 +19,24 @@ import org.springframework.http.MediaType;
 @TestInstance(Lifecycle.PER_CLASS)
 class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
-  @Autowired private InBoundLogRepository inBoundLogRepository;
+    @Autowired private InBoundLogRepository inBoundLogRepository;
 
-  @Test
-  void sendingMessage() throws Exception {
-    Message message = FakeObjectCreator.createMessage();
-    long count = this.inBoundLogRepository.count();
-    this.mockMvc
-        .perform(
-            post("/api/sqs/send")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(message)))
-        .andExpect(status().isCreated());
+    @Test
+    void sendingMessage() throws Exception {
+        Message message = FakeObjectCreator.createMessage();
+        long count = this.inBoundLogRepository.count();
+        this.mockMvc
+                .perform(
+                        post("/api/sqs/send")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(message)))
+                .andExpect(status().isCreated());
 
-    Awaitility.given()
-        .atMost(Duration.ofSeconds(30))
-        .pollInterval(Duration.ofSeconds(3))
-        .await()
-        .untilAsserted(() -> assertThat(this.inBoundLogRepository.count()).isEqualTo(count + 1));
-  }
+        Awaitility.given()
+                .atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(3))
+                .await()
+                .untilAsserted(
+                        () -> assertThat(this.inBoundLogRepository.count()).isEqualTo(count + 1));
+    }
 }

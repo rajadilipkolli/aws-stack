@@ -20,18 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SqsController {
 
-  // QueueMessagingTemplate initializes the messaging template by configuring the destination
-  // resolver as well as the message converter.
-  private final QueueMessagingTemplate queueMessagingTemplate;
+    // QueueMessagingTemplate initializes the messaging template by configuring the destination
+    // resolver as well as the message converter.
+    private final QueueMessagingTemplate queueMessagingTemplate;
 
-  // HTTP POST url - http://localhost:8080/api/sqs/send
-  @PostMapping("/send")
-  // @ResponseStatus annotation marks the method with the status-code and the reason message that
-  // should be returned.
-  @ResponseStatus(code = HttpStatus.CREATED)
-  public void sendMessageToSqs(@RequestBody @Valid final Message message) {
-    log.info("Sending the message to the Amazon sqs.");
-    queueMessagingTemplate.convertAndSend(QUEUE, message);
-    log.info("Message sent successfully to the Amazon sqs.");
-  }
+    // HTTP POST url - http://localhost:8080/api/sqs/send
+    @PostMapping("/send")
+    // @ResponseStatus annotation marks the method with the status-code and the reason message that
+    // should be returned.
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public void sendMessageToSqs(@RequestBody @Valid final Message message) {
+        log.info("Sending the message to the Amazon sqs.");
+        queueMessagingTemplate.convertAndSend(QUEUE, message);
+        log.info("Message sent successfully to the Amazon sqs.");
+    }
 }

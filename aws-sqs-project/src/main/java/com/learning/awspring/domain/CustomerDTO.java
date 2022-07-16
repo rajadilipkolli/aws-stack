@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CustomerDTO {
 
-  @NotBlank(message = "Text cannot be empty")
-  private String text;
+    @NotBlank(message = "Text cannot be empty")
+    private String text;
 }

@@ -25,20 +25,20 @@ import org.hibernate.annotations.TypeDef;
 @AllArgsConstructor
 public class InBoundLog {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inbound_id_generator")
-  @SequenceGenerator(
-      name = "inbound_id_generator",
-      sequenceName = "inbound_log_id_seq",
-      allocationSize = 5)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inbound_id_generator")
+    @SequenceGenerator(
+            name = "inbound_id_generator",
+            sequenceName = "inbound_log_id_seq",
+            allocationSize = 5)
+    private Long id;
 
-  @Column(nullable = false, name = "message_id")
-  private String messageId;
+    @Column(nullable = false, name = "message_id")
+    private String messageId;
 
-  @Type(type = "json")
-  @Column(columnDefinition = "jsonb", name = "received_json")
-  private String receivedJson;
+    @Type(type = "json")
+    @Column(columnDefinition = "jsonb", name = "received_json")
+    private String receivedJson;
 
-  private LocalDateTime createdDate;
+    private LocalDateTime createdDate;
 }

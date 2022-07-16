@@ -19,18 +19,18 @@ import lombok.experimental.Accessors;
 @Entity
 public class FileInfo {
 
-  @Id
-  @SequenceGenerator(allocationSize = 1, name = "sequenceGenerator")
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-  private Integer id;
+    @Id
+    @SequenceGenerator(allocationSize = 1, name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    private Integer id;
 
-  private String fileName;
-  private String fileUrl;
-  private boolean isUploadSuccessFull;
+    private String fileName;
+    private String fileUrl;
+    private boolean isUploadSuccessFull;
 
-  public FileInfo(String fileName, String fileUrl, boolean isUploadSuccessFull) {
-    this.fileName = fileName;
-    this.fileUrl = fileUrl;
-    this.isUploadSuccessFull = isUploadSuccessFull;
-  }
+    public FileInfo(String fileName, String fileUrl, boolean isUploadSuccessFull) {
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+        this.isUploadSuccessFull = isUploadSuccessFull;
+    }
 }

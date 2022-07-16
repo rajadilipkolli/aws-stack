@@ -1,0 +1,36 @@
+name: aws-kinesis-project
+
+on:
+  push:
+    paths:
+      - "aws-kinesis-project/**"
+    branches: [ main ]
+  pull_request:
+    paths:
+      - "aws-kinesis-project/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+    name: Run Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Set up JDK 18
+        uses: actions/setup-java@v3.4.1
+        with:
+          java-version: 18
+          distribution: 'zulu'
+          cache: 'maven'
+
+      - name: Build and analyze
+        run: |
+          cd aws-kinesis-project
+          chmod +x mvnw
+          ./mvnw clean package

@@ -21,9 +21,10 @@ public class NotificationService {
 
     @Autowired private JavaMailSender javaMailSender;
 
-    public void sendMailMessage(final SimpleMailMessage simpleMailMessage) {
+    public String sendMailMessage(final SimpleMailMessage simpleMailMessage) {
         log.info("mailSender {}", mailSender.getClass().getName());
         this.mailSender.send(simpleMailMessage);
+        return "sent";
     }
 
     public void sendMailMessageWithAttachments() {

@@ -38,3 +38,4 @@ build/
 .jpb/
 aws-dynamodb-project/docker/volume/
 aws-kinesis-project/docker/volume/
+aws-ses-project/docker/volume/

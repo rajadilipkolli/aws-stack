@@ -1,6 +1,9 @@
 package com.example.awsspring.service;
 
 import com.example.awsspring.common.AbstractIntegrationTest;
+import java.time.Duration;
+import org.awaitility.Awaitility;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +34,14 @@ class NotificationServiceTest extends AbstractIntegrationTest {
         simpleMailMessage.setSubject("test subject");
         simpleMailMessage.setText("test text");
 
-        notificationService.sendMailMessage(simpleMailMessage);
+        Awaitility.await()
+                .atLeast(Duration.ofSeconds(1))
+                .atMost(Duration.ofSeconds(60))
+                .with()
+                .pollInterval(Duration.ofSeconds(1))
+                .until(
+                        () -> notificationService.sendMailMessage(simpleMailMessage),
+                        Matchers.equalTo("sent"));
     }
 
     @Test

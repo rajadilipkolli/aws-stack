@@ -10,9 +10,10 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
+import io.awspring.cloud.autoconfigure.context.properties.AwsCredentialsProperties;
 import io.awspring.cloud.ses.SimpleEmailServiceJavaMailSender;
 import io.awspring.cloud.ses.SimpleEmailServiceMailSender;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -22,8 +23,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 @Configuration
 @Profile({PROFILE_NOT_TEST})
+@RequiredArgsConstructor
 public class AwsConfig {
-    @Autowired private ApplicationProperties properties;
+    private final ApplicationProperties properties;
+    private final AwsCredentialsProperties awsCredentialsProperties;
 
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
@@ -67,7 +70,10 @@ public class AwsConfig {
     }
 
     private AWSCredentialsProvider getCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials("test", "test"));
+        return new AWSStaticCredentialsProvider(
+                new BasicAWSCredentials(
+                        awsCredentialsProperties.getAccessKey(),
+                        awsCredentialsProperties.getSecretKey()));
     }
 
     private AwsClientBuilder.EndpointConfiguration getEndpointConfiguration() {

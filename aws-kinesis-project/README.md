@@ -9,6 +9,10 @@ $ docker-compose -f docker/docker-compose.yml up -d
 $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
+## Notes:
+
+kinesis steam biner works with aws v1 of dynamodb and kinesis
+
 
 ### Useful Links
 * Swagger UI: http://localhost:8080/swagger-ui.html

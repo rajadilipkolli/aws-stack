@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "application.endpoint-uri",
+    "type": "java.lang.String",
+    "description": "URL at which AWS is running'"
+  },
+  {
+    "name": "application.region",
+    "type": "java.lang.String",
+    "description": "Region in which AWS is running"
+  }
+]}

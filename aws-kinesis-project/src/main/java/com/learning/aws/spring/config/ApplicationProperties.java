@@ -1,12 +1,18 @@
 package com.learning.aws.spring.config;
 
 import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
 @ConfigurationProperties("application")
 public class ApplicationProperties {
+
+    @NotBlank(message = "AWS Endpoint URL Cant be Null")
     private String endpointUri;
+    @NotBlank(message = "AWS Region Cant be Null")
     private String region;
     private Cors cors = new Cors();
 

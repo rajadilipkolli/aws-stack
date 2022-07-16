@@ -2,24 +2,29 @@ package com.learning.aws.spring.config;
 
 import static com.learning.aws.spring.utils.AppConstants.PROFILE_NOT_TEST;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClientBuilder;
+import com.amazonaws.services.kinesis.AmazonKinesisAsync;
+import com.amazonaws.services.kinesis.AmazonKinesisAsyncClientBuilder;
 import io.awspring.cloud.autoconfigure.context.properties.AwsCredentialsProperties;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 @Configuration
 @Profile({PROFILE_NOT_TEST})
 @RequiredArgsConstructor
 public class AwsConfig {
-    private ApplicationProperties properties;
-    private AwsCredentialsProperties awsCredentialsProperties;
+
+    private final ApplicationProperties properties;
+    private final AwsCredentialsProperties awsCredentialsProperties;
 
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
@@ -27,16 +32,33 @@ public class AwsConfig {
 
     @Bean
     @Primary
-    public DynamoDbClient getDynamoDbClient() {
+    public AmazonDynamoDBAsync amazonDynamoDBAsync() {
 
-        return DynamoDbClient.builder()
-                .endpointOverride(URI.create(properties.getEndpointUri()))
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(
-                                        awsCredentialsProperties.getAccessKey(),
-                                        awsCredentialsProperties.getSecretKey())))
-                .region(Region.of(properties.getRegion()))
+        return AmazonDynamoDBAsyncClientBuilder.standard()
+                .withEndpointConfiguration(
+                        new EndpointConfiguration(
+                                properties.getEndpointUri(), properties.getRegion()))
+                .withCredentials(getCredentialsProvider())
                 .build();
+    }
+
+    @Bean
+    @Primary
+    public AmazonKinesisAsync amazonKinesis() {
+        return AmazonKinesisAsyncClientBuilder.standard()
+                .withCredentials(getCredentialsProvider())
+                .withEndpointConfiguration(
+                        new EndpointConfiguration(
+                                properties.getEndpointUri(), properties.getRegion()))
+                .build();
+    }
+
+    private AWSCredentialsProvider getCredentialsProvider() {
+        return new AWSStaticCredentialsProvider(getBasicAWSCredentials());
+    }
+
+    private AWSCredentials getBasicAWSCredentials() {
+        return new BasicAWSCredentials(
+                awsCredentialsProperties.getAccessKey(), awsCredentialsProperties.getSecretKey());
     }
 }

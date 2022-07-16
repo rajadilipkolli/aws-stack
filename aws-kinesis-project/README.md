@@ -20,3 +20,4 @@ kinesis steam biner works with aws v1 of dynamodb and kinesis
 * Prometheus: http://localhost:9090/
 * Grafana: http://localhost:3000/ (admin/admin)
 * Kibana: http://localhost:5601/
+* Localstack : http://localhost:4566/health

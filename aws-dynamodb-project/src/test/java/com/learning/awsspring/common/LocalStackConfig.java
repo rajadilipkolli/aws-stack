@@ -20,7 +20,7 @@ public class LocalStackConfig {
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.14.2"))
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.0.0"))
                         .withServices(DYNAMODB)
                         .withExposedPorts(4566);
         localStackContainer.start();

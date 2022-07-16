@@ -11,7 +11,7 @@ services:
       - "5432:5432"
 
   localstack:
-    image: localstack/localstack-light
+    image: localstack/localstack:1.0.0
     environment:
       - AWS_DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566
@@ -20,6 +20,6 @@ services:
     ports:
       - '4566:4566'
     volumes:
-      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - '../.localstack:/docker-entrypoint-initaws.d'

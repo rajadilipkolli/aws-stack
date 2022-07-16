@@ -1,5 +1,8 @@
 name: aws-kinesis-project
 
+permissions:
+  actions: write
+
 on:
   push:
     paths:

@@ -22,7 +22,7 @@
 		<java.version>18</java.version>
 		<problem-spring-web.version>0.27.0</problem-spring-web.version>
 		<commons-io.version>2.11.0</commons-io.version>
-        <aws.version>2.4.1</aws.version>
+        <aws.version>2.4.2</aws.version>
         <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
 		<spotless.version>2.23.0</spotless.version>
 		<testcontainers.version>1.17.3</testcontainers.version>

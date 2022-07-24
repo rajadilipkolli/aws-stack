@@ -11,7 +11,7 @@
     <groupId>com.learning.aws.spring</groupId>
     <artifactId>aws-kinesis-project-producer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>aws-kinesis-project</name>
+    <name>aws-kinesis-project-producer</name>
     <description>aws-kinesis-project-producer</description>
 
     <properties>

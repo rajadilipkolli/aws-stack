@@ -22,7 +22,7 @@ public class IpProducer {
                 .mapToObj(ipSuffix -> "192.168.0." + ipSuffix)
                 .forEach(
                         entry -> {
-                            log.info("sending event {}", source.output());
+                            log.info("sending event {}", entry);
                             source.output().send(MessageBuilder.withPayload(entry).build());
                         });
     }

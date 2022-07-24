@@ -1,13 +1,13 @@
-name: aws-kinesis-project
+name: aws-kinesis-project-producer
 
 on:
   push:
     paths:
-      - "aws-kinesis-project/**"
+      - "aws-kinesis-project-producer/**"
     branches: [ main ]
   pull_request:
     paths:
-      - "aws-kinesis-project/**"
+      - "aws-kinesis-project-producer/**"
     types:
       - opened
       - synchronize
@@ -31,6 +31,6 @@ jobs:
 
       - name: Build and analyze
         run: |
-          cd aws-kinesis-project
+          cd aws-kinesis-project-producer
           chmod +x mvnw
           ./mvnw clean package

@@ -6,15 +6,16 @@ import java.util.function.Consumer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @Configuration
 public class IpConsumer {
 
     @Bean
-    public Consumer<List<String>> consumeEvent() {
-        return ipList -> {
-            log.info("IpAddess Received at {} is:{}", LocalDateTime.now(),ipList);
-        };
+    public Consumer<Flux<List<String>>> consumeEvent() {
+        Consumer<String> onNext =
+                ip -> log.info("IpAddess Received at {} is:{}", LocalDateTime.now(), ip);
+        return recordFlux -> recordFlux.flatMap(Flux::fromIterable).doOnNext(onNext).subscribe();
     }
 }

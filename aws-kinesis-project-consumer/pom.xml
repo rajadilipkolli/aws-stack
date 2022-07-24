@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.learning.aws.spring</groupId>
-    <artifactId>aws-kinesis-project</artifactId>
+    <artifactId>aws-kinesis-project-consumer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>aws-kinesis-project</name>
-    <description>aws-kinesis-project</description>
+    <description>aws-kinesis-project-consumer</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -49,6 +49,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

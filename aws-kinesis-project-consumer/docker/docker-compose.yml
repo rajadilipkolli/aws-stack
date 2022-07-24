@@ -6,7 +6,7 @@ services:
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=kinesis, dynamodb
+      - SERVICES=kinesis, dynamodb, cloudwatch
       - DEFAULT_REGION=us-east-1
       - KINESIS_STREAM_SHARDS=1
       - KINESIS_ERROR_PROBABILITY=0.0

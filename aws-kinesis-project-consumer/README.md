@@ -1,4 +1,4 @@
-# aws-kinesis-project
+# aws-kinesis-project-consumer
 
 ### Run tests
 `$ ./mvnw clean verify`

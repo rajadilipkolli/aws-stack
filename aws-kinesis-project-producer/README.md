@@ -1,4 +1,4 @@
-# aws-kinesis-project
+# aws-kinesis-project-producer
 
 ### Run tests
 `$ ./mvnw clean verify`

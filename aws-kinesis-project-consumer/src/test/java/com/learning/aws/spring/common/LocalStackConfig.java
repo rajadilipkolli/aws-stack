@@ -1,5 +1,6 @@
 package com.learning.aws.spring.common;
 
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.CLOUDWATCH;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.KINESIS;
 
@@ -20,8 +21,8 @@ public class LocalStackConfig {
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.0.0"))
-                        .withServices(DYNAMODB, KINESIS)
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.0.1"))
+                        .withServices(CLOUDWATCH, DYNAMODB, KINESIS)
                         .withExposedPorts(4566);
         localStackContainer.start();
     }

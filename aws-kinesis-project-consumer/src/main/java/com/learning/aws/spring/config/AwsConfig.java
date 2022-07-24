@@ -7,6 +7,8 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
+import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync;
+import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsyncClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClientBuilder;
 import com.amazonaws.services.kinesis.AmazonKinesisAsync;
@@ -50,6 +52,16 @@ public class AwsConfig {
                 .withEndpointConfiguration(
                         new EndpointConfiguration(
                                 properties.getEndpointUri(), properties.getRegion()))
+                .build();
+    }
+
+    @Bean
+    public AmazonCloudWatchAsync amazonCloudWatch() {
+        return AmazonCloudWatchAsyncClientBuilder.standard()
+                .withEndpointConfiguration(
+                        new EndpointConfiguration(
+                                properties.getEndpointUri(), properties.getRegion()))
+                .withCredentials(getCredentialsProvider())
                 .build();
     }
 

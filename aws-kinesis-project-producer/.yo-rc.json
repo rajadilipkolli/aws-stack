@@ -1,0 +1,15 @@
+{
+  "generator-springboot": {
+    "appName": "aws-kinesis-project",
+    "packageName": "com.learning.aws.spring",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "none",
+    "features": [
+      "elk",
+      "monitoring",
+      "localstack"
+    ],
+    "buildTool": "maven",
+    "packageFolder": "com/learning/aws/spring"
+  }
+}

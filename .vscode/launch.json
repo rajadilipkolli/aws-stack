@@ -2,12 +2,23 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-KinesisApplication<aws-kinesis-project>",
+            "name": "Spring Boot-KinesisApplication<aws-kinesis-project-consumer>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
-            "mainClass": "com.learning.aws.spring.KinesisApplication",
-            "projectName": "aws-kinesis-project",
+            "mainClass": "com.learning.aws.spring.KinesisConsumerApplication",
+            "projectName": "aws-kinesis-project-consumer",
+            "args": "--spring.profiles.active=local",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-KinesisApplication<aws-kinesis-project-producer>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.learning.aws.spring.KinesisProducerApplication",
+            "projectName": "aws-kinesis-project-producer",
             "args": "--spring.profiles.active=local",
             "envFile": "${workspaceFolder}/.env"
         },

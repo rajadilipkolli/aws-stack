@@ -1,16 +1,17 @@
 version: '3.8'
 services:
+
   localstack:
     image: localstack/localstack:1.0.3
     ports:
-      - '4566-4583:4566-4583'
+      - "4566:4566"
     environment:
-      - DEBUG=1
-      - USE_SSL=0
-      - AWS_CBOR_DISABLE=1
-      - SERVICES=dynamodb
+      - SERVICES=kinesis, dynamodb
+      - DEFAULT_REGION=us-east-1
+      - KINESIS_STREAM_SHARDS=1
+      - KINESIS_ERROR_PROBABILITY=0.0
+      - KINESIS_STREAM_NAME=my-test-stream
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - AWS_DEFAULT_REGION=us-east-1
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"

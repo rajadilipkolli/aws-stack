@@ -4,6 +4,8 @@ image:
 ports:
   - port: 4566
     visibility: public
+  - port: 8080
+    visibility: public
 
 vscode:
   extensions:

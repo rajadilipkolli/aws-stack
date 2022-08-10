@@ -1,6 +1,10 @@
 image:
   file: .gitpod.Dockerfile
 
+ports:
+  - port: 4566
+    visibility: public
+
 vscode:
   extensions:
     - vscjava.vscode-java-pack

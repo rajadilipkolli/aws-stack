@@ -1,4 +1,4 @@
-# aws-kinesis-project-consumer
+# aws-kinesis-consumer-project
 
 ### Run tests
 `$ ./mvnw clean verify`
@@ -11,7 +11,7 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 
 ## Notes:
 
-kinesis steam biner works with aws v1 of dynamodb and kinesis
+kinesis steam binder works with aws v1 of dynamodb and kinesis
 
 
 ### Useful Links

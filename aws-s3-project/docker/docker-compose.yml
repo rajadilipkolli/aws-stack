@@ -11,7 +11,7 @@ services:
       - "5432:5432"
 
   localstack:
-    image: localstack/localstack:1.0.3
+    image: localstack/localstack:1.0.4
     environment:
       - AWS_DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566

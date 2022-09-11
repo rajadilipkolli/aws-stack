@@ -19,5 +19,8 @@ public class Initializer implements CommandLineRunner {
         log.info("Running Initializer.....");
         sesClient.verifyEmailAddress(
                 VerifyEmailAddressRequest.builder().emailAddress("sender@example.com").build());
+        sesClient.verifyEmailAddress(
+                VerifyEmailAddressRequest.builder().emailAddress("bar@baz.com").build());
+        log.info("Verified emailId.....");
     }
 }

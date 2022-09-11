@@ -2,13 +2,13 @@ package com.example.awsspring.common;
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SES;
 
-import org.springframework.boot.test.context.TestConfiguration;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
-@TestConfiguration
+@Slf4j
 public class LocalStackConfig {
 
     static LocalStackContainer localStackContainer;

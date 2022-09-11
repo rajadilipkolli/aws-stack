@@ -20,7 +20,7 @@ public class LocalStackConfig {
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.0.1"))
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.1.0"))
                         .withServices(DYNAMODB)
                         .withExposedPorts(4566);
         localStackContainer.start();
@@ -31,15 +31,13 @@ public class LocalStackConfig {
     public DynamoDbClient getDynamoDbClient() {
 
         return DynamoDbClient.builder()
-                .endpointOverride(
-                        localStackContainer.getEndpointOverride(
-                                LocalStackContainer.Service.DYNAMODB))
+                .endpointOverride(localStackContainer.getEndpointOverride(DYNAMODB))
+                .region(Region.of(localStackContainer.getRegion()))
                 .credentialsProvider(
                         StaticCredentialsProvider.create(
                                 AwsBasicCredentials.create(
                                         localStackContainer.getAccessKey(),
                                         localStackContainer.getSecretKey())))
-                .region(Region.of(localStackContainer.getRegion()))
                 .build();
     }
 

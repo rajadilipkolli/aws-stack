@@ -1,6 +1,6 @@
 {
   "generator-springboot": {
-    "appName": "aws-kinesis-project",
+    "appName": "aws-kinesis-consumer-project",
     "packageName": "com.learning.aws.spring",
     "databaseType": "postgresql",
     "dbMigrationTool": "none",

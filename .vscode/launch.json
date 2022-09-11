@@ -11,12 +11,12 @@
         },
         {
             "type": "java",
-            "name": "Spring Boot-KinesisApplication<aws-kinesis-project-consumer>",
+            "name": "Spring Boot-KinesisApplication<aws-kinesis-consumer-project>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "mainClass": "com.learning.aws.spring.KinesisConsumerApplication",
-            "projectName": "aws-kinesis-project-consumer",
+            "projectName": "aws-kinesis-consumer-project",
             "args": "--spring.profiles.active=local",
             "envFile": "${workspaceFolder}/.env"
         },

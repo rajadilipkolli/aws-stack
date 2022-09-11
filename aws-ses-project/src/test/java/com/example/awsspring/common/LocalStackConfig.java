@@ -1,25 +1,18 @@
 package com.example.awsspring.common;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SES;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.ses.SesClient;
 
 @TestConfiguration
-@Slf4j
 public class LocalStackConfig {
 
     static LocalStackContainer localStackContainer;
@@ -27,42 +20,24 @@ public class LocalStackConfig {
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.0.0"))
-                        .withServices(S3, SQS, SES)
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.1.0"))
+                        .withServices(SES)
                         .withExposedPorts(4566);
         localStackContainer.start();
-        try {
-            localStackContainer.execInContainer(
-                    StandardCharsets.UTF_8,
-                    "awslocal",
-                    "ses",
-                    "verify-email-identity",
-                    "--email-address",
-                    "sender@example.com",
-                    "--region",
-                    localStackContainer.getRegion(),
-                    "--endpoint-url",
-                    localStackContainer.getEndpointOverride(SES).toString());
-            log.info("verified user");
-        } catch (UnsupportedOperationException | IOException | InterruptedException e) {
-            e.printStackTrace();
-            log.error("unable to verify user ", e);
-        }
     }
 
     @Bean
     @Primary
-    public AmazonSimpleEmailService localstackAmazonSimpleEmailService() {
+    public SesClient localstackSesClient() {
+        AwsCredentialsProvider credentialsProvider =
+                () ->
+                        AwsBasicCredentials.create(
+                                localStackContainer.getAccessKey(),
+                                localStackContainer.getSecretKey());
 
-        return AmazonSimpleEmailServiceClientBuilder.standard()
-                .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(SES))
-                .withCredentials(getCredentialsProvider())
+        return SesClient.builder()
+                .region(Region.of(localStackContainer.getRegion()))
+                .credentialsProvider(credentialsProvider)
                 .build();
-    }
-
-    private AWSCredentialsProvider getCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(
-                new BasicAWSCredentials(
-                        localStackContainer.getAccessKey(), localStackContainer.getSecretKey()));
     }
 }

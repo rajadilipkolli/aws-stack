@@ -1,26 +1,41 @@
-version: '3.8'
+version: '3.7'
+
 services:
 
+  # Elasticsearch Docker Images: https://www.docker.elastic.co/
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     container_name: elasticsearch
     environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
       - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xmx2048m -Xms2048m"
-    volumes:
-      - esdata1:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+      - discovery.type=single-node
     ulimits:
       memlock:
         soft: -1
         hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
 
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.4.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+  
   logstash:
-    image: docker.elastic.co/logstash/logstash:6.8.23
+    image: docker.elastic.co/logstash/logstash:7.4.0
     container_name: logstash
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:
@@ -30,17 +45,6 @@ services:
     links:
       - elasticsearch
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:6.8.23
-    container_name: kibana
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-    ports:
-      - "5601:5601"
-    links:
-      - elasticsearch
-
 volumes:
-  esdata1:
+  elasticsearch-data:
     driver: local
-

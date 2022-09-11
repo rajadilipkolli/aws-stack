@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+
+  aws-ses-project:
+    build: ..
+    ports:
+      - "18080:8080"
+      - "18787:8787"
+    restart: always
+    depends_on:
+      - localstack
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker

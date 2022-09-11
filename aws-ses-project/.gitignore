@@ -35,9 +35,3 @@ build/
 ### Misc ###
 *.log
 .DS_Store
-.jpb/
-aws-dynamodb-project/docker/volume/
-aws-ses-project/docker/volume/
-aws-kinesis-consumer-project/docker/volume/
-aws-kinesis-project-producer/docker/volume/
-logs/

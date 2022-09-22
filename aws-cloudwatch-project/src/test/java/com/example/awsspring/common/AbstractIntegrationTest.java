@@ -17,9 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest(
         webEnvironment = RANDOM_PORT,
         properties = {
-            "spring.cloud.aws.credentials.access-key=noop",
-            "spring.cloud.aws.credentials.secret-key=noop",
-            "spring.cloud.aws.region.static=us-east-1",
             "management.metrics.export.cloudwatch.namespace=tc-localstack",
             "management.metrics.export.cloudwatch.step=5s",
             "management.metrics.enable.all=false",

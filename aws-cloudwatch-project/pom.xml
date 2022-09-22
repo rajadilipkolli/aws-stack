@@ -81,6 +81,12 @@
 			<artifactId>spring-cloud-aws-starter-metrics</artifactId>
             <version>${spring-cloud-aws-version}</version>
         </dependency>
+        <!-- Necessary for AutoConfiguring RegionProviderAutoConfiguration-->
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-core</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>

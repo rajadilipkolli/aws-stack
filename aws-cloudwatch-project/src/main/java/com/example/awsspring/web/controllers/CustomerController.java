@@ -2,8 +2,8 @@ package com.example.awsspring.web.controllers;
 
 import com.example.awsspring.entities.Customer;
 import com.example.awsspring.services.CustomerService;
+import io.micrometer.core.annotation.Timed;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/customers")
-@Slf4j
+@Timed
 public class CustomerController {
 
     private final CustomerService customerService;

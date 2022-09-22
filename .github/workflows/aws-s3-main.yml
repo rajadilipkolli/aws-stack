@@ -17,6 +17,9 @@ jobs:
   build:
     name: Run Unit & Integration Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./aws-s3-project
     steps:
       - uses: actions/checkout@v3
         with:
@@ -30,7 +33,7 @@ jobs:
           cache: 'maven'
 
       - name: Build and analyze
-        run: |
-          cd aws-s3-project
-          chmod +x mvnw
-          ./mvnw clean package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./mvnw clean package sonar:sonar

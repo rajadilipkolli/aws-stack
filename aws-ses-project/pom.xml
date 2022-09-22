@@ -89,7 +89,6 @@
         <dependency>
 			<groupId>io.awspring.cloud</groupId>
 			<artifactId>spring-cloud-aws-starter-ses</artifactId>
-            <version>${spring-cloud-aws-version}</version>
 		</dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -132,7 +131,6 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>
-            <version>1.12.307</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -153,6 +151,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+				<groupId>io.awspring.cloud</groupId>
+				<artifactId>spring-cloud-aws-dependencies</artifactId>
+				<version>${spring-cloud-aws-version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 

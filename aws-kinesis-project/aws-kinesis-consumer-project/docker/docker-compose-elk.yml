@@ -26,7 +26,7 @@ services:
 
   kibana:
     container_name: kibana
-    image: docker.elastic.co/kibana/kibana:7.4.0
+    image: docker.elastic.co/kibana/kibana:7.17.6
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
@@ -35,7 +35,7 @@ services:
       - elasticsearch
   
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.4.0
+    image: docker.elastic.co/logstash/logstash:7.17.6
     container_name: logstash
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:

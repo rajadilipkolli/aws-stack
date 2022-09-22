@@ -1,13 +1,13 @@
-name: aws-kinesis-project-producer
+name: aws-kinesis-producer-project
 
 on:
   push:
     paths:
-      - "aws-kinesis-project-producer/**"
+      - "aws-kinesis-project/aws-kinesis-producer-project/**"
     branches: [ main ]
   pull_request:
     paths:
-      - "aws-kinesis-project-producer/**"
+      - "aws-kinesis-project/aws-kinesis-producer-project/**"
     types:
       - opened
       - synchronize
@@ -17,6 +17,9 @@ jobs:
   build:
     name: Run Unit & Integration Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "./aws-kinesis-project/aws-kinesis-producer-project"
     steps:
       - uses: actions/checkout@v3
         with:
@@ -30,7 +33,4 @@ jobs:
           cache: 'maven'
 
       - name: Build and analyze
-        run: |
-          cd aws-kinesis-project-producer
-          chmod +x mvnw
-          ./mvnw clean package
+        run: ./mvnw clean package

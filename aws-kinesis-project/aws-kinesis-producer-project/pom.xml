@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.learning.aws.spring</groupId>
-    <artifactId>aws-kinesis-project-producer</artifactId>
+    <artifactId>aws-kinesis-producer-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>aws-kinesis-project-producer</name>
-    <description>aws-kinesis-project-producer</description>
+    <name>aws-kinesis-producer-project</name>
+    <description>aws-kinesis-producer-project</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

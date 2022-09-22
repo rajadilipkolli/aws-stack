@@ -1,0 +1,16 @@
+{
+  "generator-springboot": {
+    "appName": "aws-cloudwatch-project",
+    "packageName": "com.example.awsspring",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "liquibase",
+    "features": [
+      "elk",
+      "monitoring",
+      "localstack"
+    ],
+    "buildTool": "maven",
+    "packageFolder": "com/example/awsspring",
+    "liquibaseMigrationCounter": 2
+  }
+}

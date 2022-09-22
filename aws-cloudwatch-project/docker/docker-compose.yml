@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+
+  postgresqldb:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=appdb
+    ports:
+      - "5432:5432"
+
+  localstack:
+    image: localstack/localstack:1.1.0
+    ports:
+      - "4566:4566"
+    environment:
+      - DEBUG=1
+      - USE_SSL=0
+      - AWS_CBOR_DISABLE=1
+      - SERVICES=cloudwatch
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"

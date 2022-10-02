@@ -22,12 +22,15 @@ public class LocalStackConfig {
     @DynamicPropertySource
     static void setApplicationProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
         dynamicPropertyRegistry.add(
-                "cloud.aws.dynamodb.accessKey", LOCAL_STACK_CONTAINER::getAccessKey);
+                "spring.cloud.aws.credentials.access-key", LOCAL_STACK_CONTAINER::getAccessKey);
         dynamicPropertyRegistry.add(
-                "cloud.aws.dynamodb.secretKey", LOCAL_STACK_CONTAINER::getSecretKey);
-        dynamicPropertyRegistry.add("cloud.aws.dynamodb.region", LOCAL_STACK_CONTAINER::getRegion);
+                "spring.cloud.aws.credentials.secret-key", LOCAL_STACK_CONTAINER::getSecretKey);
         dynamicPropertyRegistry.add(
-                "cloud.aws.dynamodb.endpoint",
+                "spring.cloud.aws.region.static", LOCAL_STACK_CONTAINER::getRegion);
+        dynamicPropertyRegistry.add(
+                "spring.cloud.aws.dynamodb.region", LOCAL_STACK_CONTAINER::getRegion);
+        dynamicPropertyRegistry.add(
+                "spring.cloud.aws.dynamodb.endpoint",
                 () -> LOCAL_STACK_CONTAINER.getEndpointOverride(DYNAMODB));
     }
 }

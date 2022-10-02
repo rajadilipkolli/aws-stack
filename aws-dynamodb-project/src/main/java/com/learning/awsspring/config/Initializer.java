@@ -25,6 +25,6 @@ public class Initializer implements CommandLineRunner {
         customer.setEmail("rajaEmail@gmail.com");
         this.customerRepository.save(customer);
         Customer persistedCustomer = this.customerRepository.getCustomerById(uuid);
-        log.debug("persistedCustomer", persistedCustomer);
+        log.debug("persistedCustomer {}", persistedCustomer);
     }
 }

@@ -2,48 +2,35 @@ package com.learning.awsspring.common;
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
 
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
-@TestConfiguration
 public class LocalStackConfig {
-    static LocalStackContainer localStackContainer;
+    protected static final LocalStackContainer LOCAL_STACK_CONTAINER;
 
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
-        localStackContainer =
+        LOCAL_STACK_CONTAINER =
                 new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.1.0"))
                         .withServices(DYNAMODB)
                         .withExposedPorts(4566);
-        localStackContainer.start();
+        LOCAL_STACK_CONTAINER.start();
     }
 
-    @Bean
-    @Primary
-    public DynamoDbClient getDynamoDbClient() {
-
-        return DynamoDbClient.builder()
-                .endpointOverride(localStackContainer.getEndpointOverride(DYNAMODB))
-                .region(Region.of(localStackContainer.getRegion()))
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(
-                                        localStackContainer.getAccessKey(),
-                                        localStackContainer.getSecretKey())))
-                .build();
-    }
-
-    @Bean
-    @Primary
-    public DynamoDbEnhancedClient getDynamoDbEnhancedClient(DynamoDbClient dynamoDbClient) {
-        return DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient).build();
+    @DynamicPropertySource
+    static void setApplicationProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
+        dynamicPropertyRegistry.add(
+                "spring.cloud.aws.credentials.access-key", LOCAL_STACK_CONTAINER::getAccessKey);
+        dynamicPropertyRegistry.add(
+                "spring.cloud.aws.credentials.secret-key", LOCAL_STACK_CONTAINER::getSecretKey);
+        dynamicPropertyRegistry.add(
+                "spring.cloud.aws.region.static", LOCAL_STACK_CONTAINER::getRegion);
+        dynamicPropertyRegistry.add(
+                "spring.cloud.aws.dynamodb.region", LOCAL_STACK_CONTAINER::getRegion);
+        dynamicPropertyRegistry.add(
+                "spring.cloud.aws.dynamodb.endpoint",
+                () -> LOCAL_STACK_CONTAINER.getEndpointOverride(DYNAMODB));
     }
 }

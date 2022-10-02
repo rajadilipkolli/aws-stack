@@ -8,6 +8,7 @@ services:
       - "18787:8787"
     restart: always
     depends_on:
-      - postgresqldb
+      - localstack
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - CLOUD_AWS_DYNAMODB_ENDPOINT=http://localstack:4566

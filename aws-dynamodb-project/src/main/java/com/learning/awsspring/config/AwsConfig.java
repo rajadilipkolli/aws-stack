@@ -1,45 +1,35 @@
 package com.learning.awsspring.config;
 
-import static com.learning.awsspring.utils.AppConstants.PROFILE_NOT_TEST;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import java.net.URI;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 @Configuration
-@Profile({PROFILE_NOT_TEST})
+@RequiredArgsConstructor
 public class AwsConfig {
-    @Autowired private ApplicationProperties properties;
-
-    private String accessKeyId = "test";
-    private String secretAccessKey = "test";
 
     @Bean
-    public DynamoDbClient getDynamoDbClient() {
-        AwsCredentialsProvider credentialsProvider =
-                new AwsCredentialsProvider() {
-
-                    @Override
-                    public AwsCredentials resolveCredentials() {
-                        return AwsBasicCredentials.create(accessKeyId, secretAccessKey);
-                    }
-                };
+    public DynamoDbClient dynamoDbClient(AwsDynamoDbProperties awsDynamoDbProperties) {
 
         return DynamoDbClient.builder()
-                .region(Region.US_EAST_1)
-                .credentialsProvider(credentialsProvider)
+                .endpointOverride(URI.create(awsDynamoDbProperties.getEndpoint()))
+                .credentialsProvider(
+                        StaticCredentialsProvider.create(
+                                AwsBasicCredentials.create(
+                                        awsDynamoDbProperties.getAccessKey(),
+                                        awsDynamoDbProperties.getSecretKey())))
+                .region(Region.of(awsDynamoDbProperties.getRegion()))
                 .build();
     }
 
     @Bean
-    public DynamoDbEnhancedClient getDynamoDbEnhancedClient() {
-        return DynamoDbEnhancedClient.builder().dynamoDbClient(getDynamoDbClient()).build();
+    public DynamoDbEnhancedClient dynamoDbEnhancedClient(DynamoDbClient dynamoDbClient) {
+        return DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient).build();
     }
 }

@@ -2,7 +2,6 @@ package com.learning.awsspring.repositories;
 
 import com.learning.awsspring.entities.Customer;
 import io.awspring.cloud.dynamodb.DynamoDbTemplate;
-
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -33,4 +33,4 @@ jobs:
         run: |
           cd aws-dynamodb-project
           chmod +x mvnw
-          ./mvnw clean package
+          ./mvnw clean verify

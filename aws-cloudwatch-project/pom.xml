@@ -78,10 +78,11 @@
         </dependency>
         <dependency>
             <groupId>io.awspring.cloud</groupId>
-			<artifactId>spring-cloud-aws-starter-metrics</artifactId>
+            <artifactId>spring-cloud-aws-starter-metrics</artifactId>
             <version>${spring-cloud-aws-version}</version>
         </dependency>
-        <!-- Necessary for AutoConfiguring RegionProviderAutoConfiguration-->
+        <!-- added for autoconfiguation of StaticRegionProvider, Should be removed when the
+            dependency comes OOTB with spring-cloud-aws-starter-metrics -->
         <dependency>
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-core</artifactId>
@@ -147,11 +148,11 @@
             <scope>test</scope>
         </dependency>
         <!-- AWS SDK v1 is required by testcontainers-localstack -->
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk-core</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

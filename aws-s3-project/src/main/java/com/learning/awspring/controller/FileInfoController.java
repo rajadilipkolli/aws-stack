@@ -1,17 +1,13 @@
 package com.learning.awspring.controller;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.learning.awspring.domain.FileInfo;
 import com.learning.awspring.service.AwsS3Service;
 import com.learning.awspring.service.FileInfoService;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,18 +27,23 @@ public class FileInfoController {
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     FileInfo uploadFileToS3(@RequestPart(name = "file") MultipartFile multipartFile)
-            throws AmazonServiceException, SdkClientException, IOException {
+            throws IOException {
         return awsS3Service.uploadObjectToS3(multipartFile);
     }
 
-    @GetMapping("/s3/download/{name}")
-    S3ObjectInputStream downloadFromS3Route(@PathVariable(name = "name") String fileName)
-            throws FileNotFoundException {
-        return awsS3Service.downloadFileFromS3Bucket(fileName);
+    @GetMapping(value = "/s3/download/{name}")
+    ResponseEntity<byte[]> downloadFromS3Route(
+            @PathVariable(name = "name") String fileName, HttpServletResponse httpServletResponse)
+            throws IOException {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        var inputStreamResource =
+                awsS3Service.downloadFileFromS3Bucket(fileName, httpServletResponse);
+        httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
+        return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
     }
 
     @GetMapping("/s3/view-all")
-    List<S3ObjectSummary> viewAllFromS3Route() {
+    List<String> viewAllFromS3Route() {
         return awsS3Service.listObjects();
     }
 

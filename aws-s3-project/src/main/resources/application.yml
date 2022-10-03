@@ -1,6 +1,5 @@
 application:
-  endpoint-uri: http://localhost:4566
-  region: us-east-1
+  bucket-name: testbucket
 
 spring:
   datasource:
@@ -33,18 +32,22 @@ spring:
         query:
           fail_on_pagination_over_collection_fetch: true
           in_clause_parameter_padding: true
-
-cloud:
-  aws:
-    region:
-      static: us-east-1
-    s3:
-      endpoint-url: http://127.0.0.1:4566
-      bucket-name: testbucket
-      access-key: localstack
-      secret-key: localstack
-    stack:
-      auto: false
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        access-key: noop
+        secret-key: noop
+      s3:
+        endpoint: http://127.0.0.1:4566
+        region: us-east-1
+      stack:
+        auto: false
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 logging:
   level:

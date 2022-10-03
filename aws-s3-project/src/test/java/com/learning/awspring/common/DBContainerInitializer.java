@@ -1,27 +1,54 @@
 package com.learning.awspring.common;
 
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
+
+import java.io.IOException;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.lifecycle.Startables;
+import org.testcontainers.utility.DockerImageName;
 
-public class DBContainerInitializer {
+class DBContainerInitializer {
 
-    @Container
-    private static final PostgreSQLContainer<?> sqlContainer =
+    private static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER =
             new PostgreSQLContainer<>("postgres:latest")
                     .withDatabaseName("integration-tests-db")
                     .withUsername("username")
                     .withPassword("password");
 
+    private static final LocalStackContainer LOCAL_STACK_CONTAINER =
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.1.0"))
+                    .withServices(S3);
+
     static {
-        sqlContainer.start();
+        Startables.deepStart(LOCAL_STACK_CONTAINER, POSTGRE_SQL_CONTAINER).join();
     }
 
     @DynamicPropertySource
-    public static void setPostGreSQLValues(DynamicPropertyRegistry dynamicPropertyRegistry) {
-        dynamicPropertyRegistry.add("spring.datasource.url", sqlContainer::getJdbcUrl);
-        dynamicPropertyRegistry.add("spring.datasource.username", sqlContainer::getUsername);
-        dynamicPropertyRegistry.add("spring.datasource.password", sqlContainer::getPassword);
+    public static void registerApplicationValues(DynamicPropertyRegistry dynamicPropertyRegistry) {
+        dynamicPropertyRegistry.add("spring.datasource.url", POSTGRE_SQL_CONTAINER::getJdbcUrl);
+        dynamicPropertyRegistry.add(
+                "spring.datasource.username", POSTGRE_SQL_CONTAINER::getUsername);
+        dynamicPropertyRegistry.add(
+                "spring.datasource.password", POSTGRE_SQL_CONTAINER::getPassword);
+        dynamicPropertyRegistry.add(
+                "spring.cloud.aws.s3.endpoint",
+                () -> LOCAL_STACK_CONTAINER.getEndpointOverride(S3).toString());
+        dynamicPropertyRegistry.add("spring.cloud.aws.s3.region", LOCAL_STACK_CONTAINER::getRegion);
+    }
+
+    @BeforeAll
+    static void beforeAll() throws IOException, InterruptedException {
+        LOCAL_STACK_CONTAINER.execInContainer(
+                "awslocal",
+                "s3api",
+                "create-bucket",
+                "--bucket",
+                "testbucket",
+                "--region",
+                LOCAL_STACK_CONTAINER.getRegion());
     }
 }

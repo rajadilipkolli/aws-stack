@@ -1,67 +1,82 @@
 package com.learning.awspring.service;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.learning.awspring.config.AwsS3Config;
+import com.learning.awspring.config.ApplicationProperties;
 import com.learning.awspring.domain.FileInfo;
 import com.learning.awspring.repository.FileInfoRepository;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import io.awspring.cloud.s3.ObjectMetadata;
+import io.awspring.cloud.s3.S3Resource;
+import io.awspring.cloud.s3.S3Template;
+import java.io.*;
 import java.util.List;
-import java.util.Objects;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.exception.SdkClientException;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class AwsS3Service {
 
-    private final AmazonS3 amazonS3;
-    private final AwsS3Config awsS3Config;
+    private final S3Template s3Template;
+    private final ApplicationProperties applicationProperties;
     private final FileInfoRepository fileInfoRepository;
+    private final S3Client s3Client;
 
-    public S3ObjectInputStream downloadFileFromS3Bucket(final String fileName)
-            throws FileNotFoundException {
-        log.info("Downloading file '{}' from bucket: '{}' ", fileName, awsS3Config.getBucketName());
+    public byte[] downloadFileFromS3Bucket(
+            final String fileName, HttpServletResponse httpServletResponse) throws IOException {
+        log.info(
+                "Downloading file '{}' from bucket: '{}' ",
+                fileName,
+                applicationProperties.getBucketName());
         if (this.fileInfoRepository.existsByFileName(fileName)) {
-            final S3Object s3Object = amazonS3.getObject(awsS3Config.getBucketName(), fileName);
-            return s3Object.getObjectContent();
+            S3Resource s3Resource =
+                    this.s3Template.download(applicationProperties.getBucketName(), fileName);
+            httpServletResponse.setContentType(s3Resource.contentType());
+            InputStream inputStream = s3Resource.getInputStream();
+            return IOUtils.toByteArray(inputStream, s3Resource.contentLength());
         } else {
             throw new FileNotFoundException(fileName);
         }
     }
 
-    public List<S3ObjectSummary> listObjects() {
-        log.info("Retrieving object summaries for bucket '{}'", awsS3Config.getBucketName());
-        ObjectListing objectListing = amazonS3.listObjects(awsS3Config.getBucketName());
-        return objectListing.getObjectSummaries();
+    public List<String> listObjects() {
+        log.info(
+                "Retrieving object summaries for bucket '{}'",
+                applicationProperties.getBucketName());
+        ListObjectsV2Response response =
+                this.s3Client.listObjectsV2(
+                        ListObjectsV2Request.builder()
+                                .bucket(applicationProperties.getBucketName())
+                                .build());
+        return response.contents().stream().map(S3Object::key).toList();
     }
 
     public FileInfo uploadObjectToS3(MultipartFile multipartFile)
-            throws AmazonServiceException, SdkClientException, IOException {
+            throws SdkClientException, IOException {
         String fileName = multipartFile.getOriginalFilename();
-        log.info("Uploading file '{}' to bucket: '{}' ", fileName, awsS3Config.getBucketName());
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(multipartFile.getResource().contentLength());
-        String fileUrl =
-                awsS3Config.getEndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
-        PutObjectResult putObjectResult =
-                amazonS3.putObject(
-                        awsS3Config.getBucketName(),
+        Assert.notNull(fileName, () -> "FileName Can't be null");
+        log.info(
+                "Uploading file '{}' to bucket: '{}' ",
+                fileName,
+                applicationProperties.getBucketName());
+        S3Resource s3Resource =
+                this.s3Template.upload(
+                        applicationProperties.getBucketName(),
                         fileName,
                         multipartFile.getInputStream(),
-                        objectMetadata);
-        var fileInfo = new FileInfo(fileName, fileUrl, Objects.nonNull(putObjectResult));
+                        ObjectMetadata.builder()
+                                .contentType(multipartFile.getContentType())
+                                .build());
+        var fileInfo = new FileInfo(fileName, s3Resource.getURL().toString(), s3Resource.exists());
         return fileInfoRepository.save(fileInfo);
     }
 }

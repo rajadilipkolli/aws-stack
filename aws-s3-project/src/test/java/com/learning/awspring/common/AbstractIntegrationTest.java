@@ -8,13 +8,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles({PROFILE_TEST, PROFILE_IT})
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-@Import({LocalStackConfig.class})
+@SpringBootTest(
+        webEnvironment = RANDOM_PORT,
+        properties = {
+            "spring.cloud.aws.credentials.access-key=noop",
+            "spring.cloud.aws.credentials.secret-key=noop",
+            "spring.cloud.aws.region.static=us-east-1"
+        })
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest extends DBContainerInitializer {
 

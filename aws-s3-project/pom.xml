@@ -20,7 +20,7 @@
         <java.version>18</java.version>
         <problem-spring-web.version>0.27.0</problem-spring-web.version>
         <commons-io.version>2.11.0</commons-io.version>
-        <aws.version>2.4.2</aws.version>
+        <aws.version>3.0.0-M2</aws.version>
         <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
         <spotless.version>2.27.1</spotless.version>
         <testcontainers.version>1.17.4</testcontainers.version>
@@ -81,7 +81,7 @@
         </dependency>
         <dependency>
             <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-starter-aws</artifactId>
+            <artifactId>spring-cloud-aws-starter-s3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -144,6 +144,12 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>localstack</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- AWS SDK v1 is required by testcontainers-localstack -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -310,7 +316,8 @@
                 <configuration>
                     <configLocation>build-config/checkstyle/checkstyle.xml</configLocation>
                     <suppressionsLocation>build-config/checkstyle/suppressions.xml</suppressionsLocation>
-                    <encoding>UTF-8</encoding>
+                    <inputEncoding>UTF-8</inputEncoding>
+                    <outputEncoding>UTF-8</outputEncoding>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>

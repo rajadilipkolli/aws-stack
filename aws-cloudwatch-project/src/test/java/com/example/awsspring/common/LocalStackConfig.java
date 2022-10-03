@@ -2,14 +2,13 @@ package com.example.awsspring.common;
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.CLOUDWATCH;
 
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
-@TestConfiguration
 public class LocalStackConfig {
+
     static LocalStackContainer localStackContainer;
 
     static {

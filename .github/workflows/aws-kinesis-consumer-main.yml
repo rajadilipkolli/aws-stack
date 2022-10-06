@@ -3,11 +3,11 @@ name: aws-kinesis-consumer-project
 on:
   push:
     paths:
-      - "aws-kinesis-project/aws-kinesis-consumer-project/**"
+      - "aws-kinesis-project/consumer/**"
     branches: [ main ]
   pull_request:
     paths:
-      - "aws-kinesis-project/aws-kinesis-consumer-project/**"
+      - "aws-kinesis-project/consumer/**"
     types:
       - opened
       - synchronize
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "./aws-kinesis-project/aws-kinesis-consumer-project"
+        working-directory: "./aws-kinesis-project/consumer"
     steps:
       - uses: actions/checkout@v3
         with:

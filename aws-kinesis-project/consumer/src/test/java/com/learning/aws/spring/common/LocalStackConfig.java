@@ -8,6 +8,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClientBuilder;
 import com.amazonaws.services.kinesis.AmazonKinesisAsync;
 import com.amazonaws.services.kinesis.AmazonKinesisAsyncClientBuilder;
+import java.io.IOException;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -25,6 +26,18 @@ public class LocalStackConfig {
                         .withServices(CLOUDWATCH, DYNAMODB, KINESIS)
                         .withExposedPorts(4566);
         localStackContainer.start();
+        try {
+            localStackContainer.execInContainer(
+                    "awslocal",
+                    "kinesis",
+                    "create-stream",
+                    "--stream-name",
+                    "my-test-stream",
+                    "--shard-count",
+                    "1");
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Bean

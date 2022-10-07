@@ -82,10 +82,10 @@
             <version>${spring-cloud-aws-version}</version>
         </dependency>
         <!-- added for autoconfiguation of StaticRegionProvider, Should be removed when the
-            dependency comes OOTB with spring-cloud-aws-starter-metrics -->
+            dependency comes OOTB with spring-cloud-aws-starter-metrics which will be fixed in next version-->
         <dependency>
             <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-aws-core</artifactId>
+            <artifactId>spring-cloud-aws-starter</artifactId>
         </dependency>
 
         <dependency>

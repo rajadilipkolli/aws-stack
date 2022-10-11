@@ -3,4 +3,4 @@
 
 # Getting Started
 
-This repository contains AWS samples that can be integrated with Spring boot
+This repository contains AWS samples that can be integrated with Spring boot, connects to localstack instead of aws so that we can verify the functionality in local

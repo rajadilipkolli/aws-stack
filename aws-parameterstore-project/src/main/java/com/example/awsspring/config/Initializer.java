@@ -14,6 +14,7 @@ public class Initializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        log.info("Running Initializer.....");
+        log.info(
+                "Running Initializer, UserName from parameter store {} ", properties.getUsername());
     }
 }

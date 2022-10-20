@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Application",
+            "request": "launch",
+            "mainClass": "com.example.awsspring.Application",
+            "projectName": "aws-parameterstore-project"
+        },
+        {
+            "type": "java",
             "name": "Launch SESApplication",
             "request": "launch",
             "mainClass": "com.example.awsspring.SESApplication",

@@ -1,53 +1,48 @@
 package com.example.awsspring.common;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SSM;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import java.io.IOException;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
-@TestConfiguration
 public class LocalStackConfig {
+
     static LocalStackContainer localStackContainer;
 
     static {
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.1.0"))
-                        .withServices(S3, SQS)
-                        .withExposedPorts(4566);
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.2.0"))
+                        .withServices(SSM)
+                        .withExposedPorts(4566)
+                        .withReuse(true);
         localStackContainer.start();
     }
 
-    @Bean
-    @Primary
-    public AmazonS3 localstackAmazonS3() {
-        return AmazonS3ClientBuilder.standard()
-                .enablePathStyleAccess()
-                .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(SQS))
-                .withCredentials(getCredentialsProvider())
-                .build();
-    }
+    @DynamicPropertySource
+    static void registerProperties(DynamicPropertyRegistry registry)
+            throws IOException, InterruptedException {
+        localStackContainer.execInContainer(
+                "awslocal",
+                "ssm",
+                "put-parameter",
+                "--name",
+                "/spring/config/application.username",
+                "--value",
+                "appuser",
+                "--type",
+                "String",
+                "--region",
+                localStackContainer.getRegion());
 
-    @Bean
-    @Primary
-    public AmazonSQSAsync localstackAmazonSQSAsync() {
-        return AmazonSQSAsyncClientBuilder.standard()
-                .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(SQS))
-                .withCredentials(getCredentialsProvider())
-                .build();
-    }
-
-    private AWSCredentialsProvider getCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials("test", "test"));
+        registry.add(
+                "spring.cloud.aws.parameterstore.endpoint",
+                () -> localStackContainer.getEndpointOverride(SSM).toString());
+        registry.add("spring.cloud.aws.parameterstore.region", localStackContainer::getRegion);
+        registry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
+        registry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
+        registry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);
     }
 }

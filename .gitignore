@@ -36,8 +36,9 @@ build/
 *.log
 .DS_Store
 .jpb/
+logs/
 aws-dynamodb-project/docker/volume/
 aws-ses-project/docker/volume/
 aws-kinesis-consumer-project/docker/volume/
 aws-kinesis-project-producer/docker/volume/
-logs/
+aws-parameterstore-project/docker/volume/

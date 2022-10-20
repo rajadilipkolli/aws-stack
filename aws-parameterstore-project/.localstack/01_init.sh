@@ -1,11 +1,7 @@
 #!/bin/bash
 
-awslocal s3 mb s3://testbucket
-echo "List of S3 buckets:"
+awslocal ssm put-parameter --name /spring/config/application.password --value secret --type String --region us-east-1
+awslocal ssm put-parameter --name /spring/config/application.username --value appuser --type String --region us-east-1
+echo "List of ssm parameters:"
 echo "-------------------------------"
-awslocal s3 ls
-
-awslocal sqs create-queue --queue-name test_queue
-echo "List of SQS Queues:"
-echo "-------------------------------"
-awslocal sqs list-queues
+awslocal ssm get-parameters --names /spring/config/application.username /spring/config/application.password

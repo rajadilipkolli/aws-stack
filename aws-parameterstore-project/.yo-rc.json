@@ -1,0 +1,14 @@
+{
+  "generator-springboot": {
+    "appName": "aws-parameterstore-project",
+    "packageName": "com.example.awsspring",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "liquibase",
+    "features": [
+      "localstack"
+    ],
+    "buildTool": "maven",
+    "packageFolder": "com/example/awsspring",
+    "liquibaseMigrationCounter": 2
+  }
+}

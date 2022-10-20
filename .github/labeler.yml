@@ -16,6 +16,8 @@
   - aws-sqs-project/**/*
 "component: kinesis":
   - aws-kinesis-project/**/*
+"component: parameterstore":
+  - aws-parameterstore-project/**/*
 "status: waiting-for-triage":
   - ./*
   - ./**/*
@@ -30,3 +32,4 @@
   - aws-sns-project/pom.xml
   - aws-sqs-project/pom.xml
   - aws-kinesis-project/pom.xml
+  - aws-parameterstore-project/pom.xml

@@ -18,6 +18,8 @@
   - aws-kinesis-project/**/*
 "component: parameterstore":
   - aws-parameterstore-project/**/*
+"component: secretmanager":
+  - aws-secretmanager-project/**/*
 "status: waiting-for-triage":
   - ./*
   - ./**/*
@@ -33,3 +35,4 @@
   - aws-sqs-project/pom.xml
   - aws-kinesis-project/pom.xml
   - aws-parameterstore-project/pom.xml
+  - aws-secretmanager-project/pom.xml

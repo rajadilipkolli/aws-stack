@@ -1,0 +1,12 @@
+{
+  "generator-springboot": {
+    "appName": "aws-secretmanager-project",
+    "packageName": "com.example.awsspring",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "flywaydb",
+    "features": [],
+    "buildTool": "maven",
+    "packageFolder": "com/example/awsspring",
+    "flywayMigrationCounter": 2
+  }
+}

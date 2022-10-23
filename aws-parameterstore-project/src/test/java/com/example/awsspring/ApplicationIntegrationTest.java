@@ -13,6 +13,6 @@ class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void contextLoads() {
-        assertThat(applicationProperties.getUsername()).isNull();
+        assertThat(applicationProperties.getUsername()).isNotNull().isEqualTo("appuser");
     }
 }

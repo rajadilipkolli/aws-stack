@@ -1,11 +1,6 @@
 #!/bin/bash
 
-awslocal s3 mb s3://testbucket
-echo "List of S3 buckets:"
+awslocal secretsmanager create-secret --name /spring/secret --secret-string file://myCreds.json --region us-east-1
+echo "List of secretsmanager secrets:"
 echo "-------------------------------"
-awslocal s3 ls
-
-awslocal sqs create-queue --queue-name test_queue
-echo "List of SQS Queues:"
-echo "-------------------------------"
-awslocal sqs list-queues
+awslocal secretsmanager list-secrets

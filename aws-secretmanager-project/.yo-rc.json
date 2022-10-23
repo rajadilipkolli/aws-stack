@@ -4,7 +4,9 @@
     "packageName": "com.example.awsspring",
     "databaseType": "postgresql",
     "dbMigrationTool": "flywaydb",
-    "features": [],
+    "features": [
+      "localstack"
+    ],
     "buildTool": "maven",
     "packageFolder": "com/example/awsspring",
     "flywayMigrationCounter": 2

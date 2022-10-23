@@ -1,16 +1,8 @@
 package com.example.awsspring.common;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SECRETSMANAGER;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -21,22 +13,8 @@ public class LocalStackConfig {
     static {
         localStackContainer =
                 new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.2.0"))
-                        .withServices(S3, SQS)
+                        .withServices(SECRETSMANAGER)
                         .withExposedPorts(4566);
         localStackContainer.start();
-    }
-
-    @Bean
-    @Primary
-    public AmazonS3 localstackAmazonS3() {
-        return AmazonS3ClientBuilder.standard()
-                .enablePathStyleAccess()
-                .withEndpointConfiguration(localStackContainer.getEndpointConfiguration(SQS))
-                .withCredentials(getCredentialsProvider())
-                .build();
-    }
-
-    private AWSCredentialsProvider getCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials("test", "test"));
     }
 }

@@ -2,6 +2,17 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Spring Boot-SecretManager<aws-secretmanager-project>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.example.awsspring.Application",
+            "projectName": "aws-secretmanager-project",
+            "args": "--spring.profiles.active=local",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
             "name": "Launch Application",
             "request": "launch",
             "mainClass": "com.example.awsspring.Application",

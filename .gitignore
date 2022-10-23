@@ -42,3 +42,4 @@ aws-ses-project/docker/volume/
 aws-kinesis-consumer-project/docker/volume/
 aws-kinesis-project-producer/docker/volume/
 aws-parameterstore-project/docker/volume/
+aws-secretmanager-project/docker/volume/

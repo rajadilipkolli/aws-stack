@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ApplicationProperties {
 
     private String username;
+    private String password;
 
     private Cors cors = new Cors();
 

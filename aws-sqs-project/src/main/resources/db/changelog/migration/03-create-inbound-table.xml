@@ -10,14 +10,16 @@
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="inbound_log_pkey"/>
             </column>
-            <column name="message_id" type="varchar(100)">
+            <column name="message_id" type="varchar(40)">
                 <constraints nullable="false"/>
             </column>
-            <column name="received_json" type="JSONB"/>
+            <column name="received_json" type="JSONB">
+                <constraints nullable="false" unique="true"/>
+            </column>
             <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </createTable>
 
-        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="5" maxValue="9223372036854775807"
-                        minValue="1" sequenceName="inbound_log_id_seq" startValue="1"/>
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807"
+                        minValue="1" sequenceName="inbound_log_seq" startValue="1"/>
     </changeSet>
 </databaseChangeLog>

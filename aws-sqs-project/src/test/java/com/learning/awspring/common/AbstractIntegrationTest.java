@@ -27,32 +27,36 @@ import org.testcontainers.utility.DockerImageName;
 public abstract class AbstractIntegrationTest {
 
     @Container
-    static LocalStackContainer localStack =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack"))
+    private static final LocalStackContainer localStackContainer =
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.2.0"))
                     .withServices(SQS);
 
     @Container
-    private static final PostgreSQLContainer<?> sqlContainer =
+    private static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER =
             new PostgreSQLContainer<>("postgres:latest")
                     .withDatabaseName("integration-tests-db")
                     .withUsername("username")
                     .withPassword("password");
 
     static {
-        Startables.deepStart(sqlContainer, localStack).join();
+        Startables.deepStart(POSTGRE_SQL_CONTAINER, localStackContainer).join();
     }
 
     @DynamicPropertySource
     static void overrideConfiguration(DynamicPropertyRegistry registry)
             throws UnsupportedOperationException, IOException, InterruptedException {
-        localStack.execInContainer(
+        localStackContainer.execInContainer(
                 "awslocal", "sqs", "create-queue", "--queue-name", AppConstants.QUEUE);
-        registry.add("cloud.aws.sqs.endpoint", () -> localStack.getEndpointOverride(SQS));
-        registry.add("cloud.aws.credentials.access-key", localStack::getAccessKey);
-        registry.add("cloud.aws.credentials.secret-key", localStack::getSecretKey);
-        registry.add("spring.datasource.url", sqlContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", sqlContainer::getUsername);
-        registry.add("spring.datasource.password", sqlContainer::getPassword);
+        registry.add(
+                "spring.cloud.aws.sqs.endpoint",
+                () -> localStackContainer.getEndpointOverride(SQS));
+        registry.add("spring.cloud.aws.sqs.region", localStackContainer::getRegion);
+        registry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
+        registry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
+        registry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);
+        registry.add("spring.datasource.url", POSTGRE_SQL_CONTAINER::getJdbcUrl);
+        registry.add("spring.datasource.username", POSTGRE_SQL_CONTAINER::getUsername);
+        registry.add("spring.datasource.password", POSTGRE_SQL_CONTAINER::getPassword);
     }
 
     @Autowired protected MockMvc mockMvc;

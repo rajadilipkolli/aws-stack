@@ -45,8 +45,6 @@ spring:
               preferred: pooled-lo
         jdbc:
           batch_size: 25
-          lob:
-            non_contextual_creation: true
           time_zone: UTC
         order_inserts: true
         order_updates: true
@@ -54,3 +52,16 @@ spring:
           fail_on_pagination_over_collection_fetch: true
           in_clause_parameter_padding: true
     show-sql: true
+  mvc:
+    problemdetails:
+      enabled: true
+  cloud:
+    aws:
+      credentials:
+        access-key: noop
+        secret-key: noop
+      region:
+        static: us-east-1
+      sqs:
+        endpoint: http://localhost:4566
+        region: us-east-1

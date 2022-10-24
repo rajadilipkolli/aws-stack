@@ -1,18 +1,18 @@
 package com.learning.awspring.web.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.awspring.entities.InBoundLog;
+import com.learning.awspring.model.SNSMessagePayload;
 import com.learning.awspring.repositories.InBoundLogRepository;
 import com.learning.awspring.utils.AppConstants;
-import com.learning.awspring.web.model.Message;
-import io.awspring.cloud.messaging.listener.SqsMessageDeletionPolicy;
-import io.awspring.cloud.messaging.listener.annotation.SqsListener;
+import com.learning.awspring.utils.MessageDeserializationUtil;
+import io.awspring.cloud.sqs.annotation.SqsListener;
 import java.time.LocalDateTime;
-import javax.validation.Valid;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.Message;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -27,21 +27,24 @@ public class SQSListener {
     // @SqsListener listens to the message from the specified queue.
     // Here in this example we are printing the message on the console and the message will be
     // deleted from the queue once it is successfully delivered.
-    @SqsListener(value = AppConstants.QUEUE, deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
-    public void readMessageFromSqs(@Valid Message message, @Header("MessageId") String messageId)
-            throws JsonProcessingException {
-        log.info("Received message= {} with messageId= {}", message, messageId);
+    @SqsListener(value = AppConstants.QUEUE)
+    public void readMessageFromSqs(List<Message<SNSMessagePayload>> payloadMessageList) {
+        log.info("Received message= {} ", payloadMessageList);
 
-        saveMessageToDatabase(message, messageId);
+        for (Message<SNSMessagePayload> snsMessagePayload : payloadMessageList) {
+            saveMessageToDatabase(
+                    snsMessagePayload.getPayload(),
+                    Objects.requireNonNull(snsMessagePayload.getHeaders().getId()).toString());
+        }
     }
 
     @Async
-    private void saveMessageToDatabase(Message message, String messageId)
-            throws JsonProcessingException {
+    private void saveMessageToDatabase(SNSMessagePayload snsMessagePayload, String messageId) {
         var inboundLog = new InBoundLog();
         inboundLog.setCreatedDate(LocalDateTime.now());
         inboundLog.setMessageId(messageId);
-        inboundLog.setReceivedJson(this.objectMapper.writeValueAsString(message));
+        inboundLog.setReceivedJson(
+                MessageDeserializationUtil.getMessageBodyAsJson(snsMessagePayload));
         this.inBoundLogRepository.save(inboundLog);
     }
 }

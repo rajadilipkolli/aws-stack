@@ -6,8 +6,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.5</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<version>3.0.0-RC1</version>
+		<relativePath /> <!-- lookup parent from repositor]y -->
 	</parent>
 	<groupId>com.learning.awspring</groupId>
 	<artifactId>aws-sqs-project</artifactId>
@@ -19,10 +19,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<java.version>18</java.version>
-		<problem-spring-web.version>0.27.0</problem-spring-web.version>
+		<java.version>17</java.version>
 		<commons-io.version>2.11.0</commons-io.version>
-        <aws.version>2.4.2</aws.version>
+        <spring-cloud-aws.version>3.0.0-M3</spring-cloud-aws.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
 		<spotless.version>2.27.2</spotless.version>
 		<testcontainers.version>1.17.5</testcontainers.version>
@@ -57,11 +56,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.zalando</groupId>
-			<artifactId>problem-spring-web-starter</artifactId>
-			<version>${problem-spring-web.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
@@ -81,10 +75,10 @@
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
         </dependency>
-		<dependency>
-			<groupId>io.awspring.cloud</groupId>
-			<artifactId>spring-cloud-starter-aws-messaging</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter-sqs</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -105,8 +99,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.6.12</version>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.0.0-M7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -119,7 +113,7 @@
 		</dependency>
         <dependency>
             <groupId>com.vladmihalcea</groupId>
-            <artifactId>hibernate-types-55</artifactId>
+            <artifactId>hibernate-types-60</artifactId>
             <version>2.20.0</version>
         </dependency>
 
@@ -148,6 +142,12 @@
 			<artifactId>localstack</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <!-- AWS SDK v1 is required by testcontainers-localstack -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -162,7 +162,7 @@
 			<dependency>
 				<groupId>io.awspring.cloud</groupId>
 				<artifactId>spring-cloud-aws-dependencies</artifactId>
-				<version>${aws.version}</version>
+				<version>${spring-cloud-aws.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -312,7 +312,6 @@
 				<configuration>
 					<configLocation>build-config/checkstyle/checkstyle.xml</configLocation>
 					<suppressionsLocation>build-config/checkstyle/suppressions.xml</suppressionsLocation>
-					<encoding>UTF-8</encoding>
 					<consoleOutput>true</consoleOutput>
 					<failsOnError>true</failsOnError>
 					<linkXRef>false</linkXRef>
@@ -447,11 +446,24 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

@@ -7,7 +7,7 @@
     <changeSet author="sivalabs" id="createTable-customers">
         <createSequence
                         sequenceName="customer_id_seq"
-                        incrementBy="100"
+                        incrementBy="50"
                         startValue="1"
                         />
         <createTable tableName="customers">

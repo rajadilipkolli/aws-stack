@@ -7,7 +7,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.0.0-RC1</version>
-		<relativePath /> <!-- lookup parent from repositor]y -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.learning.awspring</groupId>
 	<artifactId>aws-sqs-project</artifactId>
@@ -24,6 +24,7 @@
         <spring-cloud-aws.version>3.0.0-M3</spring-cloud-aws.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
 		<spotless.version>2.27.2</spotless.version>
+        <springdoc-openapi.version>2.0.0-RC1</springdoc-openapi.version>
 		<testcontainers.version>1.17.5</testcontainers.version>
 
 		<project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
@@ -100,7 +101,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.0.0-RC1</version>
+			<version>${springdoc-openapi.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -188,8 +189,32 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <image>
+                        <buildpacks>
+                            <buildpack>gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea</buildpack>
+                            <buildpack>gcr.io/paketo-buildpacks/java-native-image</buildpack>
+                        </buildpacks>
+                    </image>
                 </configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.hibernate.orm.tooling</groupId>
+                <artifactId>hibernate-enhance-maven-plugin</artifactId>
+                <version>${hibernate.version}</version>
+                <executions>
+                    <execution>
+                        <id>enhance</id>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                        <configuration>
+                            <enableLazyInitialization>true</enableLazyInitialization>
+                            <enableDirtyTracking>true</enableDirtyTracking>
+                            <enableAssociationManagement>true</enableAssociationManagement>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

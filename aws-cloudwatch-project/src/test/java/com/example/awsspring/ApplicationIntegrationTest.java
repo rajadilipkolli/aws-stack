@@ -37,7 +37,8 @@ class ApplicationIntegrationTest extends AbstractIntegrationTest {
                             status().isOk(), content().contentType(MediaType.APPLICATION_JSON));
         }
 
-        Dimension exception = Dimension.builder().name("exception").value("None").build();
+        Dimension error = Dimension.builder().name("error").value("none").build();
+        Dimension exception = Dimension.builder().name("exception").value("none").build();
         Dimension method = Dimension.builder().name("method").value("GET").build();
         Dimension outcome = Dimension.builder().name("outcome").value("SUCCESS").build();
         Dimension uri = Dimension.builder().name("uri").value("/api/customers").build();
@@ -46,7 +47,7 @@ class ApplicationIntegrationTest extends AbstractIntegrationTest {
                 Metric.builder()
                         .namespace("tc-localstack")
                         .metricName("http.server.requests.count")
-                        .dimensions(exception, method, outcome, uri, status)
+                        .dimensions(error, exception, method, outcome, uri, status)
                         .build();
         MetricStat metricStat =
                 MetricStat.builder()

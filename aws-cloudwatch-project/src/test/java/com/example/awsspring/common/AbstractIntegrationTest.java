@@ -5,7 +5,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
+import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
             "management.metrics.enable.all=false",
             "management.metrics.enable.http=true"
         })
-@AutoConfigureMetrics
+@AutoConfigureObservability
 @ContextConfiguration(initializers = {DBContainerInitializer.class})
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest extends LocalStackConfig {

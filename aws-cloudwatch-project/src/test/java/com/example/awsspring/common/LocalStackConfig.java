@@ -24,6 +24,7 @@ public class LocalStackConfig {
         registry.add(
                 "spring.cloud.aws.cloudwatch.endpoint",
                 () -> localStackContainer.getEndpointOverride(CLOUDWATCH).toString());
+        registry.add("spring.cloud.aws.cloudwatch.region", localStackContainer::getRegion);
         registry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
         registry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
         registry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>3.0.0-RC1</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.learning.awspring</groupId>
@@ -18,10 +18,11 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <java.version>17</java.version>
-        <problem-spring-web.version>0.27.0</problem-spring-web.version>
         <commons-io.version>2.11.0</commons-io.version>
         <spring-cloud-aws.version>3.0.0-M3</spring-cloud-aws.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <springdoc-openapi.version>2.0.0-RC1</springdoc-openapi.version>
+
         <spotless.version>2.27.2</spotless.version>
         <testcontainers.version>1.17.5</testcontainers.version>
 
@@ -53,11 +54,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>problem-spring-web-starter</artifactId>
-            <version>${problem-spring-web.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -103,8 +99,8 @@
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.12</version>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -117,7 +113,7 @@
         </dependency>
         <dependency>
             <groupId>com.vladmihalcea</groupId>
-            <artifactId>hibernate-types-55</artifactId>
+            <artifactId>hibernate-types-60</artifactId>
             <version>2.20.0</version>
         </dependency>
 

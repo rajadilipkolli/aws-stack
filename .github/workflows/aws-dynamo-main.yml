@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "service-registry"
+        working-directory: "aws-dynamodb-project"
     strategy:
       matrix:
         java: ["19"]

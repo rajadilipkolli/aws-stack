@@ -22,7 +22,7 @@ jobs:
         working-directory: "aws-dynamodb-project"
     strategy:
       matrix:
-        java: ["19"]
+        java: ["17"]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -43,7 +43,7 @@ jobs:
           java --version
           gu --version
           native-image --version
-      - if: ${{ github.ref == 'refs/heads/master' }}
+      - if: ${{ github.ref == 'refs/heads/main' }}
         name: SonarQube Scan
         run: ./mvnw compile verify sonar:sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:

@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "aws-dynamodb-project/**"
-    branches: [ main ]
+    branches: [main]
   pull_request:
     paths:
       - "aws-dynamodb-project/**"
@@ -15,22 +15,41 @@ on:
 
 jobs:
   build:
-    name: Run Unit & Integration Tests
+    name: Run Unit & Integration Tests with jdk  ${{ matrix.java }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "service-registry"
+    strategy:
+      matrix:
+        java: ["19"]
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3.6.0
+      - uses: graalvm/setup-graalvm@v1
         with:
-          java-version: 17
-          distribution: 'zulu'
-          cache: 'maven'
+          version: "latest"
+          java-version: ${{ matrix.java }}
+          components: "native-image"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: "maven"
+
+      - name: Printing versions
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          gu --version
+          native-image --version
+      - if: ${{ github.ref == 'refs/heads/master' }}
+        name: SonarQube Scan
+        run: ./mvnw compile verify sonar:sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and analyze
-        run: |
-          cd aws-dynamodb-project
-          chmod +x mvnw
-          ./mvnw clean verify
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+        run: ./mvnw clean -Pnative spring-boot:build-image

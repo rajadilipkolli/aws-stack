@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <java.version>17</java.version>
+        <java.version>19</java.version>
         <spring-cloud.version>2022.0.0-RC1</spring-cloud.version>
         <spring-cloud-aws-version>3.0.0-M3</spring-cloud-aws-version>
         <springdoc-openapi.version>2.0.0-RC1</springdoc-openapi.version>
@@ -156,12 +156,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <image>
+                    <!-- <image>
                         <buildpacks>
                             <buildpack>gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea</buildpack>
                             <buildpack>gcr.io/paketo-buildpacks/java-native-image</buildpack>
                         </buildpacks>
-                    </image>
+                    </image> -->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

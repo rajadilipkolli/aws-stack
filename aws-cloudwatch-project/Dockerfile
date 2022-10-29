@@ -1,4 +1,4 @@
-FROM openjdk:17.0.2-jdk-slim
+FROM openjdk:20-slim-buster
 VOLUME /tmp
 ADD target/aws-cloudwatch-project-0.0.1-SNAPSHOT.jar app.jar
 RUN sh -c 'touch /app.jar'

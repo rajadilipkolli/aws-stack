@@ -24,6 +24,9 @@ public class CustomerRepository {
 
     // Store this customer item in the database
     public Customer saveEntity(Customer customer) {
+        if (null == customer.getId()) {
+            customer.setId(UUID.randomUUID());
+        }
         return dynamoDbTemplate.save(customer);
     }
 

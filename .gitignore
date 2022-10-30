@@ -39,7 +39,7 @@ build/
 logs/
 aws-dynamodb-project/docker/volume/
 aws-ses-project/docker/volume/
-aws-kinesis-consumer-project/docker/volume/
-aws-kinesis-project-producer/docker/volume/
+aws-kinesis-project/consumer/docker/volume/
+aws-kinesis-project/producer/docker/volume/
 aws-parameterstore-project/docker/volume/
 aws-secretmanager-project/docker/volume/

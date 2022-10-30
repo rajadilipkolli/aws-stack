@@ -1,29 +1,24 @@
 package com.learning.aws.spring.producer;
 
+import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.messaging.Source;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-@EnableBinding(Source.class)
 @Slf4j
 public class IpProducer {
 
-    @Autowired private Source source;
-
     @Scheduled(fixedDelay = 3000L)
-    private void produce() {
-        IntStream.range(1, 200)
-                .mapToObj(ipSuffix -> "192.168.0." + ipSuffix)
-                .forEach(
-                        entry -> {
-                            log.info("sending event {}", entry);
-                            source.output().send(MessageBuilder.withPayload(entry).build());
-                        });
+    @Bean
+    public Supplier<List<String>> produceSupplier() {
+        return () ->
+                IntStream.range(1, 200)
+                        .mapToObj(ipSuffix -> "192.168.0." + ipSuffix)
+                        .peek(entry -> log.info("sending event {}", entry))
+                        .toList();
     }
 }

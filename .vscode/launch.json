@@ -38,17 +38,6 @@
         },
         {
             "type": "java",
-            "name": "Spring Boot-KinesisApplication<aws-kinesis-project-producer>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "mainClass": "com.learning.aws.spring.KinesisProducerApplication",
-            "projectName": "aws-kinesis-project-producer",
-            "args": "--spring.profiles.active=local",
-            "envFile": "${workspaceFolder}/.env"
-        },
-        {
-            "type": "java",
             "name": "Spring Boot-S3Application<aws-s3-project>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
@@ -66,6 +55,16 @@
             "console": "internalConsole",
             "mainClass": "com.learning.awsspring.Application",
             "projectName": "aws-dynamodb-project",
+            "args": "--spring.profiles.active=local",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-KinesisProducerApplication<aws-kinesis-producer-project>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.learning.aws.spring.KinesisProducerApplication",
+            "projectName": "aws-kinesis-producer-project",
             "args": "--spring.profiles.active=local",
             "envFile": "${workspaceFolder}/.env"
         }

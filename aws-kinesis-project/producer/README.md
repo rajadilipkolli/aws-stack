@@ -11,8 +11,7 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 
 ## Notes:
 
-kinesis steam biner works with aws v1 of dynamodb and kinesis
-
+- kinesis steam biner works with aws v1 of dynamodb and kinesis, as a result we should still live with spring-aws-cloud version of 2.4.2 and not 3.0.0-M3
 
 ### Useful Links
 * Swagger UI: http://localhost:8080/swagger-ui.html

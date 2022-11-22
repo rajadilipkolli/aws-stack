@@ -34,3 +34,5 @@ jobs:
 
       - name: Build and analyze
         run: ./mvnw clean verify
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.1

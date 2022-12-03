@@ -60,6 +60,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -173,6 +174,10 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.graalvm.buildtools</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
@@ -189,12 +194,6 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                    <image>
-                        <buildpacks>
-                            <buildpack>gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea</buildpack>
-                            <buildpack>gcr.io/paketo-buildpacks/java-native-image</buildpack>
-                        </buildpacks>
-                    </image>
                 </configuration>
 			</plugin>
             <plugin>
@@ -244,8 +243,8 @@
                 </configuration>
             </plugin>
 			<plugin>
-				<groupId>pl.project13.maven</groupId>
-				<artifactId>git-commit-id-plugin</artifactId>
+				<groupId>io.github.git-commit-id</groupId>
+				<artifactId>git-commit-id-maven-plugin</artifactId>
 				<executions>
 					<execution>
 						<goals>

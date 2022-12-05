@@ -1,5 +1,9 @@
 # aws-sqs-project
 
+Amazon Simple Queue Service (SQS) is a fully managed message queuing service that enables you to decouple and scale microservices, distributed systems, and serverless applications. SQS eliminates the complexity and overhead associated with managing and operating message oriented middleware, and empowers developers to focus on differentiating work.
+
+With SQS, you can send, store, and receive messages between software components at any volume, without losing messages or requiring other services to be available. SQS enables you to move data between distributed components of your applications that perform different tasks, without losing messages or requiring each component to be always available. This makes it easy to build and operate resilient, scalable, and asynchronous architectures that support the integration of diverse applications and services.
+
 ## Pre Requisites
 * Amazon cli (Only for local)
 * Docker Desktop

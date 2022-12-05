@@ -1,10 +1,12 @@
 # aws-dynamodb-project
 
+Amazon DynamoDB is a fully managed NoSQL database service offered by Amazon Web Services (AWS). It provides fast and predictable performance with seamless scalability, allowing users to easily store, retrieve, and manage massive amounts of data. DynamoDB is used for applications that require high performance, low latency, and flexibility in terms of data structure and access patterns. It offers various features such as automatic partitioning, global tables, and Streams, which enable users to build highly scalable and durable applications.
+
 ### Run tests
 `$ ./mvnw clean verify`
 
 ### Run locally
-```
+```shell
 $ docker-compose -f docker/docker-compose.yml up -d
 $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```

@@ -1,0 +1,14 @@
+{
+  "generator-springboot": {
+    "appName": "aws-lamda-project",
+    "packageName": "com.example.awslamda",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "liquibase",
+    "features": [
+      "localstack"
+    ],
+    "buildTool": "maven",
+    "packageFolder": "com/example/awslamda",
+    "liquibaseMigrationCounter": 1
+  }
+}

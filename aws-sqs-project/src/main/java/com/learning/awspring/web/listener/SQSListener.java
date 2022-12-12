@@ -1,9 +1,9 @@
 package com.learning.awspring.web.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learning.awspring.entities.InBoundLog;
+import com.learning.awspring.entities.InboundLog;
 import com.learning.awspring.model.SNSMessagePayload;
-import com.learning.awspring.repositories.InBoundLogRepository;
+import com.learning.awspring.repositories.InboundLogRepository;
 import com.learning.awspring.utils.AppConstants;
 import com.learning.awspring.utils.MessageDeserializationUtil;
 import io.awspring.cloud.sqs.annotation.SqsListener;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SQSListener {
 
-    private final InBoundLogRepository inBoundLogRepository;
+    private final InboundLogRepository inboundLogRepository;
     private final ObjectMapper objectMapper;
 
     // @SqsListener listens to the message from the specified queue.
@@ -44,12 +44,12 @@ public class SQSListener {
     @Async
     private void saveMessageToDatabase(
             SNSMessagePayload snsMessagePayload, String messageId, Instant receivedAt) {
-        var inboundLog = new InBoundLog();
+        var inboundLog = new InboundLog();
         inboundLog.setCreatedDate(LocalDateTime.now(ZoneOffset.UTC));
         inboundLog.setMessageId(messageId);
         inboundLog.setReceivedAt(LocalDateTime.ofInstant(receivedAt, ZoneOffset.UTC));
         inboundLog.setReceivedJson(
                 MessageDeserializationUtil.getMessageBodyAsJson(snsMessagePayload));
-        this.inBoundLogRepository.save(inboundLog);
+        this.inboundLogRepository.save(inboundLog);
     }
 }

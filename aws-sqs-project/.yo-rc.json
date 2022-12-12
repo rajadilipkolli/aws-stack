@@ -9,6 +9,6 @@
     ],
     "buildTool": "maven",
     "packageFolder": "com/learning/awspring",
-    "liquibaseMigrationCounter": 2
+    "liquibaseMigrationCounter": 3
   }
 }

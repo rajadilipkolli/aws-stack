@@ -1,4 +1,4 @@
-package com.learning.awspring.model;
+package com.learning.awspring.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;

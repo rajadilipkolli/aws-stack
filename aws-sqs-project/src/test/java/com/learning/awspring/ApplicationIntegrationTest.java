@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.learning.awspring.common.AbstractIntegrationTest;
 import com.learning.awspring.model.SNSMessagePayload;
-import com.learning.awspring.repositories.InBoundLogRepository;
+import com.learning.awspring.repositories.InboundLogRepository;
 import com.learning.awspring.utils.FakeObjectCreator;
 import java.time.Duration;
 import org.awaitility.Awaitility;
@@ -19,7 +19,7 @@ import org.springframework.http.MediaType;
 @TestInstance(Lifecycle.PER_CLASS)
 class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
-    @Autowired private InBoundLogRepository inBoundLogRepository;
+    @Autowired private InboundLogRepository inBoundLogRepository;
 
     @Test
     void sendingMessage() throws Exception {

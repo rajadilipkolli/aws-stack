@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+    <changeSet author="app" id="createTable-inbound_logs">
+        <createSequence
+                        sequenceName="inbound_logs_seq"
+                        incrementBy="50"
+                        startValue="1"
+                        />
+        <createTable tableName="inbound_logs">
+            <column name="id" type="bigint" defaultValueSequenceNext="inbound_logs_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="message_id" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="received_json" type="JSONB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="received_at" type="timestamptz"/>
+            <column name="created_date" type="timestamptz"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -67,6 +67,16 @@
             "projectName": "aws-kinesis-producer-project",
             "args": "--spring.profiles.active=local",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-Application<aws-sqs-project>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.learning.awspring.Application",
+            "projectName": "aws-sqs-project",
+            "args": "--spring.profiles.active=local",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

@@ -1,6 +1,6 @@
 package com.learning.awspring.entities;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,9 +30,11 @@ public class InBoundLog {
     @Column(nullable = false, name = "message_id", length = 40)
     private String messageId;
 
-    @Type(JsonBinaryType.class)
+    @Type(JsonType.class)
     @Column(columnDefinition = "jsonb", name = "received_json", nullable = false)
     private String receivedJson;
+
+    private LocalDateTime receivedAt;
 
     @CreatedDate private LocalDateTime createdDate = LocalDateTime.now();
 }

@@ -7,7 +7,9 @@ import com.learning.awspring.repositories.InBoundLogRepository;
 import com.learning.awspring.utils.AppConstants;
 import com.learning.awspring.utils.MessageDeserializationUtil;
 import io.awspring.cloud.sqs.annotation.SqsListener;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -34,15 +36,18 @@ public class SQSListener {
         for (Message<SNSMessagePayload> snsMessagePayload : payloadMessageList) {
             saveMessageToDatabase(
                     snsMessagePayload.getPayload(),
-                    Objects.requireNonNull(snsMessagePayload.getHeaders().getId()).toString());
+                    Objects.requireNonNull(snsMessagePayload.getHeaders().getId()).toString(),
+                    snsMessagePayload.getHeaders().get("Sqs_ReceivedAt", Instant.class));
         }
     }
 
     @Async
-    private void saveMessageToDatabase(SNSMessagePayload snsMessagePayload, String messageId) {
+    private void saveMessageToDatabase(
+            SNSMessagePayload snsMessagePayload, String messageId, Instant receivedAt) {
         var inboundLog = new InBoundLog();
-        inboundLog.setCreatedDate(LocalDateTime.now());
+        inboundLog.setCreatedDate(LocalDateTime.now(ZoneOffset.UTC));
         inboundLog.setMessageId(messageId);
+        inboundLog.setReceivedAt(LocalDateTime.ofInstant(receivedAt, ZoneOffset.UTC));
         inboundLog.setReceivedJson(
                 MessageDeserializationUtil.getMessageBodyAsJson(snsMessagePayload));
         this.inBoundLogRepository.save(inboundLog);

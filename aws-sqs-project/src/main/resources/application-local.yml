@@ -16,4 +16,4 @@ spring:
   datasource:
     password: secret
     url: jdbc:postgresql://localhost:5432/appdb
-    username: user
+    username: appuser

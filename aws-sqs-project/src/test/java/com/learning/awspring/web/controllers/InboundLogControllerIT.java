@@ -126,8 +126,8 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.detail", is("Invalid request content.")))
                 .andExpect(jsonPath("$.instance", is("/api/inboundlog")))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
-                .andExpect(jsonPath("$.violations[0].field", is("text")))
-                .andExpect(jsonPath("$.violations[0].message", is("Text cannot be empty")))
+                .andExpect(jsonPath("$.violations[0].field", is("messageId")))
+                .andExpect(jsonPath("$.violations[0].message", is("MessageId cannot be blank")))
                 .andReturn();
     }
 

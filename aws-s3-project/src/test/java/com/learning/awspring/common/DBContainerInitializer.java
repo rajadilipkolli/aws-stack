@@ -20,7 +20,7 @@ class DBContainerInitializer {
                     .withPassword("password");
 
     private static final LocalStackContainer LOCAL_STACK_CONTAINER =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.3.0"))
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.3.1"))
                     .withServices(S3);
 
     static {

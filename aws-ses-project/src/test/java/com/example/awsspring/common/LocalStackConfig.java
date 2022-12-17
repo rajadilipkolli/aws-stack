@@ -16,7 +16,7 @@ public class LocalStackConfig {
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.3.0"))
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.3.1"))
                         .withServices(SES)
                         .withExposedPorts(4566);
         localStackContainer.start();

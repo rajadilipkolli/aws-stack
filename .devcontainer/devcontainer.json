@@ -13,7 +13,9 @@
 			"extensions": [
 				"redhat.java",
 				"ms-azuretools.vscode-docker",
-				"vscjava.vscode-java-pack"
+				"vscjava.vscode-java-pack",
+				"vscjava.vscode-maven",
+				"vscjava.vscode-java-test"
 			]
 		}
 	}

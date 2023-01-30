@@ -20,7 +20,7 @@
 
         <java.version>19</java.version>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
-        <spring-cloud-aws-version>3.0.0-RC1</spring-cloud-aws-version>
+        <spring-cloud-aws.version>3.0.0-RC1</spring-cloud-aws.version>
         <springdoc-openapi.version>2.0.2</springdoc-openapi.version>
         <commons-io.version>2.11.0</commons-io.version>
 
@@ -79,7 +79,6 @@
         <dependency>
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter-dynamodb</artifactId>
-            <version>${spring-cloud-aws-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -136,7 +135,7 @@
             <dependency>
                 <groupId>io.awspring.cloud</groupId>
                 <artifactId>spring-cloud-aws-dependencies</artifactId>
-                <version>${spring-cloud-aws-version}</version>
+                <version>${spring-cloud-aws.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -31,7 +31,7 @@ public class SQSListener {
     // deleted from the queue once it is successfully delivered.
     @SqsListener(value = AppConstants.QUEUE)
     public void readMessageFromSqs(List<Message<SNSMessagePayload>> payloadMessageList) {
-        log.info("Received message= {} ", payloadMessageList);
+        log.info("Received messages= {} ", payloadMessageList);
 
         for (Message<SNSMessagePayload> snsMessagePayload : payloadMessageList) {
             saveMessageToDatabase(

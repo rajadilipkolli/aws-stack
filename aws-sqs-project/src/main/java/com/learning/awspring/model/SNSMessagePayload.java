@@ -1,10 +1,5 @@
 package com.learning.awspring.model;
 
-import lombok.Data;
+import java.io.Serializable;
 
-@Data
-public class SNSMessagePayload {
-
-    private String id;
-    private String messageBody;
-}
+public record SNSMessagePayload(String id, String messageBody) implements Serializable {}

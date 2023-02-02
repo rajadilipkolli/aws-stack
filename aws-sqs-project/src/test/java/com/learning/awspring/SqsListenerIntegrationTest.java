@@ -3,8 +3,10 @@ package com.learning.awspring;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.learning.awspring.common.AbstractIntegrationTest;
+import com.learning.awspring.model.SQSMessagePayload;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import java.time.Duration;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -57,7 +59,31 @@ class SqsListenerIntegrationTest extends AbstractIntegrationTest {
                                             .receiveMessage(builder -> builder.queueUrl(queueURL))
                                             .thenApply(ReceiveMessageResponse::messages)
                                             .get();
-                            assertThat(messages).isNotEmpty();
+                            assertThat(messages).isNotEmpty().hasSize(1);
+                        });
+    }
+
+    @Test
+    void shouldSendAndReceiveSqsMessageUsingSqsTemplate() {
+
+        this.sqsTemplate.sendAsync(
+                to -> to.queue(QUEUE_NAME).payload(new SQSMessagePayload("1", "test message")));
+
+        Awaitility.given()
+                .atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(3))
+                .await()
+                .untilAsserted(
+                        () -> {
+                            Collection<org.springframework.messaging.Message<SQSMessagePayload>>
+                                    messages =
+                                            sqsTemplate.receiveMany(
+                                                    from ->
+                                                            from.queue(QUEUE_NAME)
+                                                                    .visibilityTimeout(
+                                                                            Duration.ofSeconds(10)),
+                                                    SQSMessagePayload.class);
+                            assertThat(messages).isNotEmpty().hasSize(1);
                         });
     }
 

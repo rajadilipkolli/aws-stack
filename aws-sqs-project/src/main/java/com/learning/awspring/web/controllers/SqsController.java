@@ -3,7 +3,7 @@ package com.learning.awspring.web.controllers;
 import static com.learning.awspring.utils.AppConstants.QUEUE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learning.awspring.model.SNSMessagePayload;
+import com.learning.awspring.model.SQSMessagePayload;
 import com.learning.awspring.utils.MessageDeserializationUtil;
 import io.awspring.cloud.sqs.operations.SendResult;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
@@ -35,14 +35,14 @@ public class SqsController {
     // should be returned.
     @ResponseStatus(code = HttpStatus.CREATED)
     public SendResult<Object> sendMessageToSqs(
-            @RequestBody @Valid final SNSMessagePayload snsMessagePayload) {
+            @RequestBody @Valid final SQSMessagePayload sqsMessagePayload) {
         log.info("Sending the message to the Amazon sqs.");
         return this.sqsTemplate.send(
                 to ->
                         to.queue(QUEUE)
                                 .payload(
                                         MessageDeserializationUtil.getMessageBodyAsJson(
-                                                snsMessagePayload))
+                                                sqsMessagePayload))
                                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
     }
 }

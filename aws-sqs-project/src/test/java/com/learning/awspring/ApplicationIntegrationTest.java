@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.learning.awspring.common.AbstractIntegrationTest;
-import com.learning.awspring.model.SNSMessagePayload;
+import com.learning.awspring.model.SQSMessagePayload;
 import com.learning.awspring.repositories.InboundLogRepository;
 import com.learning.awspring.utils.FakeObjectCreator;
 import java.time.Duration;
@@ -23,7 +23,7 @@ class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void sendingMessage() throws Exception {
-        SNSMessagePayload snsMessagePayload = FakeObjectCreator.createMessage();
+        SQSMessagePayload snsMessagePayload = FakeObjectCreator.createMessage();
         long count = this.inBoundLogRepository.count();
         this.mockMvc
                 .perform(

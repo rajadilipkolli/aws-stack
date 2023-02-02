@@ -2,7 +2,7 @@ package com.learning.awspring.web.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.awspring.entities.InboundLog;
-import com.learning.awspring.model.SNSMessagePayload;
+import com.learning.awspring.model.SQSMessagePayload;
 import com.learning.awspring.repositories.InboundLogRepository;
 import com.learning.awspring.utils.AppConstants;
 import com.learning.awspring.utils.MessageDeserializationUtil;
@@ -30,10 +30,10 @@ public class SQSListener {
     // Here in this example we are printing the message on the console and the message will be
     // deleted from the queue once it is successfully delivered.
     @SqsListener(value = AppConstants.QUEUE)
-    public void readMessageFromSqs(List<Message<SNSMessagePayload>> payloadMessageList) {
+    public void readMessageFromSqs(List<Message<SQSMessagePayload>> payloadMessageList) {
         log.info("Received messages= {} ", payloadMessageList);
 
-        for (Message<SNSMessagePayload> snsMessagePayload : payloadMessageList) {
+        for (Message<SQSMessagePayload> snsMessagePayload : payloadMessageList) {
             saveMessageToDatabase(
                     snsMessagePayload.getPayload(),
                     Objects.requireNonNull(snsMessagePayload.getHeaders().getId()).toString(),
@@ -43,13 +43,13 @@ public class SQSListener {
 
     @Async
     private void saveMessageToDatabase(
-            SNSMessagePayload snsMessagePayload, String messageId, Instant receivedAt) {
+            SQSMessagePayload sqsMessagePayload, String messageId, Instant receivedAt) {
         var inboundLog = new InboundLog();
         inboundLog.setCreatedDate(LocalDateTime.now(ZoneOffset.UTC));
         inboundLog.setMessageId(messageId);
         inboundLog.setReceivedAt(LocalDateTime.ofInstant(receivedAt, ZoneOffset.UTC));
         inboundLog.setReceivedJson(
-                MessageDeserializationUtil.getMessageBodyAsJson(snsMessagePayload));
+                MessageDeserializationUtil.getMessageBodyAsJson(sqsMessagePayload));
         this.inboundLogRepository.save(inboundLog);
     }
 }

@@ -49,6 +49,3 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USERNAME }}/aws-dynamodb-project-${{ matrix.java }}
           docker push ${{ secrets.DOCKER_USERNAME }}/aws-dynamodb-project-${{ matrix.java }}
-
-      - name: Codecov
-        uses: codecov/codecov-action@v3.1.1

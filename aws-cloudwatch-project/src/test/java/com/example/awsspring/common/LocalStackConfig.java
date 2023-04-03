@@ -13,7 +13,7 @@ public class LocalStackConfig {
 
     static {
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.3.1"))
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:2.0.0"))
                         .withServices(CLOUDWATCH)
                         .withExposedPorts(4566);
         localStackContainer.start();

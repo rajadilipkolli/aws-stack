@@ -35,7 +35,8 @@
   - aws-ses-project/pom.xml
   - aws-sns-project/pom.xml
   - aws-sqs-project/pom.xml
-  - aws-kinesis-project/pom.xml
+  - aws-kinesis-project/consumer/pom.xml
+  - aws-kinesis-project/producer/pom.xml
   - aws-parameterstore-project/pom.xml
   - aws-secretmanager-project/pom.xml
   - aws-lamda-project/pom.xml

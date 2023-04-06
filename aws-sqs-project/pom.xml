@@ -23,7 +23,7 @@
 		<commons-io.version>2.11.0</commons-io.version>
         <spring-cloud-aws.version>3.0.0-RC2</spring-cloud-aws.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
-		<spotless.version>2.35.0</spotless.version>
+		<spotless.version>2.36.0</spotless.version>
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
 		<testcontainers.version>1.18.0</testcontainers.version>
 

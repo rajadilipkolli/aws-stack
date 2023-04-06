@@ -1,7 +1,9 @@
 package com.learning.awspring.utils;
 
 import com.learning.awspring.model.SQSMessagePayload;
+
 import lombok.experimental.UtilityClass;
+
 import org.apache.commons.lang3.RandomStringUtils;
 
 @UtilityClass

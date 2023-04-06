@@ -2,12 +2,13 @@ package com.learning.awspring.common;
 
 import static com.learning.awspring.utils.AppConstants.PROFILE_IT;
 import static com.learning.awspring.utils.AppConstants.PROFILE_TEST;
+
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.awspring.utils.AppConstants;
-import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,8 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
+
+import java.io.IOException;
 
 @ActiveProfiles({PROFILE_TEST, PROFILE_IT})
 @SpringBootTest(webEnvironment = RANDOM_PORT)

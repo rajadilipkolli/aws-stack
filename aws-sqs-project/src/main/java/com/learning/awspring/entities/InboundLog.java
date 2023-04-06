@@ -1,6 +1,7 @@
 package com.learning.awspring.entities;
 
 import io.hypersistence.utils.hibernate.type.json.JsonType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,15 +9,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
-import java.util.Objects;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "inbound_logs")

@@ -1,7 +1,7 @@
 package com.example.awsspring.service;
 
 import com.example.awsspring.common.AbstractIntegrationTest;
-import java.time.Duration;
+
 import org.awaitility.Awaitility;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+
+import java.time.Duration;
 
 class NotificationServiceTest extends AbstractIntegrationTest {
 

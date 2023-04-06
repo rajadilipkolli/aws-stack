@@ -14,12 +14,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.learning.awspring.common.AbstractIntegrationTest;
 import com.learning.awspring.entities.InboundLog;
 import com.learning.awspring.repositories.InboundLogRepository;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class InboundLogControllerIT extends AbstractIntegrationTest {
 

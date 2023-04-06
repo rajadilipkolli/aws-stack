@@ -9,8 +9,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import com.learning.awspring.entities.InboundLog;
 import com.learning.awspring.model.response.PagedResult;
 import com.learning.awspring.repositories.InboundLogRepository;
-import java.util.List;
-import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +20,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 class InboundLogServiceTest {

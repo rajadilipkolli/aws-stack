@@ -1,9 +1,11 @@
 package com.learning.aws.spring.config;
 
-import javax.validation.constraints.NotBlank;
 import lombok.Data;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
+import javax.validation.constraints.NotBlank;
 
 @Data
 @ConfigurationProperties("application")

@@ -1,6 +1,7 @@
 package com.example.awslamda;
 
 import com.example.awslamda.config.ApplicationProperties;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

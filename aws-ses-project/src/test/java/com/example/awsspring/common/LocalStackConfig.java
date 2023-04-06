@@ -3,6 +3,7 @@ package com.example.awsspring.common;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SES;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.localstack.LocalStackContainer;

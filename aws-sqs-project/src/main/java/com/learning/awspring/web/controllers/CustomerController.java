@@ -3,8 +3,9 @@ package com.learning.awspring.web.controllers;
 import com.learning.awspring.domain.CustomerDTO;
 import com.learning.awspring.entities.Customer;
 import com.learning.awspring.services.CustomerService;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")

@@ -1,14 +1,18 @@
 package com.learning.aws.spring.consumer;
 
 import com.amazonaws.services.kinesis.model.Record;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import reactor.core.publisher.Flux;
+
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Consumer;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import reactor.core.publisher.Flux;
 
 @Slf4j
 @Configuration

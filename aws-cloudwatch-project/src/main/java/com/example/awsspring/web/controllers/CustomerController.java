@@ -2,8 +2,9 @@ package com.example.awsspring.web.controllers;
 
 import com.example.awsspring.entities.Customer;
 import com.example.awsspring.services.CustomerService;
+
 import io.micrometer.core.annotation.Timed;
-import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")

@@ -31,7 +31,7 @@ public abstract class AbstractIntegrationTest {
 
     @Container
     private static final LocalStackContainer localStackContainer =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack:2.0.0"))
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack:2.0.2"))
                     .withServices(SQS);
 
     @Container

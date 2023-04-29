@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestApplication",
+            "request": "launch",
+            "mainClass": "com.learning.awspring.TestApplication",
+            "projectName": "aws-sqs-project"
+        },
+        {
+            "type": "java",
             "name": "Launch Application",
             "request": "launch",
             "mainClass": "com.example.awsspring.Application",
@@ -76,7 +83,8 @@
             "mainClass": "com.learning.awspring.Application",
             "projectName": "aws-sqs-project",
             "args": "--spring.profiles.active=local",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=33093 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=aws-sqs-project"
         }
     ]
 }

@@ -11,14 +11,15 @@ services:
       - "5432:5432"
 
   localstack:
-    image: localstack/localstack:1.4.0
+    image: localstack/localstack:2.0.2
     ports:
       - "4566:4566"
     environment:
+      - EAGER_SERVICE_LOADING=1  # Needed from localstack 2+
       - SERVICES=ssm
       - DEFAULT_REGION=us-east-1
-      - AWS_CBOR_DISABLE=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
+      - "../.localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook  
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - '../.localstack:/docker-entrypoint-initaws.d'

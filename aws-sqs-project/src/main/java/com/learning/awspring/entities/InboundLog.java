@@ -21,6 +21,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "inbound_logs")
@@ -34,12 +35,12 @@ public class InboundLog {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false, name = "message_id", length = 40)
-    @NotBlank(message = "MessageId cannot be blank")
-    private String messageId;
+    @Column(columnDefinition = "uuid", nullable = false, name = "message_id", length = 36)
+    private UUID messageId;
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb", name = "received_json", nullable = false)
+    @NotBlank(message = "receivedJson cant be Blank")
     private String receivedJson;
 
     private LocalDateTime receivedAt;

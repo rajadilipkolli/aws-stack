@@ -14,7 +14,7 @@
             <column name="id" type="bigint" defaultValueSequenceNext="inbound_logs_seq">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="message_id" type="text">
+            <column name="message_id" type="uuid">
                 <constraints nullable="false"/>
             </column>
             <column name="received_json" type="JSONB">

@@ -2,9 +2,7 @@ package com.learning.awspring.web.controllers;
 
 import static com.learning.awspring.utils.AppConstants.QUEUE;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.awspring.model.SQSMessagePayload;
-import com.learning.awspring.utils.MessageDeserializationUtil;
 
 import io.awspring.cloud.sqs.operations.SendResult;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
@@ -14,9 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +27,6 @@ public class SqsController {
 
     private final SqsTemplate sqsTemplate;
 
-    private final ObjectMapper objectMapper;
-
     // HTTP POST url - http://localhost:8080/api/sqs/send
     @PostMapping("/send")
     // @ResponseStatus annotation marks the method with the status-code and the reason message that
@@ -41,12 +35,6 @@ public class SqsController {
     public SendResult<Object> sendMessageToSqs(
             @RequestBody @Valid final SQSMessagePayload sqsMessagePayload) {
         log.info("Sending the message to the Amazon sqs.");
-        return this.sqsTemplate.send(
-                to ->
-                        to.queue(QUEUE)
-                                .payload(
-                                        MessageDeserializationUtil.getMessageBodyAsJson(
-                                                sqsMessagePayload))
-                                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
+        return this.sqsTemplate.send(to -> to.queue(QUEUE).payload(sqsMessagePayload));
     }
 }

@@ -35,6 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @WebMvcTest(controllers = InboundLogController.class)
 @ActiveProfiles(PROFILE_TEST)
@@ -51,9 +52,9 @@ class InboundLogControllerTest {
     @BeforeEach
     void setUp() {
         this.inboundLogList = new ArrayList<>();
-        this.inboundLogList.add(new InboundLog(1L, "text 1", null, null, null));
-        this.inboundLogList.add(new InboundLog(2L, "text 2", null, null, null));
-        this.inboundLogList.add(new InboundLog(3L, "text 3", null, null, null));
+        this.inboundLogList.add(new InboundLog(1L, UUID.randomUUID(), null, null, null));
+        this.inboundLogList.add(new InboundLog(2L, UUID.randomUUID(), null, null, null));
+        this.inboundLogList.add(new InboundLog(3L, UUID.randomUUID(), null, null, null));
     }
 
     @Test
@@ -79,14 +80,14 @@ class InboundLogControllerTest {
     @Test
     void shouldFindInboundLogById() throws Exception {
         Long inboundLogId = 1L;
-        InboundLog inboundLog = new InboundLog(inboundLogId, "text 1", null, null, null);
+        InboundLog inboundLog = new InboundLog(inboundLogId, UUID.randomUUID(), null, null, null);
         given(inboundLogService.findInboundLogById(inboundLogId))
                 .willReturn(Optional.of(inboundLog));
 
         this.mockMvc
                 .perform(get("/api/inboundlog/{id}", inboundLogId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId())));
+                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId().toString())));
     }
 
     @Test
@@ -104,7 +105,18 @@ class InboundLogControllerTest {
         given(inboundLogService.saveInboundLog(any(InboundLog.class)))
                 .willAnswer((invocation) -> invocation.getArgument(0));
 
-        InboundLog inboundLog = new InboundLog(1L, "some text", null, null, null);
+        InboundLog inboundLog =
+                new InboundLog(
+                        1L,
+                        UUID.randomUUID(),
+                        """
+                {
+                        "id" : 1,
+                        "messageBody": "hello"
+                }
+                        """,
+                        null,
+                        null);
         this.mockMvc
                 .perform(
                         post("/api/inboundlog")
@@ -112,7 +124,7 @@ class InboundLogControllerTest {
                                 .content(objectMapper.writeValueAsString(inboundLog)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId())));
+                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId().toString())));
     }
 
     @Test
@@ -132,15 +144,15 @@ class InboundLogControllerTest {
                 .andExpect(jsonPath("$.detail", is("Invalid request content.")))
                 .andExpect(jsonPath("$.instance", is("/api/inboundlog")))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
-                .andExpect(jsonPath("$.violations[0].field", is("messageId")))
-                .andExpect(jsonPath("$.violations[0].message", is("MessageId cannot be blank")))
+                .andExpect(jsonPath("$.violations[0].field", is("receivedJson")))
+                .andExpect(jsonPath("$.violations[0].message", is("receivedJson cant be Blank")))
                 .andReturn();
     }
 
     @Test
     void shouldUpdateInboundLog() throws Exception {
         Long inboundLogId = 1L;
-        InboundLog inboundLog = new InboundLog(inboundLogId, "Updated text", null, null, null);
+        InboundLog inboundLog = new InboundLog(inboundLogId, UUID.randomUUID(), null, null, null);
         given(inboundLogService.findInboundLogById(inboundLogId))
                 .willReturn(Optional.of(inboundLog));
         given(inboundLogService.saveInboundLog(any(InboundLog.class)))
@@ -152,14 +164,14 @@ class InboundLogControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(inboundLog)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId())));
+                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId().toString())));
     }
 
     @Test
     void shouldReturn404WhenUpdatingNonExistingInboundLog() throws Exception {
         Long inboundLogId = 1L;
         given(inboundLogService.findInboundLogById(inboundLogId)).willReturn(Optional.empty());
-        InboundLog inboundLog = new InboundLog(inboundLogId, "Updated text", null, null, null);
+        InboundLog inboundLog = new InboundLog(inboundLogId, UUID.randomUUID(), null, null, null);
 
         this.mockMvc
                 .perform(
@@ -172,7 +184,7 @@ class InboundLogControllerTest {
     @Test
     void shouldDeleteInboundLog() throws Exception {
         Long inboundLogId = 1L;
-        InboundLog inboundLog = new InboundLog(inboundLogId, "Some text", null, null, null);
+        InboundLog inboundLog = new InboundLog(inboundLogId, UUID.randomUUID(), null, null, null);
         given(inboundLogService.findInboundLogById(inboundLogId))
                 .willReturn(Optional.of(inboundLog));
         doNothing().when(inboundLogService).deleteInboundLogById(inboundLog.getId());
@@ -180,7 +192,7 @@ class InboundLogControllerTest {
         this.mockMvc
                 .perform(delete("/api/inboundlog/{id}", inboundLog.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId())));
+                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId().toString())));
     }
 
     @Test

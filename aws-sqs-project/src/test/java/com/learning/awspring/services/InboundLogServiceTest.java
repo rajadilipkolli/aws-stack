@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 class InboundLogServiceTest {
@@ -64,7 +65,8 @@ class InboundLogServiceTest {
         assertThat(optionalInboundLog).isPresent();
         InboundLog inboundLog = optionalInboundLog.get();
         assertThat(inboundLog.getId()).isEqualTo(1L);
-        assertThat(inboundLog.getMessageId()).isEqualTo("junitTest");
+        assertThat(inboundLog.getMessageId().toString())
+                .isEqualTo("4594f2c9-5f88-4472-9229-1b31d867ae71");
     }
 
     @Test
@@ -76,7 +78,8 @@ class InboundLogServiceTest {
         // then
         assertThat(persistedInboundLog).isNotNull();
         assertThat(persistedInboundLog.getId()).isEqualTo(1L);
-        assertThat(persistedInboundLog.getMessageId()).isEqualTo("junitTest");
+        assertThat(persistedInboundLog.getMessageId().toString())
+                .isEqualTo("4594f2c9-5f88-4472-9229-1b31d867ae71");
     }
 
     @Test
@@ -92,7 +95,7 @@ class InboundLogServiceTest {
     private InboundLog getInboundLog() {
         InboundLog inboundLog = new InboundLog();
         inboundLog.setId(1L);
-        inboundLog.setMessageId("junitTest");
+        inboundLog.setMessageId(UUID.fromString("4594f2c9-5f88-4472-9229-1b31d867ae71"));
         return inboundLog;
     }
 }

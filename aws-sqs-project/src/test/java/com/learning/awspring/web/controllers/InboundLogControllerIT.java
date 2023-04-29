@@ -20,8 +20,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 class InboundLogControllerIT extends AbstractIntegrationTest {
 
@@ -37,7 +39,7 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
         inboundLogList.add(
                 new InboundLog(
                         null,
-                        "First InboundLog",
+                        UUID.randomUUID(),
                         """
                         {"id": "string1","messageBody": "string1"}
                         """,
@@ -46,7 +48,7 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
         inboundLogList.add(
                 new InboundLog(
                         null,
-                        "Second InboundLog",
+                        UUID.randomUUID(),
                         """
                         {"id": "string2","messageBody": "string2"}
                         """,
@@ -55,7 +57,7 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
         inboundLogList.add(
                 new InboundLog(
                         null,
-                        "Third InboundLog",
+                        UUID.randomUUID(),
                         """
                         {"id": "string3","messageBody": "string3"}
                         """,
@@ -87,7 +89,7 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(get("/api/inboundlog/{id}", inboundLogId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId())));
+                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId().toString())));
     }
 
     @Test
@@ -95,11 +97,11 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
         InboundLog inboundLog =
                 new InboundLog(
                         null,
-                        "New InboundLog",
+                        UUID.randomUUID(),
                         """
-                       {"id": "string1","messageBody": "string1"}
+                        {"id": "string1","messageBody": "string1"}
                         """,
-                        null,
+                        LocalDateTime.now(),
                         null);
         this.mockMvc
                 .perform(
@@ -108,7 +110,7 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
                                 .content(objectMapper.writeValueAsString(inboundLog)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId())));
+                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId().toString())));
     }
 
     @Test
@@ -128,15 +130,15 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.detail", is("Invalid request content.")))
                 .andExpect(jsonPath("$.instance", is("/api/inboundlog")))
                 .andExpect(jsonPath("$.violations", hasSize(1)))
-                .andExpect(jsonPath("$.violations[0].field", is("messageId")))
-                .andExpect(jsonPath("$.violations[0].message", is("MessageId cannot be blank")))
+                .andExpect(jsonPath("$.violations[0].field", is("receivedJson")))
+                .andExpect(jsonPath("$.violations[0].message", is("receivedJson cant be Blank")))
                 .andReturn();
     }
 
     @Test
     void shouldUpdateInboundLog() throws Exception {
         InboundLog inboundLog = inboundLogList.get(0);
-        inboundLog.setMessageId("Updated InboundLog");
+        inboundLog.setMessageId(UUID.randomUUID());
 
         this.mockMvc
                 .perform(
@@ -144,7 +146,7 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(inboundLog)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId())));
+                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId().toString())));
     }
 
     @Test
@@ -154,6 +156,6 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(delete("/api/inboundlog/{id}", inboundLog.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId())));
+                .andExpect(jsonPath("$.messageId", is(inboundLog.getMessageId().toString())));
     }
 }

@@ -1,9 +1,8 @@
 package com.learning.awspring.web.listener;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.awspring.entities.InboundLog;
 import com.learning.awspring.model.SQSMessagePayload;
-import com.learning.awspring.repositories.InboundLogRepository;
+import com.learning.awspring.services.InboundLogService;
 import com.learning.awspring.utils.AppConstants;
 import com.learning.awspring.utils.MessageDeserializationUtil;
 
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.messaging.Message;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -21,14 +19,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SQSListener {
 
-    private final InboundLogRepository inboundLogRepository;
-    private final ObjectMapper objectMapper;
+    private final InboundLogService inboundLogService;
 
     // @SqsListener listens to the message from the specified queue.
     // Here in this example we are printing the message on the console and the message will be
@@ -37,23 +35,28 @@ public class SQSListener {
     public void readMessageFromSqs(List<Message<SQSMessagePayload>> payloadMessageList) {
         log.info("Received messages= {} ", payloadMessageList);
 
-        for (Message<SQSMessagePayload> snsMessagePayload : payloadMessageList) {
-            saveMessageToDatabase(
-                    snsMessagePayload.getPayload(),
-                    Objects.requireNonNull(snsMessagePayload.getHeaders().getId()).toString(),
-                    snsMessagePayload.getHeaders().get("Sqs_ReceivedAt", Instant.class));
-        }
-    }
-
-    @Async
-    private void saveMessageToDatabase(
-            SQSMessagePayload sqsMessagePayload, String messageId, Instant receivedAt) {
-        var inboundLog = new InboundLog();
-        inboundLog.setCreatedDate(LocalDateTime.now(ZoneOffset.UTC));
-        inboundLog.setMessageId(messageId);
-        inboundLog.setReceivedAt(LocalDateTime.ofInstant(receivedAt, ZoneOffset.UTC));
-        inboundLog.setReceivedJson(
-                MessageDeserializationUtil.getMessageBodyAsJson(sqsMessagePayload));
-        this.inboundLogRepository.save(inboundLog);
+        List<InboundLog> inBoundLogList =
+                payloadMessageList.stream()
+                        .map(
+                                snsMessage -> {
+                                    var inboundLog = new InboundLog();
+                                    inboundLog.setCreatedDate(LocalDateTime.now(ZoneOffset.UTC));
+                                    inboundLog.setMessageId(snsMessage.getHeaders().getId());
+                                    inboundLog.setReceivedAt(
+                                            LocalDateTime.ofInstant(
+                                                    Objects.requireNonNull(
+                                                            snsMessage
+                                                                    .getHeaders()
+                                                                    .get(
+                                                                            "Sqs_ReceivedAt",
+                                                                            Instant.class)),
+                                                    ZoneOffset.UTC));
+                                    inboundLog.setReceivedJson(
+                                            MessageDeserializationUtil.getMessageBodyAsJson(
+                                                    snsMessage.getPayload()));
+                                    return inboundLog;
+                                })
+                        .collect(Collectors.toList());
+        inboundLogService.saveAllMessagesToDatabase(inBoundLogList);
     }
 }

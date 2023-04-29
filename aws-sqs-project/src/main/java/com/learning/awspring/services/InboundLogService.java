@@ -4,6 +4,8 @@ import com.learning.awspring.entities.InboundLog;
 import com.learning.awspring.model.response.PagedResult;
 import com.learning.awspring.repositories.InboundLogRepository;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,18 +13,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class InboundLogService {
 
     private final InboundLogRepository inboundLogRepository;
 
-    public InboundLogService(InboundLogRepository inboundLogRepository) {
-        this.inboundLogRepository = inboundLogRepository;
-    }
-
+    @Transactional(readOnly = true)
     public PagedResult<InboundLog> findAllInboundLogs(
             int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort =
@@ -37,6 +38,7 @@ public class InboundLogService {
         return new PagedResult<>(inboundLogsPage);
     }
 
+    @Transactional(readOnly = true)
     public Optional<InboundLog> findInboundLogById(Long id) {
         return inboundLogRepository.findById(id);
     }
@@ -47,5 +49,9 @@ public class InboundLogService {
 
     public void deleteInboundLogById(Long id) {
         inboundLogRepository.deleteById(id);
+    }
+
+    public List<InboundLog> saveAllMessagesToDatabase(List<InboundLog> inBoundLogList) {
+        return this.inboundLogRepository.saveAll(inBoundLogList);
     }
 }

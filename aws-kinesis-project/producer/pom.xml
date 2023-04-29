@@ -20,7 +20,6 @@
 
         <java.version>17</java.version>
         <spring-cloud.version>2022.0.2</spring-cloud.version>
-        <spring-cloud-aws.version>2.4.4</spring-cloud-aws.version>
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
         <commons-io.version>2.11.0</commons-io.version>
 
@@ -30,7 +29,6 @@
         <spotless.version>2.36.0</spotless.version>
         <dependency-check-maven.version>8.2.1</dependency-check-maven.version>
         <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0</maven-failsafe-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
@@ -71,16 +69,11 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-aws-autoconfigure</artifactId>
-            <version>${spring-cloud-aws.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream-binder-kinesis</artifactId>
-            <version>3.0.0</version>
+            <version>4.0.0-M1</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>

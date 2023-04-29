@@ -6,13 +6,11 @@ services:
     ports:
       - "4566:4566"
     environment:
+      - EAGER_SERVICE_LOADING=1
       - SERVICES=kinesis, dynamodb
       - DEFAULT_REGION=us-east-1
-      - KINESIS_STREAM_SHARDS=1
-      - KINESIS_ERROR_PROBABILITY=0.0
-      - KINESIS_STREAM_NAME=my-test-stream
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
+      - "../.localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - '../.localstack:/docker-entrypoint-initaws.d'

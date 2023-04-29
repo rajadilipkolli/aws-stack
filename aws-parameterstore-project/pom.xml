@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.6</version>
+        <version>3.1.0-RC1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example.awsspring</groupId>
@@ -30,7 +30,6 @@
         <spotless.version>2.36.0</spotless.version>
         <dependency-check-maven.version>8.2.1</dependency-check-maven.version>
         <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0</maven-failsafe-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
@@ -132,12 +131,6 @@
             <artifactId>localstack</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- AWS SDK v1 is required by testcontainers-localstack -->
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-core</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -146,13 +139,6 @@
                 <groupId>io.awspring.cloud</groupId>
                 <artifactId>spring-cloud-aws-dependencies</artifactId>
                 <version>${spring-cloud-aws.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>${testcontainers.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

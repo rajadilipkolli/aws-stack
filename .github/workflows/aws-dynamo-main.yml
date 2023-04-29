@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         distribution: [ 'temurin' ]
-        java: [ '19' ]
+        java: [ '17' ]
     steps:
       - uses: actions/checkout@v3
 

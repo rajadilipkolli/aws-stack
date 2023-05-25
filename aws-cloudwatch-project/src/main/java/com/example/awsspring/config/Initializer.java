@@ -2,10 +2,8 @@ package com.example.awsspring.config;
 
 import com.example.awsspring.entities.Customer;
 import com.example.awsspring.repositories.CustomerRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

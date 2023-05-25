@@ -15,11 +15,11 @@ public class TestcontainersConfig {
     @Bean
     @ServiceConnection
     public PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>("postgres:15.2-alpine");
+        return new PostgreSQLContainer<>("postgres:15.3-alpine");
     }
 
     static final LocalStackContainer localStackContainer =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack:2.0.2"))
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
                     .withServices(SQS);
 
     static {

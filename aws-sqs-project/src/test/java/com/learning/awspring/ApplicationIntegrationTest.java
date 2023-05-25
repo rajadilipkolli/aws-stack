@@ -8,15 +8,13 @@ import com.learning.awspring.common.AbstractIntegrationTest;
 import com.learning.awspring.model.SQSMessagePayload;
 import com.learning.awspring.repositories.InboundLogRepository;
 import com.learning.awspring.utils.FakeObjectCreator;
-
+import java.time.Duration;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-
-import java.time.Duration;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class ApplicationIntegrationTest extends AbstractIntegrationTest {

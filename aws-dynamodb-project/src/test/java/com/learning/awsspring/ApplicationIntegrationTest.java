@@ -4,14 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.learning.awsspring.common.AbstractIntegrationTest;
 import com.learning.awsspring.entities.Customer;
-
 import io.awspring.cloud.dynamodb.DynamoDbOperations;
-
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
@@ -19,8 +16,6 @@ import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-
-import java.util.UUID;
 
 @Slf4j
 class ApplicationIntegrationTest extends AbstractIntegrationTest {

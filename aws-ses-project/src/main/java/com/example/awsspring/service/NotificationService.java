@@ -2,18 +2,14 @@ package com.example.awsspring.service;
 
 import io.awspring.cloud.ses.SimpleEmailServiceJavaMailSender;
 import io.awspring.cloud.ses.SimpleEmailServiceMailSender;
-
+import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 import software.amazon.awssdk.services.ses.SesClient;
-
-import java.nio.charset.StandardCharsets;
 
 @Service
 @Slf4j

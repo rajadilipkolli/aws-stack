@@ -1,14 +1,12 @@
 package com.learning.aws.spring.producer;
 
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j

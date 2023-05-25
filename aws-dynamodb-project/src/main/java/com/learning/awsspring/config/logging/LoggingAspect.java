@@ -1,7 +1,6 @@
 package com.learning.awsspring.config.logging;
 
 import com.learning.awsspring.utils.AppConstants;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;

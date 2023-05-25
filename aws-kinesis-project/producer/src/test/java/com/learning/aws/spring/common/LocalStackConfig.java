@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
-
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -20,7 +19,8 @@ public class LocalStackConfig {
     static {
         System.setProperty("com.amazonaws.sdk.disableCbor", "true");
         localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
+                new LocalStackContainer(
+                                DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
                         .withEnv("EAGER_SERVICE_LOADING", "1")
                         .withServices(KINESIS)
                         .withExposedPorts(4566);

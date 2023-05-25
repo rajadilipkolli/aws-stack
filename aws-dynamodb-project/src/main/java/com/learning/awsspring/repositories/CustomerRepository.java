@@ -1,19 +1,14 @@
 package com.learning.awsspring.repositories;
 
 import com.learning.awsspring.entities.Customer;
-
 import io.awspring.cloud.dynamodb.DynamoDbTemplate;
-
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Repository;
-
-import software.amazon.awssdk.enhanced.dynamodb.Key;
-import software.amazon.awssdk.enhanced.dynamodb.model.Page;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
+import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 
 @Repository
 @RequiredArgsConstructor

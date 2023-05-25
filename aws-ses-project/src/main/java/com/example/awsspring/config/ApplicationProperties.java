@@ -1,9 +1,7 @@
 package com.example.awsspring.config;
 
 import jakarta.validation.constraints.NotBlank;
-
 import lombok.Data;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data

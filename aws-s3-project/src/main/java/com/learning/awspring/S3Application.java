@@ -1,7 +1,6 @@
 package com.learning.awspring;
 
 import com.learning.awspring.config.ApplicationProperties;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

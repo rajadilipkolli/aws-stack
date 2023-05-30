@@ -24,7 +24,7 @@
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
 
         <spotless.version>2.37.0</spotless.version>
-        <testcontainers.version>1.18.1</testcontainers.version>
+        <testcontainers.version>1.18.2</testcontainers.version>
 
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>

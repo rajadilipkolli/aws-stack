@@ -11,7 +11,7 @@ import org.testcontainers.utility.MountableFile;
 public class LocalStackContainerConfig {
 
     private static final LocalStackContainer localStackContainer =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.0.2"))
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
                     .withCopyFileToContainer(
                             MountableFile.forClasspathResource("script.sh", 0775),
                             "/etc/localstack/init/ready.d/")

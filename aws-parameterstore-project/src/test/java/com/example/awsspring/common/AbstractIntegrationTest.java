@@ -12,7 +12,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles({PROFILE_TEST})
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = RANDOM_PORT,
+        properties = {"spring.config.import=aws-parameterstore:/spring/config/"})
 @ImportTestcontainers(MyDBContainer.class)
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest extends LocalStackContainerConfig {

@@ -5,3 +5,5 @@ awslocal ssm put-parameter --name /spring/config/application.username --value ap
 echo "List of ssm parameters:"
 echo "-------------------------------"
 awslocal ssm get-parameters --names /spring/config/application.username /spring/config/application.password
+
+echo "Initialized."

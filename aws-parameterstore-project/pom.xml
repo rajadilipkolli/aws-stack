@@ -19,15 +19,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <java.version>17</java.version>
-        <spring-cloud.version>2022.0.2</spring-cloud.version>
         <spring-cloud-aws.version>3.0.1</spring-cloud-aws.version>
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
         <commons-io.version>2.12.0</commons-io.version>
 
-        <testcontainers.version>1.18.0</testcontainers.version>
-
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
-        <spotless.version>2.36.0</spotless.version>
+        <spotless.version>2.37.0</spotless.version>
         <dependency-check-maven.version>8.2.1</dependency-check-maven.version>
         <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
@@ -109,6 +106,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

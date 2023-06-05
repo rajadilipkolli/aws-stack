@@ -13,7 +13,7 @@ public class LocalStackContainerConfig {
     private static final LocalStackContainer localStackContainer =
             new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
                     .withCopyFileToContainer(
-                            MountableFile.forClasspathResource("script.sh", 0775),
+                            MountableFile.forClasspathResource("script.sh", 775),
                             "/etc/localstack/init/ready.d/")
                     .withServices(SSM)
                     .withEnv("EAGER_SERVICE_LOADING", "1");

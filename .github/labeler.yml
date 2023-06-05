@@ -20,8 +20,6 @@
   - aws-parameterstore-project/**/*
 "component: secretmanager":
   - aws-secretmanager-project/**/*
-"component: lamda":
-  - aws-lamda-project/**/*
 "status: waiting-for-triage":
   - ./*
   - ./**/*
@@ -39,4 +37,3 @@
   - aws-kinesis-project/producer/pom.xml
   - aws-parameterstore-project/pom.xml
   - aws-secretmanager-project/pom.xml
-  - aws-lamda-project/pom.xml

@@ -3,11 +3,10 @@ package com.learning.awspring.controller;
 import com.learning.awspring.domain.FileInfo;
 import com.learning.awspring.service.AwsS3Service;
 import com.learning.awspring.service.FileInfoService;
-
 import jakarta.servlet.http.HttpServletResponse;
-
+import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,9 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

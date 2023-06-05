@@ -1,4 +1,4 @@
-package com.example.awslamda.common;
+package com.example.awsspring.common;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +12,7 @@ public class DBContainerInitializer
         implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     private static final PostgreSQLContainer<?> sqlContainer =
-            new PostgreSQLContainer<>("postgres:15-alpine")
+            new PostgreSQLContainer<>("postgres:15.3-alpine")
                     .withDatabaseName("integration-tests-db")
                     .withUsername("username")
                     .withPassword("password");

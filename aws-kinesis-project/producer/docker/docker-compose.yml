@@ -6,8 +6,7 @@ services:
     ports:
       - "4566:4566"
     environment:
-      - EAGER_SERVICE_LOADING=1
-      - SERVICES=kinesis, dynamodb
+      - SERVICES=kinesis
       - DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566
     volumes:

@@ -14,7 +14,7 @@ public class IpProducer {
 
     @Scheduled(fixedDelay = 3000L)
     @Bean
-    public Supplier<List<String>> produceSupplier() {
+    public Supplier<List<String>> producerSupplier() {
         return () ->
                 IntStream.range(1, 200)
                         .mapToObj(ipSuffix -> "192.168.0." + ipSuffix)

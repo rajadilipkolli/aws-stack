@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:15-alpine
+    image: postgres:15.3-alpine
     environment:
       - POSTGRES_USER=appuser
       - POSTGRES_PASSWORD=secret
@@ -15,11 +15,11 @@ services:
     ports:
       - "4566:4566"
     environment:
-      - EAGER_SERVICE_LOADING=1
       - SERVICES=SECRETSMANAGER
       - DEFAULT_REGION=us-east-1
-      - AWS_CBOR_DISABLE=1
     volumes:
-      - "../.localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook    
-      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "../localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
+      - localstack:/tmp/localstack
+
+volumes:
+  localstack:

@@ -7,6 +7,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +46,17 @@ public class CustomerController {
                                 .buildAndExpand(persistedCustomer.getId().toString())
                                 .toUri())
                 .body(persistedCustomer);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Customer> deleteCustomer(@PathVariable(name = "id") UUID uuid) {
+        return customerService
+                .findCustomerById(uuid)
+                .map(
+                        customer -> {
+                            customerService.deleteCustomerById(uuid);
+                            return ResponseEntity.ok(customer);
+                        })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

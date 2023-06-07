@@ -12,10 +12,11 @@ public class LocalStackContainerConfig {
                     .withCopyFileToContainer(
                             MountableFile.forHostPath("localstack/"),
                             "/etc/localstack/init/ready.d/")
-                    .waitingFor(Wait.forLogMessage(".*Initialized\\.\n", 1));
+                    .waitingFor(Wait.forLogMessage(".*LocalStack initialized successfully\n", 1));
 
     static {
         localStackContainer.start();
+        // Workaround to set value early
         System.setProperty(
                 "spring.cloud.aws.endpoint", localStackContainer.getEndpoint().toString());
         System.setProperty(

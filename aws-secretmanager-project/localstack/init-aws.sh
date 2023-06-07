@@ -4,3 +4,5 @@ awslocal secretsmanager create-secret --name /spring/secret --secret-string '{"a
 echo "List of secretsmanager secrets:"
 echo "-------------------------------"
 awslocal secretsmanager list-secrets
+
+echo "LocalStack initialized successfully"

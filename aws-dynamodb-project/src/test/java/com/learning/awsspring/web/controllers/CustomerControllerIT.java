@@ -3,9 +3,12 @@ package com.learning.awsspring.web.controllers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.learning.awsspring.common.AbstractIntegrationTest;
 import com.learning.awsspring.entities.Customer;
@@ -87,5 +90,17 @@ class CustomerControllerIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.email", is(customer.getEmail())))
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(header().exists("location"));
+    }
+
+    @Test
+    @Disabled
+    void shouldDeleteCustomer() throws Exception {
+        Customer customer = customerList.get(0);
+
+        this.mockMvc
+                .perform(delete("/api/customers/{id}", customer.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(customer.getName())))
+                .andExpect(jsonPath("$.email", is(customer.getEmail())));
     }
 }

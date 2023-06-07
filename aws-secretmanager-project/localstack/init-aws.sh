@@ -5,4 +5,4 @@ echo "List of secretsmanager secrets:"
 echo "-------------------------------"
 awslocal secretsmanager list-secrets
 
-echo "Initialized."
+echo "LocalStack initialized successfully"

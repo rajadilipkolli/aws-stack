@@ -18,6 +18,8 @@ services:
       - SERVICES=SECRETSMANAGER
       - DEFAULT_REGION=us-east-1
     volumes:
-      - "../.localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook    
-      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "../localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
+      - localstack:/tmp/localstack
+
+volumes:
+  localstack:

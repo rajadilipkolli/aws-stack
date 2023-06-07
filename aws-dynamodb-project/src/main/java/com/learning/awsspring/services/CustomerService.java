@@ -25,4 +25,8 @@ public class CustomerService {
     public Optional<Customer> findCustomerById(UUID id) {
         return Optional.ofNullable(this.customerRepository.getCustomerById(id));
     }
+
+    public void deleteCustomerById(UUID id) {
+        this.customerRepository.deleteCustomerById(id);
+    }
 }

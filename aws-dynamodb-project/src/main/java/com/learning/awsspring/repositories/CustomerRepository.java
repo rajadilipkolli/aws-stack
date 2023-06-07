@@ -54,4 +54,13 @@ public class CustomerRepository {
 
         return result;
     }
+
+    public void deleteCustomerById(UUID uuid) {
+
+        // Create a KEY object
+        Key key = Key.builder().partitionValue(uuid.toString()).build();
+
+        // delete the item by using the key
+        dynamoDbTemplate.delete(key, Customer.class);
+    }
 }

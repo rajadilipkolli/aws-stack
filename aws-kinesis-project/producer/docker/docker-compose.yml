@@ -6,7 +6,7 @@ services:
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=kinesis, dynamodb
+      - SERVICES=kinesis, dynamodb, iam
       - DEFAULT_REGION=us-east-1
     volumes:
       - "../.localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook

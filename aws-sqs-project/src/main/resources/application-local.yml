@@ -1,18 +1,12 @@
-cloud:
-  aws:
-    credentials:
-      secretKey: test
-      accessKey: test
-    region:
-      static: us-east-1
-    stack:
-      auto: false
-      enabled: false
-    sqs:
-      endpoint: http://localhost:4566
-      listener:
-        autoStartup: true
 spring:
+  cloud:
+    aws:
+      credentials:
+        secretKey: test
+        accessKey: test
+      region:
+        static: us-east-1
+      endpoint: http://localhost:4566
   datasource:
     password: secret
     url: jdbc:postgresql://localhost:5432/appdb

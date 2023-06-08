@@ -1,5 +1,6 @@
 package com.learning.awspring;
 
+import com.learning.awspring.config.TestcontainersConfig;
 import org.springframework.boot.SpringApplication;
 
 public class TestApplication {

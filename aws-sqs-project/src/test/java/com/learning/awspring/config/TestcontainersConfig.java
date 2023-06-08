@@ -1,6 +1,4 @@
-package com.learning.awspring;
-
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
+package com.learning.awspring.config;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -19,15 +17,13 @@ public class TestcontainersConfig {
     }
 
     static final LocalStackContainer localStackContainer =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
-                    .withServices(SQS);
+            new LocalStackContainer(
+                    DockerImageName.parse("localstack/localstack").withTag("2.1.0"));
 
     static {
         localStackContainer.start();
         System.setProperty(
-                "spring.cloud.aws.sqs.endpoint",
-                localStackContainer.getEndpointOverride(SQS).toString());
-        System.setProperty("spring.cloud.aws.sqs.region", localStackContainer.getRegion());
+                "spring.cloud.aws.endpoint", localStackContainer.getEndpoint().toString());
         System.setProperty(
                 "spring.cloud.aws.credentials.access-key", localStackContainer.getAccessKey());
         System.setProperty(

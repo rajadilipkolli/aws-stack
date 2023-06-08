@@ -20,14 +20,12 @@ import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 @SpringBootTest(
         webEnvironment = RANDOM_PORT,
         properties = {
-            "spring.cloud.stream.bindings.eventConsumerBatchProcessingWithHeaders-in-0.destination=test_stream",
             "spring.cloud.stream.kinesis.bindings.eventConsumerBatchProcessingWithHeaders-in-0.consumer.idleBetweenPolls = 1",
             "spring.cloud.stream.kinesis.bindings.eventConsumerBatchProcessingWithHeaders-in-0.consumer.listenerMode = batch",
             "spring.cloud.stream.kinesis.bindings.eventConsumerBatchProcessingWithHeaders-in-0.consumer.checkpointMode = manual",
             "spring.cloud.stream.bindings.eventConsumerBatchProcessingWithHeaders-in-0.consumer.useNativeDecoding = true",
             "spring.cloud.stream.kinesis.binder.headers = event.eventType",
-            "spring.cloud.stream.kinesis.binder.autoAddShards = true",
-            "spring.cloud.aws.region.static=eu-west-2"
+            "spring.cloud.stream.kinesis.binder.autoAddShards = true"
         })
 @Import(LocalStackConfig.class)
 @AutoConfigureMockMvc

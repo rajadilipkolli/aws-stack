@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
+import software.amazon.awssdk.services.kinesis.model.Record;
 
 @Slf4j
 @Configuration

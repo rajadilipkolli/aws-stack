@@ -30,10 +30,10 @@ public class LocalStackConfig {
     }
 
     @Bean
-    @Scheduled(fixedRate = 600000L, initialDelay = 5000)
+    @Scheduled(fixedRate = 600000L)
     public Supplier<List<String>> producerSupplier() {
         return () ->
-                IntStream.range(1, 2)
+                IntStream.range(1, 4)
                         .mapToObj(ipSuffix -> "192.168.0." + ipSuffix)
                         .peek(entry -> log.info("sending event {}", entry))
                         .toList();

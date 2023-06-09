@@ -20,7 +20,7 @@ public class IpConsumer {
         return recordFlux ->
                 recordFlux
                         .flatMap(Flux::fromIterable)
-                        .map(Record::toString)
+                        .map(record -> record.data().asUtf8String())
                         .doOnNext(onNext)
                         .subscribe();
     }

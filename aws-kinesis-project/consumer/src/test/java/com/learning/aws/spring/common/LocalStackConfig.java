@@ -1,5 +1,6 @@
 package com.learning.aws.spring.common;
 
+import com.learning.aws.spring.model.IpAddressDTO;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -31,10 +32,10 @@ public class LocalStackConfig {
 
     @Bean
     @Scheduled(fixedRate = 600000L)
-    public Supplier<List<String>> producerSupplier() {
+    public Supplier<List<IpAddressDTO>> producerSupplier() {
         return () ->
-                IntStream.range(1, 4)
-                        .mapToObj(ipSuffix -> "192.168.0." + ipSuffix)
+                IntStream.range(1, 11)
+                        .mapToObj(ipSuffix -> new IpAddressDTO("192.168.0." + ipSuffix))
                         .peek(entry -> log.info("sending event {}", entry))
                         .toList();
     }

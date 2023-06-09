@@ -10,7 +10,7 @@ services:
       - DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566
     volumes:
-      - "../.localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
+      # - "../.localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
       - localstack:/tmp/localstack
 
 volumes:

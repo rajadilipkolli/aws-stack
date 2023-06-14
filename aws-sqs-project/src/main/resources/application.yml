@@ -55,13 +55,3 @@ spring:
   mvc:
     problemdetails:
       enabled: true
-  cloud:
-    aws:
-      credentials:
-        access-key: noop
-        secret-key: noop
-      region:
-        static: us-east-1
-      sqs:
-        endpoint: http://localhost:4566
-        region: us-east-1

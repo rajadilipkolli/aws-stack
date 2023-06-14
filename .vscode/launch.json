@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestS3Application",
+            "request": "launch",
+            "mainClass": "com.learning.awspring.TestS3Application",
+            "projectName": "aws-s3-project"
+        },
+        {
+            "type": "java",
             "name": "TestApplication",
             "request": "launch",
             "mainClass": "com.learning.awspring.TestApplication",

@@ -44,3 +44,4 @@ aws-kinesis-project/producer/docker/volume/
 aws-parameterstore-project/docker/volume/
 aws-secretmanager-project/docker/volume/
 aws-sqs-project/docker/volume/
+aws-s3-project/docker/volume/

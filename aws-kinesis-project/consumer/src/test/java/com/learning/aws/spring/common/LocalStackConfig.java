@@ -1,74 +1,80 @@
 package com.learning.aws.spring.common;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.CLOUDWATCH;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.KINESIS;
-
-import java.io.IOException;
+import com.learning.aws.spring.model.IpAddressDTO;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.awscore.client.builder.AwsClientBuilder;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 
-@TestConfiguration
+@TestConfiguration(proxyBeanMethods = false)
+@Slf4j
 public class LocalStackConfig {
-    static LocalStackContainer localStackContainer;
+    static final LocalStackContainer LOCAL_STACK_CONTAINER =
+            new LocalStackContainer(
+                    DockerImageName.parse("localstack/localstack").withTag("2.1.0"));
 
     static {
-        System.setProperty("com.amazonaws.sdk.disableCbor", "true");
-        localStackContainer =
-                new LocalStackContainer(
-                                DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
-                        .withEnv("EAGER_SERVICE_LOADING", "1")
-                        .withServices(CLOUDWATCH, DYNAMODB, KINESIS)
-                        .withExposedPorts(4566);
-        localStackContainer.start();
-        try {
-            localStackContainer.execInContainer(
-                    "awslocal",
-                    "kinesis",
-                    "create-stream",
-                    "--stream-name",
-                    "my-test-stream",
-                    "--shard-count",
-                    "1");
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        LOCAL_STACK_CONTAINER.start();
     }
 
     @Bean
-    @Primary
-    public DynamoDbAsyncClient amazonDynamoDBAsync() {
-
-        return DynamoDbAsyncClient.builder()
-                .endpointOverride(localStackContainer.getEndpointOverride(DYNAMODB))
-                .region(Region.of(localStackContainer.getRegion()))
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(
-                                        localStackContainer.getAccessKey(),
-                                        localStackContainer.getSecretKey())))
-                .build();
+    @Scheduled(fixedRate = 600000L)
+    public Supplier<List<IpAddressDTO>> producerSupplier() {
+        return () ->
+                IntStream.range(1, 11)
+                        .mapToObj(ipSuffix -> new IpAddressDTO("192.168.0." + ipSuffix))
+                        .peek(entry -> log.info("sending event {}", entry))
+                        .toList();
     }
 
     @Bean
     @Primary
     public KinesisAsyncClient amazonKinesis() {
-        return KinesisAsyncClient.builder()
-                .endpointOverride(localStackContainer.getEndpointOverride(KINESIS))
-                .region(Region.of(localStackContainer.getRegion()))
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(
-                                        localStackContainer.getAccessKey(),
-                                        localStackContainer.getSecretKey())))
+        return applyAwsClientOptions(
+                KinesisAsyncClient.builder(), LocalStackContainer.Service.KINESIS);
+    }
+
+    @Bean
+    @Primary
+    public DynamoDbAsyncClient amazonDynamoDBAsync() {
+        return applyAwsClientOptions(
+                DynamoDbAsyncClient.builder(), LocalStackContainer.Service.DYNAMODB);
+    }
+
+    @Bean
+    @Primary
+    public CloudWatchAsyncClient cloudWatchClient() {
+        return applyAwsClientOptions(
+                CloudWatchAsyncClient.builder(), LocalStackContainer.Service.CLOUDWATCH);
+    }
+
+    private static StaticCredentialsProvider getAwsCredentialsProvider() {
+        return StaticCredentialsProvider.create(
+                AwsBasicCredentials.create(
+                        LOCAL_STACK_CONTAINER.getAccessKey(),
+                        LOCAL_STACK_CONTAINER.getSecretKey()));
+    }
+
+    private static <B extends AwsClientBuilder<B, T>, T> T applyAwsClientOptions(
+            B clientBuilder, LocalStackContainer.Service service) {
+
+        return clientBuilder
+                .region(Region.of(LOCAL_STACK_CONTAINER.getRegion()))
+                .credentialsProvider(getAwsCredentialsProvider())
+                .endpointOverride(LOCAL_STACK_CONTAINER.getEndpointOverride(service))
                 .build();
     }
 }

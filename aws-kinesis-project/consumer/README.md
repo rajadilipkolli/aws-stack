@@ -11,7 +11,7 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 
 ## Notes:
 
-kinesis steam binder works with aws v1 of dynamodb and kinesis
+ - Starting 4.0.0 kinesis steam binder works with aws v2 of dynamodb, cloudwatch and kinesis
 
 
 ### Useful Links

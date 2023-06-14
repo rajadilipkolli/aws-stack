@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:latest
+    image: postgres:15.3-alpine
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=secret
@@ -16,7 +16,6 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566
       - SERVICES=s3
-      - AWS_CBOR_DISABLE=1
     ports:
       - '4566:4566'
     volumes:

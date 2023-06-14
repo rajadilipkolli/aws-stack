@@ -23,8 +23,7 @@ public class TestS3Application {
     }
 
     @Bean
-    @RestartScope
-    LocalStackContainer localStackContainer(DynamicPropertyRegistry dynamicPropertyRegistry) {
+    public LocalStackContainer localStackContainer(DynamicPropertyRegistry propertyRegistry) {
         LocalStackContainer localStackContainer =
                 new LocalStackContainer(
                                 DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
@@ -33,12 +32,11 @@ public class TestS3Application {
                                 "/etc/localstack/init/ready.d/")
                         .waitingFor(
                                 Wait.forLogMessage(".*LocalStack initialized successfully\n", 1));
-        dynamicPropertyRegistry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
-        dynamicPropertyRegistry.add(
-                "spring.cloud.aws.region.static", localStackContainer::getRegion);
-        dynamicPropertyRegistry.add(
+        propertyRegistry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
+        propertyRegistry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);
+        propertyRegistry.add(
                 "spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
-        dynamicPropertyRegistry.add(
+        propertyRegistry.add(
                 "spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
         return localStackContainer;
     }

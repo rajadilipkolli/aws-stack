@@ -11,7 +11,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 
-class S3ApplicationTest extends AbstractIntegrationTest {
+class S3ApplicationIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired FileInfoRepository fileInfoRepository;
     @Autowired private S3Template s3Template;

@@ -2,20 +2,22 @@ application:
   bucket-name: testbucket
 
 spring:
+  cloud:
+    aws:
+      endpoint: http://127.0.0.1:4566
+      credentials:
+        access-key: noop
+        secret-key: noop
+      region:
+        static: us-east-1
+  data:
+    jpa.repositories.bootstrap-mode: deferred
   datasource:
     password: secret
     url: jdbc:postgresql://localhost:5432/appdb
     username: user
     hikari:
       auto-commit: false
-  cloud:
-    aws:
-      region:
-        static: us-east-1
-      credentials:
-        access-key: noop
-        secret-key: noop
-      endpoint: http://127.0.0.1:4566
   jpa:
     hibernate:
       ddl-auto: validate
@@ -25,11 +27,6 @@ spring:
         connection:
           provider_disables_autocommit: true
         generate_statistics: false
-        id:
-          new_generator_mappings: true
-          optimizer:
-            pooled:
-              preferred: pooled-lo
         jdbc:
           batch_size: 25
           lob:

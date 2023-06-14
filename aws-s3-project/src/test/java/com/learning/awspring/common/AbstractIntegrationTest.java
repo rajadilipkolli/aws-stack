@@ -1,6 +1,5 @@
 package com.learning.awspring.common;
 
-import static com.learning.awspring.utils.AppConstants.PROFILE_IT;
 import static com.learning.awspring.utils.AppConstants.PROFILE_TEST;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -13,7 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@ActiveProfiles({PROFILE_TEST, PROFILE_IT})
+@ActiveProfiles({PROFILE_TEST})
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureMockMvc
 @Import(TestS3Application.class)

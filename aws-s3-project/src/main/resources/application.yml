@@ -15,9 +15,7 @@ spring:
       credentials:
         access-key: noop
         secret-key: noop
-      s3:
-        endpoint: http://127.0.0.1:4566
-        region: us-east-1
+      endpoint: http://127.0.0.1:4566
   jpa:
     hibernate:
       ddl-auto: validate

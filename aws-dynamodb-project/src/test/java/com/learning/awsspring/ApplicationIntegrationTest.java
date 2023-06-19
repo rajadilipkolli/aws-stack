@@ -9,9 +9,7 @@ import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
-import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
@@ -20,17 +18,11 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 @Slf4j
 class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
-    @Autowired private DynamoDbEnhancedClient dynamoDbEnhancedClient;
-
     @Autowired private DynamoDbOperations dynamoDbOperations;
 
     @Test
     void contextLoads() {
         assertThat(LOCAL_STACK_CONTAINER.isRunning()).isTrue();
-        // Create table on start up
-        dynamoDbEnhancedClient
-                .table("customer", TableSchema.fromBean(Customer.class))
-                .createTable();
 
         UUID id = UUID.randomUUID();
         String email = "junit@email.com";
@@ -69,11 +61,6 @@ class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
         Customer customerAfterDeletion = getCustomer(id, email);
         assertThat(customerAfterDeletion).isNull();
-
-        // Delete table after it has been used
-        dynamoDbEnhancedClient
-                .table("customer", TableSchema.fromBean(Customer.class))
-                .deleteTable();
     }
 
     private Customer getCustomer(UUID id, String email) {

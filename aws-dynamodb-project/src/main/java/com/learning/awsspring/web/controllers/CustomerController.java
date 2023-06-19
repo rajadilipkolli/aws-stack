@@ -28,10 +28,11 @@ public class CustomerController {
         return customerService.findAllCustomers();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable(name = "id") UUID uuid) {
+    @GetMapping("/{id}/{email}")
+    public ResponseEntity<Customer> getCustomerById(
+            @PathVariable(name = "id") UUID uuid, @PathVariable(name = "email") String emailId) {
         return customerService
-                .findCustomerById(uuid)
+                .findCustomerById(uuid, emailId)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -48,13 +49,14 @@ public class CustomerController {
                 .body(persistedCustomer);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Customer> deleteCustomer(@PathVariable(name = "id") UUID uuid) {
+    @DeleteMapping("/{id}/{email}")
+    public ResponseEntity<Customer> deleteCustomer(
+            @PathVariable(name = "id") UUID uuid, @PathVariable(name = "email") String emailId) {
         return customerService
-                .findCustomerById(uuid)
+                .findCustomerById(uuid, emailId)
                 .map(
                         customer -> {
-                            customerService.deleteCustomerById(uuid);
+                            customerService.deleteCustomerById(uuid, emailId);
                             return ResponseEntity.ok(customer);
                         })
                 .orElseGet(() -> ResponseEntity.notFound().build());

@@ -23,10 +23,10 @@ public class CustomerRepository {
                 .toList();
     }
 
-    public Customer getCustomerById(UUID uuid) {
+    public Customer getCustomerById(UUID uuid, String emailId) {
 
         // Create a KEY object
-        Key key = Key.builder().partitionValue(uuid.toString()).build();
+        Key key = Key.builder().partitionValue(uuid.toString()).sortValue(emailId).build();
 
         // Get the item by using the key
         return dynamoDbTemplate.load(key, Customer.class);
@@ -55,10 +55,10 @@ public class CustomerRepository {
         return result;
     }
 
-    public void deleteCustomerById(UUID uuid) {
+    public void deleteCustomerById(UUID uuid, String emailId) {
 
         // Create a KEY object
-        Key key = Key.builder().partitionValue(uuid.toString()).build();
+        Key key = Key.builder().partitionValue(uuid.toString()).sortValue(emailId).build();
 
         // delete the item by using the key
         dynamoDbTemplate.delete(key, Customer.class);

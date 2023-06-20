@@ -12,14 +12,14 @@ import org.testcontainers.utility.DockerImageName;
 @Slf4j
 public class LocalStackConfig {
 
-    static LocalStackContainer localStackContainer =
+    static final LocalStackContainer localStackContainer =
             new LocalStackContainer(
                     DockerImageName.parse("localstack/localstack").withTag("2.1.0"));
 
     static {
         localStackContainer.start();
         Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(log);
-        LOCAL_STACK_CONTAINER.followOutput(logConsumer);
+        localStackContainer.followOutput(logConsumer);
     }
 
     @DynamicPropertySource

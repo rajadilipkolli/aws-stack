@@ -2,23 +2,24 @@ package com.example.awsspring.common;
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SES;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.utility.DockerImageName;
 
+@Slf4j
 public class LocalStackConfig {
 
-    static LocalStackContainer localStackContainer;
+    static LocalStackContainer localStackContainer =
+            new LocalStackContainer(
+                    DockerImageName.parse("localstack/localstack").withTag("2.1.0"));
 
     static {
-        System.setProperty("com.amazonaws.sdk.disableCbor", "true");
-        localStackContainer =
-                new LocalStackContainer(
-                                DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
-                        .withServices(SES)
-                        .withExposedPorts(4566);
         localStackContainer.start();
+        Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(log);
+        LOCAL_STACK_CONTAINER.followOutput(logConsumer);
     }
 
     @DynamicPropertySource

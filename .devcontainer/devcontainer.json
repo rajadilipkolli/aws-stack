@@ -5,9 +5,21 @@
 	"image": "mcr.microsoft.com/devcontainers/java:17",
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {
-			"installMaven": "true"
+			"installMaven": true,
+			"version": "latest",
+			"jdkDistro": "ms",
+			"gradleVersion": "latest",
+			"mavenVersion": "latest",
+			"antVersion": "latest"
 		},
-		"ghcr.io/devcontainers/features/git:1": {}
+		"ghcr.io/devcontainers/features/git:1": {
+			"ppa": true,
+			"version": "os-provided"
+		},
+		"ghcr.io/devcontainers/features/aws-cli:1": {
+			"version": "latest"
+		},
+		"ghcr.io/dhoeric/features/act:1": {}
 	},
 	"customizations": {
 		"vscode": {

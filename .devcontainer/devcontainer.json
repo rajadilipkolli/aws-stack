@@ -8,14 +8,7 @@
 			"version": "none",
 			"installMaven": "true"
 		},
-		"ghcr.io/devcontainers/features/git:1": {
-			"ppa": true,
-			"version": "os-provided"
-		},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		"ghcr.io/devcontainers/features/aws-cli:1": {
-			"version": "latest"
-		}
+		"ghcr.io/devcontainers/features/git:1": {}
 	},
 	"customizations": {
 		"vscode": {

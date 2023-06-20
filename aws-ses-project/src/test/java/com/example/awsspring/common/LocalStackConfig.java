@@ -30,9 +30,7 @@ public class LocalStackConfig {
                 "spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
         dynamicPropertyRegistry.add(
                 "spring.cloud.aws.region.static", localStackContainer::getRegion);
-        dynamicPropertyRegistry.add("spring.cloud.aws.ses.region", localStackContainer::getRegion);
         dynamicPropertyRegistry.add(
-                "spring.cloud.aws.ses.endpoint",
-                () -> localStackContainer.getEndpointOverride(SES).toString());
+                "spring.cloud.aws.endpoint", () -> localStackContainer.getEndpointOverride(SES));
     }
 }

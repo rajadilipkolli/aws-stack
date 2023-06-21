@@ -43,8 +43,10 @@ public class CustomerController {
         Customer persistedCustomer = customerService.saveCustomer(customer);
         return ResponseEntity.created(
                         uriComponentsBuilder
-                                .path("/api/customers/{id}")
-                                .buildAndExpand(persistedCustomer.getId().toString())
+                                .path("/api/customers/{id}/{email}")
+                                .buildAndExpand(
+                                        persistedCustomer.getId().toString(),
+                                        persistedCustomer.getEmail())
                                 .toUri())
                 .body(persistedCustomer);
     }

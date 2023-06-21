@@ -961,10 +961,9 @@
       },
       {
         "current": {
-          "isNone": true,
           "selected": false,
-          "text": "None",
-          "value": ""
+          "text": "host.docker.internal:8080",
+          "value": "host.docker.internal:8080"
         },
         "datasource": {
           "type": "prometheus",

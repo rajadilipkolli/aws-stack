@@ -1466,6 +1466,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -1476,6 +1477,7 @@
         "x": 0,
         "y": 21
       },
+      "hiddenSeries": false,
       "id": 106,
       "legend": {
         "avg": false,
@@ -1490,7 +1492,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1591,6 +1597,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -1601,6 +1608,7 @@
         "x": 6,
         "y": 21
       },
+      "hiddenSeries": false,
       "id": 93,
       "legend": {
         "avg": false,
@@ -1615,7 +1623,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1711,6 +1723,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -1721,6 +1734,7 @@
         "x": 12,
         "y": 21
       },
+      "hiddenSeries": false,
       "id": 32,
       "legend": {
         "avg": false,
@@ -1735,7 +1749,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1852,12 +1870,14 @@
         "uid": "PBFA97CFB590B2093"
       },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 6,
         "x": 18,
         "y": 21
       },
+      "hiddenSeries": false,
       "id": 124,
       "legend": {
         "alignAsTable": false,
@@ -1874,7 +1894,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1943,6 +1967,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -1954,6 +1979,7 @@
         "y": 28
       },
       "height": "",
+      "hiddenSeries": false,
       "id": 91,
       "legend": {
         "alignAsTable": false,
@@ -1972,7 +1998,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": true,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2056,6 +2086,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -2066,6 +2097,7 @@
         "x": 18,
         "y": 28
       },
+      "hiddenSeries": false,
       "id": 61,
       "legend": {
         "avg": false,
@@ -2080,7 +2112,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2218,6 +2254,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -2228,6 +2265,7 @@
         "x": 0,
         "y": 36
       },
+      "hiddenSeries": false,
       "id": 3,
       "legend": {
         "alignAsTable": false,
@@ -2245,7 +2283,11 @@
       "links": [],
       "maxPerRow": 3,
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2377,6 +2419,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -2387,6 +2430,7 @@
         "x": 0,
         "y": 44
       },
+      "hiddenSeries": false,
       "id": 78,
       "legend": {
         "alignAsTable": false,
@@ -2404,7 +2448,11 @@
       "links": [],
       "maxPerRow": 3,
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2508,7 +2556,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 51
+        "y": 58
       },
       "id": 131,
       "panels": [],
@@ -2534,12 +2582,14 @@
         "uid": "PBFA97CFB590B2093"
       },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 52
+        "y": 59
       },
+      "hiddenSeries": false,
       "id": 98,
       "legend": {
         "avg": false,
@@ -2554,7 +2604,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2618,12 +2672,14 @@
         "uid": "PBFA97CFB590B2093"
       },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 52
+        "y": 59
       },
+      "hiddenSeries": false,
       "id": 101,
       "legend": {
         "avg": false,
@@ -2638,7 +2694,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2716,12 +2776,14 @@
         "uid": "PBFA97CFB590B2093"
       },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 52
+        "y": 59
       },
+      "hiddenSeries": false,
       "id": 99,
       "legend": {
         "avg": false,
@@ -2736,7 +2798,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2811,7 +2877,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 59
+        "y": 66
       },
       "id": 132,
       "panels": [],
@@ -2839,6 +2905,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -2847,8 +2914,9 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 60
+        "y": 67
       },
+      "hiddenSeries": false,
       "id": 37,
       "legend": {
         "avg": false,
@@ -2863,7 +2931,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2936,6 +3008,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -2944,8 +3017,9 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 60
+        "y": 67
       },
+      "hiddenSeries": false,
       "id": 38,
       "legend": {
         "avg": false,
@@ -2960,7 +3034,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3033,7 +3111,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 67
+        "y": 74
       },
       "id": 133,
       "panels": [],
@@ -3061,6 +3139,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -3069,8 +3148,9 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 68
+        "y": 75
       },
+      "hiddenSeries": false,
       "id": 33,
       "legend": {
         "avg": false,
@@ -3085,7 +3165,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3171,6 +3255,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -3179,8 +3264,9 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 68
+        "y": 75
       },
+      "hiddenSeries": false,
       "id": 83,
       "legend": {
         "avg": false,
@@ -3195,7 +3281,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3269,6 +3359,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -3277,8 +3368,9 @@
         "h": 7,
         "w": 6,
         "x": 12,
-        "y": 68
+        "y": 75
       },
+      "hiddenSeries": false,
       "id": 85,
       "legend": {
         "avg": false,
@@ -3293,7 +3385,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3379,6 +3475,7 @@
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {
         "leftLogBase": 1,
         "rightLogBase": 1
@@ -3387,8 +3484,9 @@
         "h": 7,
         "w": 6,
         "x": 18,
-        "y": 68
+        "y": 75
       },
+      "hiddenSeries": false,
       "id": 84,
       "legend": {
         "avg": false,
@@ -3403,7 +3501,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "10.0.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3503,10 +3605,9 @@
       {
         "allFormat": "glob",
         "current": {
-          "isNone": true,
           "selected": false,
-          "text": "None",
-          "value": ""
+          "text": "host.docker.internal:8080",
+          "value": "host.docker.internal:8080"
         },
         "datasource": {
           "type": "prometheus",

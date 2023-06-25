@@ -1,7 +1,5 @@
 package com.learning.awsspring.common;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -35,7 +33,6 @@ public class LocalStackConfig {
         dynamicPropertyRegistry.add(
                 "spring.cloud.aws.region.static", LOCAL_STACK_CONTAINER::getRegion);
         dynamicPropertyRegistry.add(
-                "spring.cloud.aws.endpoint",
-                () -> LOCAL_STACK_CONTAINER.getEndpointOverride(DYNAMODB));
+                "spring.cloud.aws.endpoint", LOCAL_STACK_CONTAINER::getEndpoint);
     }
 }

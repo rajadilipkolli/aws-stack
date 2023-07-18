@@ -46,7 +46,7 @@ public class Customer {
         this.name = name;
     }
 
-    @DynamoDbSortKey
+    @DynamoDbSortKey // Can't be updated
     @DynamoDbAttribute("email")
     public String getEmail() {
         return email;

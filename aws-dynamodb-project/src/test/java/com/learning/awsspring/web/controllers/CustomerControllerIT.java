@@ -1,6 +1,5 @@
 package com.learning.awsspring.web.controllers;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -16,32 +15,16 @@ import com.learning.awsspring.repositories.CustomerRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
-import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CustomerControllerIT extends AbstractIntegrationTest {
 
-    @Autowired private DynamoDbEnhancedClient dynamoDbEnhancedClient;
     @Autowired private CustomerRepository customerRepository;
 
     private List<Customer> customerList = null;
-
-    @BeforeAll
-    void setUpDbTable() {
-        assertThat(LOCAL_STACK_CONTAINER.isRunning()).isTrue();
-        // Create table on start up
-        dynamoDbEnhancedClient
-                .table("customer", TableSchema.fromBean(Customer.class))
-                .createTable();
-    }
 
     @BeforeEach
     void setUp() {
@@ -61,17 +44,16 @@ class CustomerControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(get("/api/customers"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(customerList.size())));
+                .andExpect(jsonPath("$.size()", is(customerList.size() + 1)));
     }
 
     @Test
-    @Disabled
     void shouldFindCustomerById() throws Exception {
         Customer customer = customerList.get(0);
         UUID customerId = customer.getId();
 
         this.mockMvc
-                .perform(get("/api/customers/{id}", customerId))
+                .perform(get("/api/customers/{id}/{email}", customerId, customer.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(customer.getName())))
                 .andExpect(jsonPath("$.email", is(customer.getEmail())));
@@ -93,12 +75,15 @@ class CustomerControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    @Disabled
     void shouldDeleteCustomer() throws Exception {
         Customer customer = customerList.get(0);
 
         this.mockMvc
-                .perform(delete("/api/customers/{id}", customer.getId()))
+                .perform(
+                        delete(
+                                "/api/customers/{id}/{email}",
+                                customer.getId(),
+                                customer.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(customer.getName())))
                 .andExpect(jsonPath("$.email", is(customer.getEmail())));

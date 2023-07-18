@@ -7,10 +7,15 @@ image:
   file: .gitpod.Dockerfile
 
 ports:
+  - port: 3000
+    visibility: public
+    onOpen: open-browser
   - port: 4566-4599
     visibility: public
     onOpen: ignore
   - port: 8080
+    visibility: public
+  - port: 9000
     visibility: public
   - port: 9200
     visibility: public

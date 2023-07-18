@@ -7,9 +7,11 @@ services:
     environment:
       - SERVICES=dynamodb
       - AWS_DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
       - "../.localstack:/etc/localstack/init/ready.d"  # ready hook
       - localstack:/tmp/localstack
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
 volumes:
   localstack:

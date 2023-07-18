@@ -22,11 +22,11 @@ public class CustomerService {
         return this.customerRepository.findAll();
     }
 
-    public Optional<Customer> findCustomerById(UUID id) {
-        return Optional.ofNullable(this.customerRepository.getCustomerById(id));
+    public Optional<Customer> findCustomerById(UUID id, String emailId) {
+        return Optional.ofNullable(this.customerRepository.getCustomerById(id, emailId));
     }
 
-    public void deleteCustomerById(UUID id) {
-        this.customerRepository.deleteCustomerById(id);
+    public void deleteCustomerById(UUID id, String emailId) {
+        this.customerRepository.deleteCustomerById(id, emailId);
     }
 }

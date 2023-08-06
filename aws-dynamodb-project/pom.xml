@@ -21,7 +21,7 @@
         <java.version>17</java.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <spring-cloud-aws.version>3.0.1</spring-cloud-aws.version>
-        <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
+        <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
 
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <spotless.version>2.38.0</spotless.version>

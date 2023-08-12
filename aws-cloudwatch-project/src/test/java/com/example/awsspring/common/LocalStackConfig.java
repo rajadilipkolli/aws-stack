@@ -14,7 +14,7 @@ public class LocalStackConfig {
     static {
         localStackContainer =
                 new LocalStackContainer(
-                                DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
+                                DockerImageName.parse("localstack/localstack").withTag("2.2.0"))
                         .withServices(CLOUDWATCH)
                         .withExposedPorts(4566);
         localStackContainer.start();

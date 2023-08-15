@@ -13,14 +13,20 @@ import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URI;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -40,6 +46,7 @@ public class AwsS3Service {
     private final ApplicationProperties applicationProperties;
     private final FileInfoRepository fileInfoRepository;
     private final S3Client s3Client;
+    private final RestTemplate restTemplate;
 
     public byte[] downloadFileFromS3Bucket(
             final String fileName, HttpServletResponse httpServletResponse) throws IOException {
@@ -105,7 +112,7 @@ public class AwsS3Service {
                 s3Template.createSignedGetURL(bucketName, fileName, Duration.ofMinutes(1)));
     }
 
-    public SignedURLResponse uploadFileUsingSignedURL(SignedUploadRequest signedUploadRequest) {
+    public SignedURLResponse getUploadFileUsingSignedURL(SignedUploadRequest signedUploadRequest) {
         Builder objectMetadataBuilder = ObjectMetadata.builder();
         signedUploadRequest.metadata().forEach(objectMetadataBuilder::metadata);
         ObjectMetadata metadata = objectMetadataBuilder.build();
@@ -128,5 +135,25 @@ public class AwsS3Service {
 
     private String createBucket(String bucketName) {
         return s3Template.createBucket(bucketName);
+    }
+
+    public String uploadFileWithPreSignedUrl(MultipartFile multipartFile, String preSignedUrl)
+            throws IOException {
+        // Step 2: Upload the file using the pre-signed URL
+        HttpHeaders fileHeaders = new HttpHeaders();
+        fileHeaders.set(HttpHeaders.CONTENT_TYPE, multipartFile.getContentType());
+        HttpEntity<byte[]> fileEntity = new HttpEntity<>(multipartFile.getBytes(), fileHeaders);
+
+        ResponseEntity<String> fileResponse =
+                restTemplate.exchange(
+                        URI.create(preSignedUrl), HttpMethod.PUT, fileEntity, String.class);
+
+        if (fileResponse.getStatusCode().is2xxSuccessful()) {
+            List<String> amzRequestID = fileResponse.getHeaders().get("x-amz-request-id");
+            log.info("Response :{}", fileResponse.getBody());
+            return "File uploaded successfully!" + amzRequestID;
+        } else {
+            return "File upload failed!";
+        }
     }
 }

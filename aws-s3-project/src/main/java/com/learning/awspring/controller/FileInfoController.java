@@ -10,12 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -35,9 +30,20 @@ public class FileInfoController {
     }
 
     @PostMapping("/s3/upload/signed/")
-    SignedURLResponse uploadFileUsingSignedURL(
+    SignedURLResponse getUploadFileUsingSignedURL(
             @RequestBody SignedUploadRequest signedUploadRequest) {
-        return awsS3Service.uploadFileUsingSignedURL(signedUploadRequest);
+        return awsS3Service.getUploadFileUsingSignedURL(signedUploadRequest);
+    }
+
+    @PutMapping(
+            value = "/s3/upload/signed/",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    String uploadFileWithPreSignedUrl(
+            @RequestPart("json") SignedURLResponse signedURLResponse,
+            @RequestPart("file") MultipartFile multipartFile)
+            throws IOException {
+        return awsS3Service.uploadFileWithPreSignedUrl(multipartFile, signedURLResponse.url());
     }
 
     @GetMapping(value = "/s3/download/{name}")

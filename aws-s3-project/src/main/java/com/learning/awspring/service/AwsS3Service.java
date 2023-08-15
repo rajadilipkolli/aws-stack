@@ -2,12 +2,14 @@ package com.learning.awspring.service;
 
 import com.learning.awspring.config.ApplicationProperties;
 import com.learning.awspring.domain.FileInfo;
+import com.learning.awspring.model.SignedURLResponse;
 import com.learning.awspring.repository.FileInfoRepository;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.time.Duration;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,5 +80,12 @@ public class AwsS3Service {
                                 .build());
         var fileInfo = new FileInfo(fileName, s3Resource.getURL().toString(), s3Resource.exists());
         return fileInfoRepository.save(fileInfo);
+    }
+
+    public SignedURLResponse downloadFileUsingSignedURL(String bucketName, String fileName) {
+        return new SignedURLResponse(
+                s3Template
+                        .createSignedGetURL(bucketName, fileName, Duration.ofMinutes(1))
+                        .toString());
     }
 }

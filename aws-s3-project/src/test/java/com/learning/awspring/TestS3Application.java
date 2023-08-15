@@ -18,11 +18,11 @@ public class TestS3Application {
     @ServiceConnection
     @RestartScope
     PostgreSQLContainer<?> postgresContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:15.3-alpine"));
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:15.4-alpine"));
     }
 
     static final LocalStackContainer LOCALSTACKCONTAINER =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.2.0"))
                     .withCopyFileToContainer(
                             MountableFile.forHostPath(".localstack/"),
                             "/etc/localstack/init/ready.d/")

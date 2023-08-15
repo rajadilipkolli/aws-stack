@@ -1,6 +1,7 @@
 package com.learning.awspring.controller;
 
 import com.learning.awspring.domain.FileInfo;
+import com.learning.awspring.model.SignedURLResponse;
 import com.learning.awspring.service.AwsS3Service;
 import com.learning.awspring.service.FileInfoService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,6 +41,12 @@ public class FileInfoController {
                 awsS3Service.downloadFileFromS3Bucket(fileName, httpServletResponse);
         httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
         return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping("/s3/download/signed/{bucketName}/{name}")
+    SignedURLResponse downloadFileUsingSignedURL(
+            @PathVariable String bucketName, @PathVariable("name") String fileName) {
+        return awsS3Service.downloadFileUsingSignedURL(bucketName, fileName);
     }
 
     @GetMapping("/s3/view-all")

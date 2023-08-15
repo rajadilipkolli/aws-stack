@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -58,12 +59,8 @@ public class AwsS3Service {
     }
 
     public List<String> listObjects() {
-        ListBucketsResponse listBucketsResponse = this.s3Client.listBuckets();
-        boolean bucketExists =
-                listBucketsResponse.buckets().stream()
-                        .map(Bucket::name)
-                        .anyMatch(s -> s.equals(applicationProperties.getBucketName()));
-        if (bucketExists) {
+        Optional<String> bucketExists = getBucketExists();
+        if (bucketExists.isPresent()) {
             log.info(
                     "Retrieving object summaries for bucket '{}'",
                     applicationProperties.getBucketName());
@@ -80,6 +77,11 @@ public class AwsS3Service {
 
     public FileInfo uploadObjectToS3(MultipartFile multipartFile)
             throws SdkClientException, IOException {
+        Optional<String> bucketExists = getBucketExists();
+        if (bucketExists.isEmpty()) {
+            String location = createBucket(applicationProperties.getBucketName());
+            log.info("Created bucket at {}", location);
+        }
         String fileName = multipartFile.getOriginalFilename();
         Assert.notNull(fileName, () -> "FileName Can't be null");
         log.info(
@@ -105,12 +107,7 @@ public class AwsS3Service {
 
     public SignedURLResponse uploadFileUsingSignedURL(SignedUploadRequest signedUploadRequest) {
         Builder objectMetadataBuilder = ObjectMetadata.builder();
-        signedUploadRequest
-                .metadata()
-                .forEach(
-                        (key, value) -> {
-                            objectMetadataBuilder.metadata(key, value);
-                        });
+        signedUploadRequest.metadata().forEach(objectMetadataBuilder::metadata);
         ObjectMetadata metadata = objectMetadataBuilder.build();
         return new SignedURLResponse(
                 s3Template.createSignedPutURL(
@@ -119,5 +116,17 @@ public class AwsS3Service {
                         Duration.ofMinutes(1),
                         metadata,
                         signedUploadRequest.contentType()));
+    }
+
+    private Optional<String> getBucketExists() {
+        ListBucketsResponse listBucketsResponse = this.s3Client.listBuckets();
+        return listBucketsResponse.buckets().stream()
+                .map(Bucket::name)
+                .filter(bucketName -> applicationProperties.getBucketName().equals(bucketName))
+                .findAny();
+    }
+
+    private String createBucket(String bucketName) {
+        return s3Template.createBucket(bucketName);
     }
 }

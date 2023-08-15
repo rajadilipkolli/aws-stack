@@ -26,11 +26,15 @@ scrape_configs:
   # scheme defaults to 'http'.
 
   static_configs:
-  - targets: ['localhost:9090']
+  - targets: ['host.docker.internal:9090','localhost:9090']
+    labels:
+      application: 'prometheus'
 
-- job_name: 'myfirstawsproject'
+- job_name: 'aws-s3-project'
 
   metrics_path: '/actuator/prometheus'
   scrape_interval: 5s
   static_configs:
-  - targets: ['myfirstawsproject:8080']
+  - targets: ['host.docker.internal:8080','localhost:8080','aws-s3-project:8080']
+    labels:
+      application: 'aws-s3-project'

@@ -3,8 +3,10 @@ package com.learning.awspring.service;
 import com.learning.awspring.config.ApplicationProperties;
 import com.learning.awspring.domain.FileInfo;
 import com.learning.awspring.model.SignedURLResponse;
+import com.learning.awspring.model.SignedUploadRequest;
 import com.learning.awspring.repository.FileInfoRepository;
 import io.awspring.cloud.s3.ObjectMetadata;
+import io.awspring.cloud.s3.ObjectMetadata.Builder;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import jakarta.servlet.http.HttpServletResponse;
@@ -84,8 +86,24 @@ public class AwsS3Service {
 
     public SignedURLResponse downloadFileUsingSignedURL(String bucketName, String fileName) {
         return new SignedURLResponse(
-                s3Template
-                        .createSignedGetURL(bucketName, fileName, Duration.ofMinutes(1))
-                        .toString());
+                s3Template.createSignedGetURL(bucketName, fileName, Duration.ofMinutes(1)));
+    }
+
+    public SignedURLResponse uploadFileUsingSignedURL(SignedUploadRequest signedUploadRequest) {
+        Builder objectMetadataBuilder = ObjectMetadata.builder();
+        signedUploadRequest
+                .metadata()
+                .forEach(
+                        (key, value) -> {
+                            objectMetadataBuilder.metadata(key, value);
+                        });
+        ObjectMetadata metadata = objectMetadataBuilder.build();
+        return new SignedURLResponse(
+                s3Template.createSignedPutURL(
+                        signedUploadRequest.bucketName(),
+                        signedUploadRequest.fileName(),
+                        Duration.ofMinutes(1),
+                        metadata,
+                        signedUploadRequest.contentType()));
     }
 }

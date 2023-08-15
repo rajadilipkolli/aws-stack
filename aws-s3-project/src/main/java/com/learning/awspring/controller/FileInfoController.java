@@ -2,6 +2,7 @@ package com.learning.awspring.controller;
 
 import com.learning.awspring.domain.FileInfo;
 import com.learning.awspring.model.SignedURLResponse;
+import com.learning.awspring.model.SignedUploadRequest;
 import com.learning.awspring.service.AwsS3Service;
 import com.learning.awspring.service.FileInfoService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +32,12 @@ public class FileInfoController {
     FileInfo uploadFileToS3(@RequestPart(name = "file") MultipartFile multipartFile)
             throws IOException {
         return awsS3Service.uploadObjectToS3(multipartFile);
+    }
+
+    @PostMapping("/s3/upload/signed/")
+    SignedURLResponse uploadFileUsingSignedURL(
+            @RequestBody SignedUploadRequest signedUploadRequest) {
+        return awsS3Service.uploadFileUsingSignedURL(signedUploadRequest);
     }
 
     @GetMapping(value = "/s3/download/{name}")

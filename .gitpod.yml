@@ -27,9 +27,7 @@ ports:
 vscode:
   extensions:
     - vscjava.vscode-java-pack
-    - pivotal.vscode-spring-boot
     - ms-azuretools.vscode-docker
-    - pivotal.vscode-boot-dev-pack
     - vscjava.vscode-spring-boot-dashboard
     - vscjava.vscode-maven
     - vscjava.vscode-java-debug
@@ -38,3 +36,4 @@ vscode:
     - vscjava.vscode-spring-initializr
     - GabrielBB.vscode-lombok
     - redhat.java
+    - VMware.vscode-boot-dev-pack

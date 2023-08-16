@@ -2,7 +2,7 @@ package com.learning.awspring.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -13,6 +13,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 class FileInfoControllerIT extends AbstractIntegrationTest {
 
@@ -37,20 +38,28 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
     void uploadFileUsingSignedURL() throws Exception {
 
         SignedUploadRequest signedUploadRequest =
-                new SignedUploadRequest(
-                        "testBucket", "junit.txt", "text/plain", Map.of("testkey", "testValue"));
+                new SignedUploadRequest("testbucket", Map.of("testkey", "testValue"));
 
+        MockMultipartFile multipartFile =
+                new MockMultipartFile(
+                        "file",
+                        "junit.txt",
+                        MediaType.TEXT_PLAIN_VALUE,
+                        "Hello, World!".getBytes());
+        MockMultipartFile metadata =
+                new MockMultipartFile(
+                        "json",
+                        "json",
+                        MediaType.APPLICATION_JSON_VALUE,
+                        objectMapper.writeValueAsBytes(signedUploadRequest));
         this.mockMvc
                 .perform(
-                        post("/s3/upload/signed/")
-                                .content(this.objectMapper.writeValueAsString(signedUploadRequest))
-                                .contentType(MediaType.APPLICATION_JSON)
+                        multipart("/s3/upload/signed/")
+                                .file(multipartFile)
+                                .file(metadata)
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(
-                        jsonPath(
-                                "$.url",
-                                containsString(
-                                        "/testBucket/junit.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=")));
+                .andExpect(jsonPath("$.message", containsString("File uploaded successfully!")));
     }
 }

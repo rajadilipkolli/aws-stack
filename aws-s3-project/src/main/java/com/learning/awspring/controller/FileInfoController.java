@@ -1,12 +1,14 @@
 package com.learning.awspring.controller;
 
 import com.learning.awspring.domain.FileInfo;
+import com.learning.awspring.model.GenericResponse;
 import com.learning.awspring.model.SignedURLResponse;
 import com.learning.awspring.model.SignedUploadRequest;
 import com.learning.awspring.service.AwsS3Service;
 import com.learning.awspring.service.FileInfoService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -29,21 +31,15 @@ public class FileInfoController {
         return awsS3Service.uploadObjectToS3(multipartFile);
     }
 
-    @PostMapping("/s3/upload/signed/")
-    SignedURLResponse getUploadFileUsingSignedURL(
-            @RequestBody SignedUploadRequest signedUploadRequest) {
-        return awsS3Service.getUploadFileUsingSignedURL(signedUploadRequest);
-    }
-
-    @PutMapping(
+    @PostMapping(
             value = "/s3/upload/signed/",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    String uploadFileWithPreSignedUrl(
-            @RequestPart("json") SignedURLResponse signedURLResponse,
+    GenericResponse uploadFileWithPreSignedUrl(
+            @RequestPart("json") SignedUploadRequest signedUploadRequest,
             @RequestPart("file") MultipartFile multipartFile)
-            throws IOException {
-        return awsS3Service.uploadFileWithPreSignedUrl(multipartFile, signedURLResponse.url());
+            throws IOException, URISyntaxException {
+        return awsS3Service.uploadFileWithPreSignedUrl(multipartFile, signedUploadRequest);
     }
 
     @GetMapping(value = "/s3/download/{name}")

@@ -4,6 +4,7 @@ import com.learning.awspring.config.ApplicationProperties;
 import com.learning.awspring.config.logging.Loggable;
 import com.learning.awspring.domain.FileInfo;
 import com.learning.awspring.exception.BucketNotFoundException;
+import com.learning.awspring.model.GenericResponse;
 import com.learning.awspring.model.SignedURLResponse;
 import com.learning.awspring.model.SignedUploadRequest;
 import com.learning.awspring.repository.FileInfoRepository;
@@ -13,9 +14,11 @@ import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -112,17 +115,40 @@ public class AwsS3Service {
                 s3Template.createSignedGetURL(bucketName, fileName, Duration.ofMinutes(1)));
     }
 
-    public SignedURLResponse getUploadFileUsingSignedURL(SignedUploadRequest signedUploadRequest) {
-        Builder objectMetadataBuilder = ObjectMetadata.builder();
+    public GenericResponse uploadFileWithPreSignedUrl(
+            MultipartFile multipartFile, SignedUploadRequest signedUploadRequest)
+            throws IOException, URISyntaxException {
+        // Step 1: Get UploadFile SignedURL
+        Builder objectMetadataBuilder =
+                ObjectMetadata.builder().contentType(multipartFile.getContentType());
         signedUploadRequest.metadata().forEach(objectMetadataBuilder::metadata);
         ObjectMetadata metadata = objectMetadataBuilder.build();
-        return new SignedURLResponse(
+
+        URL preSignedUrl =
                 s3Template.createSignedPutURL(
                         signedUploadRequest.bucketName(),
-                        signedUploadRequest.fileName(),
+                        Objects.requireNonNull(multipartFile.getOriginalFilename()),
                         Duration.ofMinutes(1),
                         metadata,
-                        signedUploadRequest.contentType()));
+                        multipartFile.getContentType());
+        // Step 2: Upload the file using the pre-signed URL
+        HttpHeaders fileHeaders = new HttpHeaders();
+        fileHeaders.set(HttpHeaders.CONTENT_TYPE, multipartFile.getContentType());
+        if (!signedUploadRequest.metadata().isEmpty()) {
+            signedUploadRequest.metadata().forEach((k, v) -> fileHeaders.set("x-amz-meta-" + k, v));
+        }
+        HttpEntity<byte[]> fileEntity = new HttpEntity<>(multipartFile.getBytes(), fileHeaders);
+
+        ResponseEntity<String> fileResponse =
+                restTemplate.exchange(
+                        preSignedUrl.toURI(), HttpMethod.PUT, fileEntity, String.class);
+
+        if (fileResponse.getStatusCode().is2xxSuccessful()) {
+            List<String> amzRequestID = fileResponse.getHeaders().get("x-amz-request-id");
+            return new GenericResponse("File uploaded successfully!" + amzRequestID);
+        } else {
+            return new GenericResponse("File upload failed!");
+        }
     }
 
     private Optional<String> getBucketExists() {
@@ -135,25 +161,5 @@ public class AwsS3Service {
 
     private String createBucket(String bucketName) {
         return s3Template.createBucket(bucketName);
-    }
-
-    public String uploadFileWithPreSignedUrl(MultipartFile multipartFile, String preSignedUrl)
-            throws IOException {
-        // Step 2: Upload the file using the pre-signed URL
-        HttpHeaders fileHeaders = new HttpHeaders();
-        fileHeaders.set(HttpHeaders.CONTENT_TYPE, multipartFile.getContentType());
-        HttpEntity<byte[]> fileEntity = new HttpEntity<>(multipartFile.getBytes(), fileHeaders);
-
-        ResponseEntity<String> fileResponse =
-                restTemplate.exchange(
-                        URI.create(preSignedUrl), HttpMethod.PUT, fileEntity, String.class);
-
-        if (fileResponse.getStatusCode().is2xxSuccessful()) {
-            List<String> amzRequestID = fileResponse.getHeaders().get("x-amz-request-id");
-            log.info("Response :{}", fileResponse.getBody());
-            return "File uploaded successfully!" + amzRequestID;
-        } else {
-            return "File upload failed!";
-        }
     }
 }

@@ -24,13 +24,10 @@
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
         <commons-io.version>2.13.0</commons-io.version>
 
-        <testcontainers.version>1.19.0</testcontainers.version>
-
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <spotless.version>2.38.0</spotless.version>
         <dependency-check-maven.version>8.4.0</dependency-check-maven.version>
         <properties-maven-plugin.version>1.2.0</properties-maven-plugin.version>
-        <maven-failsafe-plugin.version>3.1.2</maven-failsafe-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
@@ -125,13 +122,6 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>${testcontainers.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

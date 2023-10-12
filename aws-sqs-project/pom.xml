@@ -20,7 +20,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<java.version>17</java.version>
-		<commons-io.version>2.14.0</commons-io.version>
+		<commons-io.version>20030203.000550</commons-io.version>
 		<spring-cloud-aws.version>3.0.2</spring-cloud-aws.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<spotless.version>2.40.0</spotless.version>
@@ -345,7 +345,7 @@
 							<version>1.17.0</version>
 							<style>AOSP</style>
 						</googleJavaFormat>
-						<formatAnnotations />
+						<formatAnnotations/>
 					</java>
 				</configuration>
 				<executions>

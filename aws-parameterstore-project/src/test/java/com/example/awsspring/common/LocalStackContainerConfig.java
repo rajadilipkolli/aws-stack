@@ -8,7 +8,7 @@ import org.testcontainers.utility.MountableFile;
 public class LocalStackContainerConfig {
 
     private static final LocalStackContainer localStackContainer =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.1.0"))
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.3.2"))
                     .withCopyFileToContainer(
                             MountableFile.forHostPath("localstack/"),
                             "/etc/localstack/init/ready.d/")

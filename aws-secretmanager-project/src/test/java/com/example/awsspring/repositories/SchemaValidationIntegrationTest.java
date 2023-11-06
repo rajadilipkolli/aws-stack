@@ -14,12 +14,12 @@ import org.springframework.boot.testcontainers.context.ImportTestcontainers;
 @DataJpaTest(properties = "spring.jpa.hibernate.ddl-auto=validate")
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @ImportTestcontainers(DBTestContainer.class)
-public class SchemaValidationIntegrationTest {
+class SchemaValidationIntegrationTest {
 
     @Autowired private DataSource dataSource;
 
     @Test
-    public void testSchemaValidity() {
+    void testSchemaValidity() {
         Assertions.assertThat(dataSource).isInstanceOf(HikariDataSource.class);
     }
 }

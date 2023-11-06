@@ -11,14 +11,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 @DataJpaTest
-public class FileInfoRepositoryTest {
+class FileInfoRepositoryTest {
 
     @Autowired private TestEntityManager entityManager;
 
     @Autowired private FileInfoRepository fileInfoRepository;
 
     @Test
-    public void testFindByFileName() {
+    void testFindByFileName() {
         FileInfo fileInfo = new FileInfo();
         fileInfo.setFileName("test");
         fileInfo.setFileUrl("testUrl");
@@ -29,7 +29,7 @@ public class FileInfoRepositoryTest {
     }
 
     @Test
-    public void testExistsByFileName() {
+    void testExistsByFileName() {
         FileInfo fileInfo = new FileInfo();
         fileInfo.setFileName("test");
         fileInfo.setFileUrl("testUrl");

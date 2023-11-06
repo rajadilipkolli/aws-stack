@@ -52,7 +52,7 @@ public class SQSListener {
                                                     snsMessage.getPayload()));
                                     return inboundLog;
                                 })
-                        .collect(Collectors.toList());
+                        .toList();
         inboundLogService.saveAllMessagesToDatabase(inBoundLogList);
     }
 }

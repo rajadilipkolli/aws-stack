@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:15.3-alpine
+    image: postgres:16.0-alpine
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=secret
@@ -11,14 +11,15 @@ services:
       - "5432:5432"
 
   localstack:
-    image: localstack/localstack:2.2.0
-    environment:
-      - AWS_DEFAULT_REGION=us-east-1
-      - EDGE_PORT=4566
-      - SERVICES=s3
+    image: localstack/localstack:2.3.2
     ports:
-      - '4566:4566'
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - SERVICES=s3
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - '../.localstack:/docker-entrypoint-initaws.d'
+      - "../.localstack:/etc/localstack/init/ready.d"  # ready hook

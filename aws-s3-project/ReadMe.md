@@ -12,6 +12,13 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
 ### Using Testcontainers at Development Time
+```shell
+./mvnw spotless:apply spring-boot:test-run
 ```
-`./mvnw spotless:apply spring-boot:test-run
-```
+
+### Useful Links
+* Swagger UI: http://localhost:8080/swagger-ui.html
+* Actuator Endpoint: http://localhost:8080/actuator
+* Prometheus: http://localhost:9090/
+* Grafana: http://localhost:3000/ (admin/admin)
+

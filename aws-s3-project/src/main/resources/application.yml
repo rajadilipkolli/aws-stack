@@ -45,9 +45,15 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
+management:
+  endpoints.web.exposure.include: configprops,env,health,info,logfile,loggers,metrics,prometheus
+  endpoint.health.show-details: always
+
 logging:
   level:
-    com:
-      amazonaws:
-        util:
-          EC2MetadataUtils: error
+    software:
+      amazon:
+        awssdk:
+          regions:
+            internal:
+              util: ERROR

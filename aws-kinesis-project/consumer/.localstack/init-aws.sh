@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 awslocal kinesis create-stream --stream-name my-test-stream --shard-count 1
 

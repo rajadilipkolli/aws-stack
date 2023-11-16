@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         distribution: [ 'temurin' ]
-        java: [ '17' ]
+        java: [ '21' ]
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
@@ -31,7 +31,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
-          distribution: temurin
+          distribution: ${{ matrix.distribution }}
           cache: 'maven'
 
       - name: Build with Maven

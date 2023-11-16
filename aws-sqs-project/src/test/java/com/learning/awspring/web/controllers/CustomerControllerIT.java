@@ -48,7 +48,7 @@ class CustomerControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldFindCustomerById() throws Exception {
-        Customer customer = customerList.get(0);
+        Customer customer = customerList.getFirst();
         Long customerId = customer.getId();
 
         this.mockMvc
@@ -93,7 +93,7 @@ class CustomerControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldUpdateCustomer() throws Exception {
-        Customer customer = customerList.get(0);
+        Customer customer = customerList.getFirst();
         CustomerDTO customerDTO = new CustomerDTO("Updated Customer");
 
         this.mockMvc
@@ -107,7 +107,7 @@ class CustomerControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldDeleteCustomer() throws Exception {
-        Customer customer = customerList.get(0);
+        Customer customer = customerList.getFirst();
 
         this.mockMvc
                 .perform(delete("/api/customers/{id}", customer.getId()))

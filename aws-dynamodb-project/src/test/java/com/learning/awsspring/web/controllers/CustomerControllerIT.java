@@ -49,7 +49,7 @@ class CustomerControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldFindCustomerById() throws Exception {
-        Customer customer = customerList.get(0);
+        Customer customer = customerList.getFirst();
         UUID customerId = customer.getId();
 
         this.mockMvc
@@ -76,7 +76,7 @@ class CustomerControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldDeleteCustomer() throws Exception {
-        Customer customer = customerList.get(0);
+        Customer customer = customerList.getFirst();
 
         this.mockMvc
                 .perform(

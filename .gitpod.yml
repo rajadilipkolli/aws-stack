@@ -1,10 +1,9 @@
-github:
-  prebuilds:
-    addComment: false
-    addBadge: true
-
 image:
   file: .gitpod.Dockerfile
+
+tasks:
+  - before: sdk install mvnd
+    init: mvnd verify -DskipTests
 
 ports:
   - port: 3000

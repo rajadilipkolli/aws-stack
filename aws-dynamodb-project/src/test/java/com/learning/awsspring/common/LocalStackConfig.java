@@ -12,7 +12,7 @@ import org.testcontainers.utility.MountableFile;
 @Slf4j
 public class LocalStackConfig {
     protected static final LocalStackContainer LOCAL_STACK_CONTAINER =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("2.3.2"))
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("3.0.0"))
                     .withCopyFileToContainer(
                             MountableFile.forHostPath(".localstack/"),
                             "/etc/localstack/init/ready.d/")

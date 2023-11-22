@@ -84,7 +84,7 @@ class SpringCloudFunctionAwsApplicationTests {
         } catch (MavenInvocationException e) {
             throw new RuntimeException("Could not build jar", e);
         }
-        return "target/lambda-0.0.1-SNAPSHOT-aws.jar";
+        return "target/aws-lambda-project-0.0.1-SNAPSHOT-aws.jar";
     }
 
     @Test

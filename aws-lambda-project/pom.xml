@@ -18,7 +18,7 @@
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.0-RC1</spring-cloud.version>
         <wrapper.version>1.0.31.RELEASE</wrapper.version>
-        <aws.java.sdk.version>2.21.24</aws.java.sdk.version>
+        <aws.java.sdk.version>2.21.28</aws.java.sdk.version>
     </properties>
 
     <dependencies>

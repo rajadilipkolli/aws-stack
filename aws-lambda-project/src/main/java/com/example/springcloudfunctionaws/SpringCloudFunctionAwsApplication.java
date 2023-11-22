@@ -15,12 +15,12 @@ public class SpringCloudFunctionAwsApplication {
 	}
 
 	@Bean
-	public Function<Profile, Integer> fetchByName(JdbcTemplate jdbcTemplate) {
+	Function<Profile, Integer> fetchByName(JdbcTemplate jdbcTemplate) {
 		return profile -> jdbcTemplate.queryForObject("SELECT COUNT(*) FROM profile WHERE name LIKE ?", Integer.class,
 				profile.name() + "%");
 	}
 
-	record Profile(String name) {
+	public record Profile(String name) {
 
 	}
 

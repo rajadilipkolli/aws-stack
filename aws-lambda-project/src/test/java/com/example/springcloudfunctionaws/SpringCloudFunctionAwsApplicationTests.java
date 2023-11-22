@@ -1,17 +1,19 @@
 package com.example.springcloudfunctionaws;
 
 import io.restassured.RestAssured;
-import io.restassured.response.ResponseBody;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
@@ -22,7 +24,16 @@ import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.core.waiters.WaiterResponse;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
-import software.amazon.awssdk.services.lambda.model.*;
+import software.amazon.awssdk.services.lambda.model.CreateFunctionRequest;
+import software.amazon.awssdk.services.lambda.model.CreateFunctionResponse;
+import software.amazon.awssdk.services.lambda.model.CreateFunctionUrlConfigRequest;
+import software.amazon.awssdk.services.lambda.model.CreateFunctionUrlConfigResponse;
+import software.amazon.awssdk.services.lambda.model.Environment;
+import software.amazon.awssdk.services.lambda.model.FunctionCode;
+import software.amazon.awssdk.services.lambda.model.FunctionUrlAuthType;
+import software.amazon.awssdk.services.lambda.model.GetFunctionConfigurationRequest;
+import software.amazon.awssdk.services.lambda.model.GetFunctionConfigurationResponse;
+import software.amazon.awssdk.services.lambda.model.PackageType;
 import software.amazon.awssdk.services.lambda.model.Runtime;
 
 import java.io.File;
@@ -40,6 +51,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers(parallel = true)
 class SpringCloudFunctionAwsApplicationTests {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringCloudFunctionAwsApplicationTests.class);
     static String jar = buildJar();
 
     static Network network = Network.newNetwork();
@@ -55,9 +67,9 @@ class SpringCloudFunctionAwsApplicationTests {
             .withEnv("LOCALSTACK_HOST", "localhost.localstack.cloud")
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())
             .withNetworkAliases("localstack")
-            .withEnv("LAMBDA_DOCKER_FLAGS", testcontainersLabels());
+            .withEnv("LAMBDA_DOCKER_FLAGS", testContainersLabels());
 
-    static String testcontainersLabels() {
+    static String testContainersLabels() {
         return Stream
                 .of(DockerClientFactory.DEFAULT_LABELS.entrySet().stream(),
                         ResourceReaper.instance().getLabels().entrySet().stream())
@@ -89,6 +101,9 @@ class SpringCloudFunctionAwsApplicationTests {
 
     @Test
     void contextLoads() throws IOException {
+        Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(LOGGER);
+        localstack.followOutput(logConsumer);
+
         String fnName = "fetchByName-fn";
         var envVars = Map.ofEntries(Map.entry("SPRING_DATASOURCE_URL", "jdbc:postgresql://postgres:5432/test"),
                 Map.entry("SPRING_DATASOURCE_USERNAME", postgres.getUsername()), Map.entry("SPRING_DATASOURCE_PASSWORD", postgres.getPassword()));
@@ -113,8 +128,10 @@ class SpringCloudFunctionAwsApplicationTests {
                 .build();
 
         CreateFunctionResponse createFunctionResponse = lambdaClient.createFunction(createFunctionRequest);
+        LOGGER.info("createFunctionResponse :{}", createFunctionResponse);
         WaiterResponse<GetFunctionConfigurationResponse> waiterResponse = lambdaClient.waiter()
                 .waitUntilFunctionActive(GetFunctionConfigurationRequest.builder().functionName(fnName).build());
+        LOGGER.info("waiterResponse :{}", waiterResponse);
 
         CreateFunctionUrlConfigRequest createFunctionUrlConfigRequest = CreateFunctionUrlConfigRequest.builder()
                 .functionName(fnName)
@@ -124,10 +141,15 @@ class SpringCloudFunctionAwsApplicationTests {
 
         String functionUrl = createFunctionUrlConfigResponse.functionUrl()
                 .replace("" + 4566, "" + localstack.getMappedPort(4566));
-        ResponseBody responseBody = RestAssured.given().body("""
+        LOGGER.info("functionURL :{}", functionUrl);
+        var responseBody = RestAssured.given().body("""
                 {"name": "profile"}
                 """).get(functionUrl).prettyPeek().andReturn().body();
         assertThat(responseBody.asString()).isEqualTo("4");
+        responseBody = RestAssured.given().body("""
+                {"name": "junit"}
+                """).get(functionUrl).prettyPeek().andReturn().body();
+        assertThat(responseBody.asString()).isEqualTo("0");
     }
 
 }

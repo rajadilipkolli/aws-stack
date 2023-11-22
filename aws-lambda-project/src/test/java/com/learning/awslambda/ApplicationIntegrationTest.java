@@ -59,7 +59,8 @@ class ApplicationIntegrationTest {
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.1-alpine")
             .withNetwork(network)
-            .withNetworkAliases("postgres");
+            .withNetworkAliases("postgres")
+            .withReuse(true);
 
     @Container
     static LocalStackContainer localstack = new LocalStackContainer(
@@ -69,7 +70,8 @@ class ApplicationIntegrationTest {
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())
             .withEnv("LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT", "30")
             .withNetworkAliases("localstack")
-            .withEnv("LAMBDA_DOCKER_FLAGS", testContainersLabels());
+            .withEnv("LAMBDA_DOCKER_FLAGS", testContainersLabels())
+            .withReuse(true);
 
     private static String testContainersLabels() {
         return Stream.of(
@@ -103,6 +105,7 @@ class ApplicationIntegrationTest {
                 .timeout(10)
                 .handler("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest")
                 .environment(Environment.builder().variables(envVars).build())
+                .description("Spring Cloud Function AWS Adapter Example")
                 .build();
 
         LambdaClient lambdaClient = LambdaClient.builder()
@@ -140,7 +143,7 @@ class ApplicationIntegrationTest {
                 .andReturn()
                 .body();
         assertThat(responseBody.asString())
-                .isEqualTo(
+                .isEqualToIgnoringWhitespace(
                         """
                 [{"id":1,"name":"profile-1"},{"id":2,"name":"profile-2"},{"id":3,"name":"profile-3"},{"id":4,"name":"profile-4"}]
                 """);

@@ -30,7 +30,8 @@ awslocal lambda create-function \
     --handler org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest \
     --role "$IAM_ROLE_ARN" \
     --zip-file "fileb://$JAR_FILE" \
-    --environment "$ENV_VARS"
+    --environment "$ENV_VARS" \
+    --description "Spring Cloud Function AWS Adapter Example"
 
 echo -e "Lambda function created successfully!\n"
 

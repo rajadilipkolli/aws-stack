@@ -1,7 +1,6 @@
 package com.learning.awslambda.services;
 
 import com.learning.awslambda.entities.Actor;
-import com.learning.awslambda.exception.ActorNotFoundException;
 import com.learning.awslambda.mapper.ActorMapper;
 import com.learning.awslambda.model.response.ActorResponse;
 import com.learning.awslambda.repositories.ActorRepository;
@@ -28,10 +27,6 @@ public class ActorService {
     public List<ActorResponse> findActorByName(String name) {
         LOGGER.info("Finding Actors By Name :{}", name);
         List<Actor> actorList = actorRepository.findByNameLike(name);
-        if (actorList.isEmpty()) {
-            throw new ActorNotFoundException(name);
-        } else {
-            return actorMapper.toResponseList(actorList);
-        }
+        return actorMapper.toResponseList(actorList);
     }
 }

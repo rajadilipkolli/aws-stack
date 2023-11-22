@@ -2,25 +2,33 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:16.0-alpine
+    image: postgres:16.1-alpine
     environment:
       - POSTGRES_USER=appuser
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=appdb
     ports:
       - "5432:5432"
+    networks:
+      - aws-lambda
 
   localstack:
-    image: localstack/localstack:2.3.2
+    image: localstack/localstack:3.0.0
     ports:
-      - "4566:4566"
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
     environment:
-      - SERVICES=s3,sqs
-      - DEFAULT_REGION=us-east-1
+      - DEBUG=${DEBUG-}
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - USE_SSL=0
-      - AWS_CBOR_DISABLE=1
+      - SERVICES=lambda
+      - LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT=30
     volumes:
+      - "../target:/localstackTemp"
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "../.localstack:/etc/localstack/init/ready.d"  # ready hook
+    networks:
+      - aws-lambda
+
+networks:
+  aws-lambda:

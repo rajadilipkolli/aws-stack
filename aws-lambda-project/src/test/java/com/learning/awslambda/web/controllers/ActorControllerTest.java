@@ -13,7 +13,6 @@ import com.learning.awslambda.model.response.ActorResponse;
 import com.learning.awslambda.services.ActorService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ class ActorControllerTest {
     void shouldFindActorById() throws Exception {
         String actorId = "text";
         ActorResponse actor = new ActorResponse(1L, "text 1");
-        given(actorService.findActorByName(actorId)).willReturn(Optional.of(actor));
+        given(actorService.findActorByName(actorId)).willReturn(actor);
 
         this.mockMvc
                 .perform(get("/api/actors/{name}", actorId))

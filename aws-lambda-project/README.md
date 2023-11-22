@@ -1,5 +1,7 @@
 # aws-lambda-project
 
+Request must be smaller than 69905067 bytes for the CreateFunction operation in aws lambda
+
 ### Format code
 
 ```shell

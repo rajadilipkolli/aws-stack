@@ -2,7 +2,7 @@ package com.learning.awslambda.exception;
 
 public class ActorNotFoundException extends ResourceNotFoundException {
 
-    public ActorNotFoundException(Long id) {
-        super("Actor with Id '%d' not found".formatted(id));
+    public ActorNotFoundException(String name) {
+        super("Actor with Name '%s' not found".formatted(name));
     }
 }

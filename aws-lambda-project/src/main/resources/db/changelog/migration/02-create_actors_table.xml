@@ -19,7 +19,7 @@
             <column name="id" type="bigint" defaultValueSequenceNext="actors_seq">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="text" type="${string.type}">
+            <column name="name" type="${string.type}">
                 <constraints nullable="false"/>
             </column>
         </createTable>

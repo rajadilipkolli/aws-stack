@@ -26,7 +26,7 @@ public class Actor {
     private Long id;
 
     @Column(nullable = false)
-    private String text;
+    private String name;
 
     @Override
     public boolean equals(Object o) {

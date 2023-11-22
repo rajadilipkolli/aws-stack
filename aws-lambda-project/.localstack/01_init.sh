@@ -49,12 +49,12 @@ awslocal lambda wait function-active-v2 --function-name "$FUNCTION_NAME"
 echo -e "Lambda function is now active\n"
 
 # Invoke Lambda function or use curl
-#awslocal lambda invoke \
-#    --function-name "$FUNCTION_NAME" \
-#    --payload '{"body": "{\"name\": \"profile\"}" }' \
-#    output.txt
-#
-#echo -e "Lambda function invoked successfully\n"
+awslocal lambda invoke \
+    --function-name "$FUNCTION_NAME" \
+    --payload '{"body": "{\"name\": \"profile\"}" }' \
+    output.txt
+
+echo -e "Lambda function invoked successfully\n"
 
 # Use curl to invoke Lambda function and capture the response
 response_from_curl=$(curl -X POST \

@@ -23,5 +23,12 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <sql>
+            INSERT INTO actors (name) VALUES ('profile-1');
+            INSERT INTO actors (name) VALUES ('profile-2');
+            INSERT INTO actors (name) VALUES ('profile-3');
+            INSERT INTO actors (name) VALUES ('profile-4');
+        </sql>
     </changeSet>
 </databaseChangeLog>

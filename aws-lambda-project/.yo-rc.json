@@ -1,0 +1,15 @@
+{
+  "generator-springboot": {
+    "appName": "aws-lambda-project",
+    "packageName": "com.learning.awslambda",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "liquibase",
+    "dbMigrationFormat": "xml",
+    "features": [
+      "localstack"
+    ],
+    "buildTool": "maven",
+    "packageFolder": "com/learning/awslambda",
+    "liquibaseMigrationCounter": 2
+  }
+}

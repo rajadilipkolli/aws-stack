@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:16.1-alpine
+    image: postgres:16.0-alpine
     environment:
       - POSTGRES_USER=appuser
       - POSTGRES_PASSWORD=secret
@@ -11,14 +11,15 @@ services:
       - "5432:5432"
 
   localstack:
-    image: localstack/localstack:3.0.0
+    image: localstack/localstack:2.3.2
     ports:
-      - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+      - "4566:4566"
     environment:
-      - DEBUG=${DEBUG-}
+      - SERVICES=s3,sqs
+      - DEFAULT_REGION=us-east-1
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - SERVICES=lambda
+      - USE_SSL=0
+      - AWS_CBOR_DISABLE=1
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"

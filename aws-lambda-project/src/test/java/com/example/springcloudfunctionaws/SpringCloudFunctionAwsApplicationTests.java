@@ -90,7 +90,7 @@ class SpringCloudFunctionAwsApplicationTests {
     @Test
     void contextLoads() throws IOException {
         String fnName = "fetchByName-fn";
-        var envVars = Map.ofEntries(Map.entry("SPRING_DATASOURCE_URL", postgres.getJdbcUrl()),
+        var envVars = Map.ofEntries(Map.entry("SPRING_DATASOURCE_URL", "jdbc:postgresql://postgres:5432/test"),
                 Map.entry("SPRING_DATASOURCE_USERNAME", postgres.getUsername()), Map.entry("SPRING_DATASOURCE_PASSWORD", postgres.getPassword()));
         CreateFunctionRequest createFunctionRequest = CreateFunctionRequest.builder()
                 .functionName(fnName)

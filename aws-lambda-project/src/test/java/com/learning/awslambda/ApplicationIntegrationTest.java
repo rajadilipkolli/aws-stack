@@ -67,6 +67,7 @@ class ApplicationIntegrationTest {
             .withNetwork(network)
             .withEnv("LOCALSTACK_HOST", "localhost.localstack.cloud")
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())
+            .withEnv("LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT", "30")
             .withNetworkAliases("localstack")
             .withEnv("LAMBDA_DOCKER_FLAGS", testContainersLabels());
 
@@ -84,9 +85,10 @@ class ApplicationIntegrationTest {
 
         Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(LOGGER);
         localstack.followOutput(logConsumer);
+        postgres.followOutput(logConsumer);
 
         String fnName = "findActorByName-fn";
-        var envVars = Map.ofEntries(
+        Map<String, String> envVars = Map.ofEntries(
                 Map.entry("SPRING_DATASOURCE_URL", "jdbc:postgresql://postgres:5432/test"),
                 Map.entry("SPRING_DATASOURCE_USERNAME", postgres.getUsername()),
                 Map.entry("SPRING_DATASOURCE_PASSWORD", postgres.getPassword()));
@@ -137,7 +139,11 @@ class ApplicationIntegrationTest {
                 .prettyPeek()
                 .andReturn()
                 .body();
-        assertThat(responseBody.asString()).isEqualTo("4");
+        assertThat(responseBody.asString())
+                .isEqualTo(
+                        """
+                [{"id":1,"name":"profile-1"},{"id":2,"name":"profile-2"},{"id":3,"name":"profile-3"},{"id":4,"name":"profile-4"}]
+                """);
         responseBody = RestAssured.given()
                 .body("""
                 {"name": "junit"}
@@ -146,7 +152,7 @@ class ApplicationIntegrationTest {
                 .prettyPeek()
                 .andReturn()
                 .body();
-        assertThat(responseBody.asString()).isEqualTo("0");
+        assertThat(responseBody.asString()).isEqualTo("[]");
     }
 
     private static String buildJar() {

@@ -3,7 +3,6 @@ package com.learning.awslambda.repositories;
 import com.learning.awslambda.entities.Actor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -25,9 +24,13 @@ public class ActorRepository {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Actor> findByNameLike(String name) {
+    public List<Actor> findByNameLike(String name) {
         String sql = "select id, name from actors where name like :name";
-        return jdbcClient.sql(sql).param("name", name).query(Actor.class).optional();
+        return jdbcClient
+                .sql(sql)
+                .param("name", "%" + name + "%")
+                .query(Actor.class)
+                .list();
     }
 
     @Transactional

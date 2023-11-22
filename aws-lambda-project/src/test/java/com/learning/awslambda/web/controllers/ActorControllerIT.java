@@ -40,7 +40,7 @@ class ActorControllerIT extends AbstractIntegrationTest {
         this.mockMvc
                 .perform(get("/api/actors/{name}", actorName))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(actor.getId()), Long.class))
-                .andExpect(jsonPath("$.name", is(actor.getName())));
+                .andExpect(jsonPath("$[0].id", is(actor.getId()), Long.class))
+                .andExpect(jsonPath("$[0].name", is(actor.getName())));
     }
 }

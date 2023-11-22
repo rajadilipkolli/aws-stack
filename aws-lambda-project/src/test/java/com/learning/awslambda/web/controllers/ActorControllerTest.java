@@ -48,11 +48,11 @@ class ActorControllerTest {
     void shouldFindActorById() throws Exception {
         String actorId = "text";
         ActorResponse actor = new ActorResponse(1L, "text 1");
-        given(actorService.findActorByName(actorId)).willReturn(actor);
+        given(actorService.findActorByName(actorId)).willReturn(List.of(actor));
 
         this.mockMvc
                 .perform(get("/api/actors/{name}", actorId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(actor.name())));
+                .andExpect(jsonPath("$[0].name", is(actor.name())));
     }
 }

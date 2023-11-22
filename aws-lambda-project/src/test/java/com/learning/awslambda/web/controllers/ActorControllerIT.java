@@ -23,7 +23,7 @@ class ActorControllerIT extends AbstractIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        actorRepository.deleteAllInBatch();
+        actorRepository.deleteAll();
 
         actorList = new ArrayList<>();
         actorList.add(new Actor(null, "First Actor"));

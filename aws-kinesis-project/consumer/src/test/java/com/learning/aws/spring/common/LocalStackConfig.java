@@ -20,7 +20,7 @@ public class LocalStackConfig {
 
     @Container
     static LocalStackContainer localStackContainer =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack:3.0.0"));
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack:3.0.1"));
 
     static {
         localStackContainer.start();

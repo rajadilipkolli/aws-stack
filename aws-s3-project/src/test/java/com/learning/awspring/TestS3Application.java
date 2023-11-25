@@ -22,7 +22,7 @@ public class TestS3Application {
     }
 
     static final LocalStackContainer LOCALSTACKCONTAINER =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("3.0.0"))
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("3.0.1"))
                     .withCopyFileToContainer(
                             MountableFile.forHostPath(".localstack/"),
                             "/etc/localstack/init/ready.d/")

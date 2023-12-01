@@ -24,7 +24,7 @@
         <spring-cloud.version>2023.0.0-RC1</spring-cloud.version>
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
         <wrapper.version>1.0.31.RELEASE</wrapper.version>
-        <aws.java.sdk.version>2.21.36</aws.java.sdk.version>
+        <aws.java.sdk.version>2.21.37</aws.java.sdk.version>
 
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <spotless.version>2.41.0</spotless.version>

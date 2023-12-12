@@ -32,7 +32,7 @@ services:
       - elastic
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.17.15
+    image: docker.elastic.co/logstash/logstash:7.17.16
     container_name: logstash
     ports:
       - "5000:5000"

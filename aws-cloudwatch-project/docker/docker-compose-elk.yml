@@ -32,7 +32,7 @@ services:
       - elasticsearch
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.15
+    image: docker.elastic.co/kibana/kibana:7.17.16
     container_name: kibana
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200

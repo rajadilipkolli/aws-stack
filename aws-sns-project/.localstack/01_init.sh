@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-awslocal s3 mb s3://testbucket
-echo "List of S3 buckets:"
-echo "-------------------------------"
-awslocal s3 ls
+# Create SNS topic
+awslocal sns create-topic --name testTopic --attributes DisplayName="LocalstackTopic"
 
-awslocal sqs create-queue --queue-name test_queue
-echo "List of SQS Queues:"
+# List SNS topics
+echo "List of SNS Topics:"
 echo "-------------------------------"
-awslocal sqs list-queues
+awslocal sns list-topics

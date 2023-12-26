@@ -15,7 +15,7 @@ services:
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=s3,sqs
+      - SERVICES=sns
       - DOCKER_HOST=unix:///var/run/docker.sock
       - AWS_CBOR_DISABLE=1
     volumes:

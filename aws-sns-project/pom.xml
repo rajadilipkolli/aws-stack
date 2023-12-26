@@ -74,7 +74,7 @@
         </dependency>
         <dependency>
             <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-aws-starter-sqs</artifactId>
+            <artifactId>spring-cloud-aws-starter-sns</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -18,6 +18,7 @@
 
     <modules>
         <module>aws-cloudwatch-project</module>
+        <module>aws-cognito-project</module>
         <module>aws-dynamodb-project</module>
         <module>aws-kinesis-project/consumer</module>
         <module>aws-kinesis-project/producer</module>

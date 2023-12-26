@@ -1,13 +1,20 @@
 package com.learning.awssns;
 
 import static io.awspring.cloud.sns.core.SnsHeaders.NOTIFICATION_SUBJECT_HEADER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.given;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.learning.awssns.common.AbstractIntegrationTest;
 import io.awspring.cloud.sns.core.SnsTemplate;
 import io.awspring.cloud.sns.sms.SmsMessageAttributes;
 import io.awspring.cloud.sns.sms.SmsType;
 import io.awspring.cloud.sns.sms.SnsSmsTemplate;
+import java.time.Duration;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +22,22 @@ import org.springframework.messaging.support.MessageBuilder;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
 import software.amazon.awssdk.services.sns.model.SubscribeRequest;
+import software.amazon.awssdk.services.sqs.SqsAsyncClient;
+import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
+import software.amazon.awssdk.services.sqs.model.CreateQueueResponse;
+import software.amazon.awssdk.services.sqs.model.Message;
+import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
+import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
-@Slf4j
 class SnsTopicIntegrationTest extends AbstractIntegrationTest {
+
+    private static final String QUEUE_NAME = "my-test-queue";
 
     @Autowired
     private SnsClient snsClient;
+
+    @Autowired
+    private SqsAsyncClient sqsAsyncClient;
 
     @Autowired
     private SnsTemplate snsTemplate;
@@ -74,5 +91,49 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
                 .build();
 
         return snsClient.createTopic(createQueueRequest).topicArn();
+    }
+
+    @Test
+    void sendValidTextMessageUsesTopicChannelSendArnReadBySqs() throws InterruptedException, ExecutionException {
+        String queueURL = this.createQueue(QUEUE_NAME)
+                .thenApply(CreateQueueResponse::queueUrl)
+                .get();
+        String queueArn = this.sqsAsyncClient
+                .getQueueAttributes(r -> r.queueUrl(queueURL).attributeNames(QueueAttributeName.QUEUE_ARN))
+                .thenApply(t -> t.attributes().get(QueueAttributeName.QUEUE_ARN))
+                .get();
+        String topicArn = snsClient
+                .createTopic(CreateTopicRequest.builder().name("my-topic-name").build())
+                .topicArn();
+
+        snsClient.subscribe(r -> r.topicArn(topicArn).protocol("sqs").endpoint(queueArn));
+
+        snsTemplate.send(
+                topicArn,
+                MessageBuilder.withPayload("Spring Cloud AWS SNS Sample!")
+                        .setHeader(NOTIFICATION_SUBJECT_HEADER, "Junit Header!")
+                        .build());
+
+        given().atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(3))
+                .await()
+                .untilAsserted(() -> {
+                    List<Message> messages = sqsAsyncClient
+                            .receiveMessage(builder -> builder.queueUrl(queueURL))
+                            .thenApply(ReceiveMessageResponse::messages)
+                            .get();
+                    assertThat(messages).isNotEmpty();
+                    JsonNode body = objectMapper.readTree(messages.getFirst().body());
+                    assertThat(body.get("Message").asText()).isEqualTo("message");
+                });
+    }
+
+    private CompletableFuture<CreateQueueResponse> createQueue(String queueName) {
+        CreateQueueRequest createQueueRequest = CreateQueueRequest.builder()
+                .queueName(queueName)
+                .attributes(Map.of(QueueAttributeName.MESSAGE_RETENTION_PERIOD, "86400"))
+                .build();
+
+        return sqsAsyncClient.createQueue(createQueueRequest);
     }
 }

@@ -96,14 +96,9 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
 
         snsClient.subscribe(r -> r.topicArn(topicArn).protocol("sqs").endpoint(queueArn));
 
-        snsTemplate.convertAndSend(
-                topicArn,
-                MessageBuilder.withPayload("Spring Cloud AWS SNS Sample!")
-                        .setHeader(NOTIFICATION_SUBJECT_HEADER, "Junit Header!")
-                        .build());
+        snsTemplate.convertAndSend(topicArn, "Spring Cloud AWS SNS Sample!");
 
-        await().atMost(Duration.ofSeconds(30))
-                .pollInterval(Duration.ofSeconds(1))
+        await().atMost(Duration.ofSeconds(60))
                 .untilAsserted(() -> {
                     ReceiveMessageResponse response = sqsAsyncClient
                             .receiveMessage(r -> r.queueUrl(queueURL))

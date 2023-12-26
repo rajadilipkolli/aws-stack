@@ -93,7 +93,4 @@ class SqsListenerIntegrationTest extends AbstractIntegrationTest {
         return sqsAsyncClient.createQueue(createQueueRequest);
     }
 
-    CompletableFuture<GetQueueUrlResponse> getQueueURL() {
-        return sqsAsyncClient.getQueueUrl(builder -> builder.queueName(QUEUE_NAME));
-    }
 }

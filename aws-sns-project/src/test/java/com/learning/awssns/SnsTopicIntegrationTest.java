@@ -12,12 +12,10 @@ import io.awspring.cloud.sns.sms.SmsMessageAttributes;
 import io.awspring.cloud.sns.sms.SmsType;
 import io.awspring.cloud.sns.sms.SnsSmsTemplate;
 import java.time.Duration;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
@@ -30,7 +28,6 @@ import software.amazon.awssdk.services.sns.model.SubscribeRequest;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
 import software.amazon.awssdk.services.sqs.model.CreateQueueResponse;
-import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
@@ -85,7 +82,6 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Disabled
     void sendValidTextMessageUsesTopicChannelSendArnReadBySqs() throws InterruptedException, ExecutionException {
         Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(log);
         localStackContainer.followOutput(logConsumer);
@@ -109,13 +105,13 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
         await().atMost(Duration.ofSeconds(30))
                 .pollInterval(Duration.ofSeconds(1))
                 .untilAsserted(() -> {
-                    List<Message> messages = sqsAsyncClient
-                            .receiveMessage(builder -> builder.queueUrl(queueURL))
-                            .thenApply(ReceiveMessageResponse::messages)
+                    ReceiveMessageResponse response = sqsAsyncClient
+                            .receiveMessage(r -> r.queueUrl(queueURL))
                             .get();
-                    assertThat(messages).isNotEmpty();
-                    JsonNode body = objectMapper.readTree(messages.getFirst().body());
-                    assertThat(body.get("Message").asText()).isEqualTo("message");
+                    assertThat(response.hasMessages()).isTrue();
+                    JsonNode body =
+                            objectMapper.readTree(response.messages().getFirst().body());
+                    assertThat(body.get("Message").asText()).isEqualTo("Spring Cloud AWS SNS Sample!");
                 });
     }
 

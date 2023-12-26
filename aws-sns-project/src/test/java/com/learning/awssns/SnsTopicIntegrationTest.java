@@ -98,16 +98,13 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
 
         snsTemplate.convertAndSend(topicArn, "Spring Cloud AWS SNS Sample!");
 
-        await().atMost(Duration.ofSeconds(60))
-                .untilAsserted(() -> {
-                    ReceiveMessageResponse response = sqsAsyncClient
-                            .receiveMessage(r -> r.queueUrl(queueURL))
-                            .get();
-                    assertThat(response.hasMessages()).isTrue();
-                    JsonNode body =
-                            objectMapper.readTree(response.messages().getFirst().body());
-                    assertThat(body.get("Message").asText()).isEqualTo("Spring Cloud AWS SNS Sample!");
-                });
+        await().atMost(Duration.ofSeconds(60)).untilAsserted(() -> {
+            ReceiveMessageResponse response =
+                    sqsAsyncClient.receiveMessage(r -> r.queueUrl(queueURL)).get();
+            assertThat(response.hasMessages()).isTrue();
+            JsonNode body = objectMapper.readTree(response.messages().getFirst().body());
+            assertThat(body.get("Message").asText()).isEqualTo("Spring Cloud AWS SNS Sample!");
+        });
     }
 
     @Test

@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
 import software.amazon.awssdk.services.sqs.model.CreateQueueResponse;
-import software.amazon.awssdk.services.sqs.model.GetQueueUrlResponse;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
@@ -92,5 +91,4 @@ class SqsListenerIntegrationTest extends AbstractIntegrationTest {
 
         return sqsAsyncClient.createQueue(createQueueRequest);
     }
-
 }

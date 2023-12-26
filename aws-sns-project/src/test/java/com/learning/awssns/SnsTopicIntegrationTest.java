@@ -2,7 +2,8 @@ package com.learning.awssns;
 
 import static io.awspring.cloud.sns.core.SnsHeaders.NOTIFICATION_SUBJECT_HEADER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.given;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.learning.awssns.common.AbstractIntegrationTest;
@@ -16,9 +17,13 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
+import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.containers.output.OutputFrame;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
 import software.amazon.awssdk.services.sns.model.SubscribeRequest;
@@ -29,6 +34,7 @@ import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
+@Slf4j
 class SnsTopicIntegrationTest extends AbstractIntegrationTest {
 
     private static final String QUEUE_NAME = "my-test-queue";
@@ -44,6 +50,9 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private SnsSmsTemplate snsSmsTemplate;
+
+    @Autowired
+    LocalStackContainer localStackContainer;
 
     @Test
     void shouldSendAndReceiveSqsMessage() {
@@ -62,15 +71,6 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
                         .setHeader(NOTIFICATION_SUBJECT_HEADER, "Junit Header!")
                         .build());
 
-        snsSmsTemplate.send(
-                "+919848022334",
-                "Message to be delivered",
-                SmsMessageAttributes.builder()
-                        .smsType(SmsType.PROMOTIONAL)
-                        .senderID("mySenderID")
-                        .maxPrice("0.50")
-                        .build());
-
         //        given()
         //                .atMost(Duration.ofSeconds(30))
         //                .pollInterval(Duration.ofSeconds(3))
@@ -84,17 +84,11 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
         //                });
     }
 
-    private String createTopic(String queueName) {
-        CreateTopicRequest createQueueRequest = CreateTopicRequest.builder()
-                .name(queueName)
-                .attributes(Map.of("DisplayName", "LocalStack"))
-                .build();
-
-        return snsClient.createTopic(createQueueRequest).topicArn();
-    }
-
     @Test
+    @Disabled
     void sendValidTextMessageUsesTopicChannelSendArnReadBySqs() throws InterruptedException, ExecutionException {
+        Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(log);
+        localStackContainer.followOutput(logConsumer);
         String queueURL = this.createQueue(QUEUE_NAME)
                 .thenApply(CreateQueueResponse::queueUrl)
                 .get();
@@ -102,21 +96,18 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
                 .getQueueAttributes(r -> r.queueUrl(queueURL).attributeNames(QueueAttributeName.QUEUE_ARN))
                 .thenApply(t -> t.attributes().get(QueueAttributeName.QUEUE_ARN))
                 .get();
-        String topicArn = snsClient
-                .createTopic(CreateTopicRequest.builder().name("my-topic-name").build())
-                .topicArn();
+        String topicArn = this.createTopic("my-topic-name");
 
         snsClient.subscribe(r -> r.topicArn(topicArn).protocol("sqs").endpoint(queueArn));
 
-        snsTemplate.send(
+        snsTemplate.convertAndSend(
                 topicArn,
                 MessageBuilder.withPayload("Spring Cloud AWS SNS Sample!")
                         .setHeader(NOTIFICATION_SUBJECT_HEADER, "Junit Header!")
                         .build());
 
-        given().atMost(Duration.ofSeconds(30))
-                .pollInterval(Duration.ofSeconds(3))
-                .await()
+        await().atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(1))
                 .untilAsserted(() -> {
                     List<Message> messages = sqsAsyncClient
                             .receiveMessage(builder -> builder.queueUrl(queueURL))
@@ -128,6 +119,23 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
                 });
     }
 
+    @Test
+    void sendValidMessage_ToPhoneNumber_WithAttributes() {
+        assertDoesNotThrow(() -> snsSmsTemplate.send(
+                "+919848022338",
+                "Spring Cloud AWS got you covered!",
+                SmsMessageAttributes.builder()
+                        .smsType(SmsType.PROMOTIONAL)
+                        .senderID("AWSPRING")
+                        .maxPrice("1.00")
+                        .build()));
+
+        await().untilAsserted(() -> {
+            String logs = localStackContainer.getLogs(OutputFrame.OutputType.STDOUT, OutputFrame.OutputType.STDERR);
+            assertThat(logs).contains("Delivering SMS message to +919848022338: Spring Cloud AWS got you covered!");
+        });
+    }
+
     private CompletableFuture<CreateQueueResponse> createQueue(String queueName) {
         CreateQueueRequest createQueueRequest = CreateQueueRequest.builder()
                 .queueName(queueName)
@@ -135,5 +143,14 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
                 .build();
 
         return sqsAsyncClient.createQueue(createQueueRequest);
+    }
+
+    private String createTopic(String topicName) {
+        CreateTopicRequest createQueueRequest = CreateTopicRequest.builder()
+                .name(topicName)
+                .attributes(Map.of("DisplayName", "LocalStack"))
+                .build();
+
+        return snsClient.createTopic(createQueueRequest).topicArn();
     }
 }

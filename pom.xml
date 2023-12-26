@@ -27,6 +27,7 @@
         <module>aws-s3-project</module>
         <module>aws-secretmanager-project</module>
         <module>aws-ses-project</module>
+        <module>aws-sns-project</module>
         <module>aws-sqs-project</module>
 
     </modules>

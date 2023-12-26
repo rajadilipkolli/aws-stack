@@ -1,0 +1,15 @@
+{
+  "generator-springboot": {
+    "appName": "aws-sns-project",
+    "packageName": "com.learning.awssns",
+    "databaseType": "postgresql",
+    "dbMigrationTool": "liquibase",
+    "dbMigrationFormat": "xml",
+    "features": [
+      "localstack"
+    ],
+    "buildTool": "maven",
+    "packageFolder": "com/learning/awssns",
+    "liquibaseMigrationCounter": 1
+  }
+}

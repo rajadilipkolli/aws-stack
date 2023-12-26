@@ -1,7 +1,6 @@
 package com.learning.awspring.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.learning.awspring.domain.FileInfo;
 import java.util.List;
@@ -25,7 +24,7 @@ class FileInfoRepositoryTest {
         entityManager.persist(fileInfo);
         entityManager.flush();
         List<FileInfo> fileInfoList = fileInfoRepository.findByFileName("test");
-        assertEquals(1, fileInfoList.size());
+        assertThat(fileInfoList).hasSize(1);
     }
 
     @Test
@@ -36,6 +35,6 @@ class FileInfoRepositoryTest {
         entityManager.persist(fileInfo);
         entityManager.flush();
         boolean exists = fileInfoRepository.existsByFileName("test");
-        assertTrue(exists);
+        assertThat(exists).isTrue();
     }
 }

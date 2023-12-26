@@ -1,9 +1,10 @@
 package com.example.awsspring.repositories;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.example.awsspring.common.DBTestContainer;
 import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -20,6 +21,6 @@ class SchemaValidationIntegrationTest {
 
     @Test
     void testSchemaValidity() {
-        Assertions.assertThat(dataSource).isInstanceOf(HikariDataSource.class);
+        assertThat(dataSource).isInstanceOf(HikariDataSource.class);
     }
 }

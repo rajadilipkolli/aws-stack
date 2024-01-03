@@ -20,7 +20,8 @@
 				"ms-azuretools.vscode-docker",
 				"vmware.vscode-boot-dev-pack",
 				"vscjava.vscode-java-pack",
-				"vscjava.vscode-maven"
+				"vscjava.vscode-maven",
+				"vscjava.vscode-java-test"
 			]
 		}
 	},

@@ -19,7 +19,6 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -33,8 +32,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.Bucket;
-import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
@@ -69,8 +66,7 @@ public class AwsS3Service {
     }
 
     public List<String> listObjects() {
-        Optional<String> bucketExists = getBucketExists();
-        if (bucketExists.isPresent()) {
+        if (getBucketExists()) {
             log.info(
                     "Retrieving object summaries for bucket '{}'",
                     applicationProperties.getBucketName());
@@ -87,8 +83,7 @@ public class AwsS3Service {
 
     public FileInfo uploadObjectToS3(MultipartFile multipartFile)
             throws SdkClientException, IOException {
-        Optional<String> bucketExists = getBucketExists();
-        if (bucketExists.isEmpty()) {
+        if (!getBucketExists()) {
             String location = createBucket(applicationProperties.getBucketName());
             log.info("Created bucket at {}", location);
         }
@@ -151,12 +146,8 @@ public class AwsS3Service {
         }
     }
 
-    private Optional<String> getBucketExists() {
-        ListBucketsResponse listBucketsResponse = this.s3Client.listBuckets();
-        return listBucketsResponse.buckets().stream()
-                .map(Bucket::name)
-                .filter(bucketName -> applicationProperties.getBucketName().equals(bucketName))
-                .findAny();
+    private boolean getBucketExists() {
+        return this.s3Template.bucketExists(applicationProperties.getBucketName());
     }
 
     private String createBucket(String bucketName) {

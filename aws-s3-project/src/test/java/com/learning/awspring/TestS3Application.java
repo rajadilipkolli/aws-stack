@@ -32,8 +32,7 @@ public class TestS3Application {
                                 MountableFile.forHostPath(".localstack/"),
                                 "/etc/localstack/init/ready.d/")
                         .waitingFor(
-                                Wait.forLogMessage(".*LocalStack initialized successfully\n", 1))
-                        .withReuse(true);
+                                Wait.forLogMessage(".*LocalStack initialized successfully\n", 1));
         registry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
         registry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
         registry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);

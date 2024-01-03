@@ -1,4 +1,4 @@
-package com.learning.awspring.domain;
+package com.learning.awspring.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

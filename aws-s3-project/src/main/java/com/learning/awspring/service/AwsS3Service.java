@@ -2,7 +2,7 @@ package com.learning.awspring.service;
 
 import com.learning.awspring.config.ApplicationProperties;
 import com.learning.awspring.config.logging.Loggable;
-import com.learning.awspring.domain.FileInfo;
+import com.learning.awspring.entities.FileInfo;
 import com.learning.awspring.exception.BucketNotFoundException;
 import com.learning.awspring.model.GenericResponse;
 import com.learning.awspring.model.SignedURLResponse;
@@ -30,10 +30,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkClientException;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
-import software.amazon.awssdk.services.s3.model.S3Object;
 
 @Service
 @Slf4j
@@ -41,10 +37,9 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 @Loggable
 public class AwsS3Service {
 
-    private final S3Template s3Template;
     private final ApplicationProperties applicationProperties;
     private final FileInfoRepository fileInfoRepository;
-    private final S3Client s3Client;
+    private final S3Template s3Template;
     private final RestTemplate restTemplate;
 
     public S3Resource downloadFileFromS3Bucket(final String fileName) throws IOException {
@@ -64,12 +59,9 @@ public class AwsS3Service {
             log.info(
                     "Retrieving object summaries for bucket '{}'",
                     applicationProperties.getBucketName());
-            ListObjectsV2Response response =
-                    this.s3Client.listObjectsV2(
-                            ListObjectsV2Request.builder()
-                                    .bucket(applicationProperties.getBucketName())
-                                    .build());
-            return response.contents().stream().map(S3Object::key).toList();
+            return this.s3Template.listObjects(applicationProperties.getBucketName(), "").stream()
+                    .map(s3Resource -> s3Resource.getLocation().getObject())
+                    .toList();
         } else {
             throw new BucketNotFoundException(applicationProperties.getBucketName());
         }

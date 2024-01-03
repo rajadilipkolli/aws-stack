@@ -2,7 +2,7 @@ package com.learning.awspring.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.learning.awspring.domain.FileInfo;
+import com.learning.awspring.entities.FileInfo;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.learning.awspring.controller;
 
-import com.learning.awspring.domain.FileInfo;
+import com.learning.awspring.entities.FileInfo;
 import com.learning.awspring.model.GenericResponse;
 import com.learning.awspring.model.SignedURLResponse;
 import com.learning.awspring.model.SignedUploadRequest;

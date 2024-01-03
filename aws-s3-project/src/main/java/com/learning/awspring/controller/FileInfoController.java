@@ -6,11 +6,13 @@ import com.learning.awspring.model.SignedURLResponse;
 import com.learning.awspring.model.SignedUploadRequest;
 import com.learning.awspring.service.AwsS3Service;
 import com.learning.awspring.service.FileInfoService;
+import io.awspring.cloud.s3.S3Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,14 +45,24 @@ public class FileInfoController {
     }
 
     @GetMapping(value = "/s3/download/{name}")
-    ResponseEntity<byte[]> downloadFromS3Route(
+    ResponseEntity<InputStreamResource> downloadFromS3Route(
             @PathVariable(name = "name") String fileName, HttpServletResponse httpServletResponse)
             throws IOException {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        byte[] inputStreamResource =
+        S3Resource s3Resource =
                 awsS3Service.downloadFileFromS3Bucket(fileName, httpServletResponse);
-        httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
-        return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+        headers.add(
+                HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=" + s3Resource.getFilename());
+        headers.add(HttpHeaders.CONTENT_TYPE, s3Resource.contentType());
+        headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(s3Resource.contentLength()));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.parseMediaType(s3Resource.contentType()))
+                .body(new InputStreamResource(s3Resource.getInputStream()));
     }
 
     @GetMapping("/s3/download/signed/{bucketName}/{name}")

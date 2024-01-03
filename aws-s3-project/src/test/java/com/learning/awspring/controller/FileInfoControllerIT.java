@@ -13,7 +13,6 @@ import com.learning.awspring.common.AbstractIntegrationTest;
 import com.learning.awspring.model.SignedUploadRequest;
 import io.awspring.cloud.s3.S3Template;
 import java.util.Map;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -43,7 +42,6 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    @Disabled
     @Order(2)
     void downloadFromS3RouteTest() throws Exception {
         String fileName = "test.txt";
@@ -55,7 +53,7 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
                         header().string(
                                         HttpHeaders.CONTENT_DISPOSITION,
                                         "attachment; filename=" + fileName))
-                .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM));
+                .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE));
     }
 
     @Test

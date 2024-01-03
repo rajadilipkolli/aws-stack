@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -48,18 +47,14 @@ public class AwsS3Service {
     private final S3Client s3Client;
     private final RestTemplate restTemplate;
 
-    public byte[] downloadFileFromS3Bucket(
+    public S3Resource downloadFileFromS3Bucket(
             final String fileName, HttpServletResponse httpServletResponse) throws IOException {
         log.info(
                 "Downloading file '{}' from bucket: '{}' ",
                 fileName,
                 applicationProperties.getBucketName());
         if (this.s3Template.objectExists(applicationProperties.getBucketName(), fileName)) {
-            S3Resource s3Resource =
-                    this.s3Template.download(applicationProperties.getBucketName(), fileName);
-            httpServletResponse.setContentType(s3Resource.contentType());
-            InputStream inputStream = s3Resource.getInputStream();
-            return IOUtils.toByteArray(inputStream, s3Resource.contentLength());
+            return this.s3Template.download(applicationProperties.getBucketName(), fileName);
         } else {
             throw new FileNotFoundException(fileName);
         }

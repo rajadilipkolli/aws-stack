@@ -47,7 +47,7 @@ public class FileInfoController {
             @PathVariable(name = "name") String fileName, HttpServletResponse httpServletResponse)
             throws IOException {
         HttpHeaders httpHeaders = new HttpHeaders();
-        var inputStreamResource =
+        byte[] inputStreamResource =
                 awsS3Service.downloadFileFromS3Bucket(fileName, httpServletResponse);
         httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
         return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);

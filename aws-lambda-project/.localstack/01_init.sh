@@ -25,7 +25,7 @@ ENV_VARS='{"Variables": {"SPRING_DATASOURCE_URL":"jdbc:postgresql://postgresqldb
 # Create Lambda function
 awslocal lambda create-function \
     --function-name "$FUNCTION_NAME" \
-    --runtime java17 \
+    --runtime java21 \
     --timeout 10 \
     --handler org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest \
     --role "$IAM_ROLE_ARN" \

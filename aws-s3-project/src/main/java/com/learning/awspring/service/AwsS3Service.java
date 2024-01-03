@@ -57,7 +57,7 @@ public class AwsS3Service {
                 "Downloading file '{}' from bucket: '{}' ",
                 fileName,
                 applicationProperties.getBucketName());
-        if (this.fileInfoRepository.existsByFileName(fileName)) {
+        if (this.s3Template.objectExists(applicationProperties.getBucketName(), fileName)) {
             S3Resource s3Resource =
                     this.s3Template.download(applicationProperties.getBucketName(), fileName);
             httpServletResponse.setContentType(s3Resource.contentType());

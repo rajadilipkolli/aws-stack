@@ -12,8 +12,8 @@ import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.ObjectMetadata.Builder;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
@@ -47,8 +47,7 @@ public class AwsS3Service {
     private final S3Client s3Client;
     private final RestTemplate restTemplate;
 
-    public S3Resource downloadFileFromS3Bucket(
-            final String fileName, HttpServletResponse httpServletResponse) throws IOException {
+    public S3Resource downloadFileFromS3Bucket(final String fileName) throws IOException {
         log.info(
                 "Downloading file '{}' from bucket: '{}' ",
                 fileName,

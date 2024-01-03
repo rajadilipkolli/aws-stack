@@ -58,6 +58,22 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
 
     @Test
     @Order(3)
+    void downloadFromS3RouteTestFailed() throws Exception {
+        String fileName = "test.pdf";
+
+        // Perform the MockMvc request
+        mockMvc.perform(get("/s3/download/{name}", fileName))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.type").value("about:blank"))
+                .andExpect(jsonPath("$.title").value("File NotFound"))
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.detail").value("test.pdf"))
+                .andExpect(jsonPath("$.instance").value("/s3/download/test.pdf"));
+    }
+
+    @Test
+    @Order(4)
     void viewAllFromS3Route() throws Exception {
 
         // Perform the request and assert the response
@@ -69,7 +85,7 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void viewAllFilesFromDb() throws Exception {
         // Perform the request and assert the response
         mockMvc.perform(get("/s3/view-all-db"))
@@ -80,7 +96,7 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     void downloadFileUsingSignedURL() throws Exception {
         // setUp data
         this.s3Template.store("testbucket", "junit.txt", "Hyderabad");
@@ -96,7 +112,7 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     void uploadFileUsingSignedURL() throws Exception {
 
         SignedUploadRequest signedUploadRequest =

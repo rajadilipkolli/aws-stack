@@ -7,7 +7,6 @@ import com.learning.awspring.model.SignedUploadRequest;
 import com.learning.awspring.service.AwsS3Service;
 import com.learning.awspring.service.FileInfoService;
 import io.awspring.cloud.s3.S3Resource;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -54,10 +53,8 @@ public class FileInfoController {
 
     @GetMapping(value = "/s3/download/{name}")
     ResponseEntity<InputStreamResource> downloadFromS3Route(
-            @PathVariable(name = "name") String fileName, HttpServletResponse httpServletResponse)
-            throws IOException {
-        S3Resource s3Resource =
-                awsS3Service.downloadFileFromS3Bucket(fileName, httpServletResponse);
+            @PathVariable(name = "name") String fileName) throws IOException {
+        S3Resource s3Resource = awsS3Service.downloadFileFromS3Bucket(fileName);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(

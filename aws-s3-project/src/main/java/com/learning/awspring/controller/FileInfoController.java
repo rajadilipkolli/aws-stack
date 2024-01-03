@@ -13,8 +13,14 @@ import java.net.URISyntaxException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -52,14 +58,12 @@ public class FileInfoController {
                 awsS3Service.downloadFileFromS3Bucket(fileName, httpServletResponse);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-        headers.add(
-                HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=" + s3Resource.getFilename());
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + s3Resource.getFilename());
         headers.add(HttpHeaders.CONTENT_TYPE, s3Resource.contentType());
         headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(s3Resource.contentLength()));
 
-        return ResponseEntity.ok()
+        return ResponseEntity
+                .ok()
                 .headers(headers)
                 .contentType(MediaType.parseMediaType(s3Resource.contentType()))
                 .body(new InputStreamResource(s3Resource.getInputStream()));

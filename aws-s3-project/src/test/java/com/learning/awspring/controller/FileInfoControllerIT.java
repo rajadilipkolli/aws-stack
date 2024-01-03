@@ -52,7 +52,7 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
                 .andExpect(
                         header().string(
                                         HttpHeaders.CONTENT_DISPOSITION,
-                                        "attachment; filename=" + fileName))
+                                        "attachment; filename=\"" + fileName + "\""))
                 .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE));
     }
 

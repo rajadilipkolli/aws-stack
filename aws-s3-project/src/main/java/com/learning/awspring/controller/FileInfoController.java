@@ -13,6 +13,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.CacheControl;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,14 +60,14 @@ public class FileInfoController {
                 awsS3Service.downloadFileFromS3Bucket(fileName, httpServletResponse);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + s3Resource.getFilename());
-        headers.add(HttpHeaders.CONTENT_TYPE, s3Resource.contentType());
-        headers.add(HttpHeaders.CONTENT_LENGTH, String.valueOf(s3Resource.contentLength()));
+        headers.setContentDisposition(
+                ContentDisposition.attachment().filename(s3Resource.getFilename()).build());
+        headers.setContentLength(s3Resource.contentLength());
+        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+        headers.setContentType(MediaType.parseMediaType(s3Resource.contentType()));
 
-        return ResponseEntity
-                .ok()
+        return ResponseEntity.ok()
                 .headers(headers)
-                .contentType(MediaType.parseMediaType(s3Resource.contentType()))
                 .body(new InputStreamResource(s3Resource.getInputStream()));
     }
 

@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.17
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
     container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster
@@ -15,13 +15,9 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.17.17
+    image: docker.elastic.co/logstash/logstash:8.12.0
     container_name: logstash
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:
@@ -32,7 +28,7 @@ services:
       - elasticsearch
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.17
+    image: docker.elastic.co/kibana/kibana:8.12.0
     container_name: kibana
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200

@@ -102,6 +102,16 @@
             "projectName": "aws-lambda-project",
             "args": "--spring.profiles.active=local",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-Application<aws-cloudwatch-project>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.awsspring.Application",
+            "projectName": "aws-cloudwatch-project",
+            "args": "--spring.profiles.active=local",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

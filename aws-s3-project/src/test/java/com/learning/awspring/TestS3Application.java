@@ -27,7 +27,7 @@ public class TestS3Application {
     LocalStackContainer localstackContainer(DynamicPropertyRegistry registry) {
         LocalStackContainer localStackContainer =
                 new LocalStackContainer(
-                                DockerImageName.parse("localstack/localstack").withTag("3.0.2"))
+                                DockerImageName.parse("localstack/localstack").withTag("3.1.0"))
                         .withCopyFileToContainer(
                                 MountableFile.forHostPath(".localstack/"),
                                 "/etc/localstack/init/ready.d/")

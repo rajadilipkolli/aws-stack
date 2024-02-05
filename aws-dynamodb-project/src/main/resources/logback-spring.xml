@@ -5,14 +5,14 @@
 
 <!--    <springProperty scope="context" name="app_name" source="spring.application.name"/>-->
 <!--    <springProperty scope="context" name="app_port" source="server.port"/>-->
-<!--    <springProperty scope="local" name="logstash_host" source="logstash.host"/>-->
-<!--    <springProperty scope="local" name="logstash_port" source="logstash.port"/>-->
+        <springProperty scope="local" name="logstash_host" source="logstash.host"/>
+        <springProperty scope="local" name="logstash_port" source="logstash.port"/>
 
-<!--    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
-<!--        <param name="Encoding" value="UTF-8"/>-->
-<!--        <destination>${logstash_host:- }:${logstash_port:- }</destination>-->
-<!--        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>-->
-<!--    </appender>-->
+        <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <param name="Encoding" value="UTF-8"/>
+            <destination>${logstash_host:- }:${logstash_port:- }</destination>
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        </appender>
 
     <springProfile name="default">
         <root level="INFO">
@@ -24,7 +24,7 @@
         <root level="INFO">
             <appender-ref ref="FILE" />
             <appender-ref ref="CONSOLE" />
-<!--            <appender-ref ref="logstash"/>-->
+            <appender-ref ref="logstash"/>
         </root>
     </springProfile>
 

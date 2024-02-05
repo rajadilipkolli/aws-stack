@@ -20,13 +20,17 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 * Prometheus: http://localhost:9090/
 * Grafana: http://localhost:3000/ (admin/admin)
 * Kibana: http://localhost:5601/
+* ElasticSearch : http://elastic:changeme@localhost:9200
 
-### Starting ELK stack along with application
+### Starting ELK stack along localstack using docker for application
 ```shell
 docker compose -f docker-compose-elk.yml -f docker-compose.yml up
 ```
+Navigate to http://localhost:5601 to access Kibana, log in using your Elasticsearch credentials and click the “Connect to your Elasticsearch index” button:
+
+
+On the next page use “logstash*” as the index pattern and click “Next step“.
 
 ### Reference
 1. https://codesoapbox.dev/how-to-browse-spring-boot-logs-in-kibana-configuring-the-elastic-stack/
-2. 
-
+2. https://salithachathuranga94.medium.com/integrate-elk-stack-into-spring-boot-application-ae38a6371f86

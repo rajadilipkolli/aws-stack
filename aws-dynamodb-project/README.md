@@ -26,11 +26,21 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```shell
 docker compose -f docker-compose-elk.yml -f docker-compose.yml up
 ```
-Navigate to http://localhost:5601 to access Kibana, log in using your Elasticsearch credentials and click the “Connect to your Elasticsearch index” button:
+Navigate to http://localhost:5601 to access Kibana, log in using your Elasticsearch credentials
 
+**Create Index Pattern**
+Now we know we have connected logstash with application. Since our ELK stack is up and running, we should be able to see these logs from Kibana dashboard!
 
-On the next page use “logstash*” as the index pattern and click “Next step“.
+In ES, we record data into indices(refer logstash.conf). So, we need indices defined to show data. Let’s create an index pattern for our index — logstash-******.
+
+Go to Management > Stack Management > Kibana > Index Patterns page from left side bar in Kibana UI. When we enter the index name, it will automatically suggest the index name. The reason for that is we have already configured Logstash with a custom conf to create output an index called logstash-****** from input log file
+
+**_Discover application logs_**
+Go to “Discover” page from menu. In the left side, you will get a drop down to select the pattern. Select logstash-****** pattern from there.
+
+![Alt text](image.png)
+
+There you go! You have the application logs! 😍❤️
 
 ### Reference
-1. https://codesoapbox.dev/how-to-browse-spring-boot-logs-in-kibana-configuring-the-elastic-stack/
-2. https://salithachathuranga94.medium.com/integrate-elk-stack-into-spring-boot-application-ae38a6371f86
+1. https://salithachathuranga94.medium.com/integrate-elk-stack-into-spring-boot-application-ae38a6371f86

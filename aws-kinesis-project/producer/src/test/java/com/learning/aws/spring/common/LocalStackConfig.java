@@ -1,5 +1,7 @@
 package com.learning.aws.spring.common;
 
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.KINESIS;
+
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,7 +22,6 @@ public class LocalStackConfig {
         localStackContainer =
                 new LocalStackContainer(
                                 DockerImageName.parse("localstack/localstack").withTag("3.2.0"))
-                        .withEnv("EAGER_SERVICE_LOADING", "1")
                         .withServices(KINESIS)
                         .withExposedPorts(4566);
         localStackContainer.start();

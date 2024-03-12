@@ -32,7 +32,7 @@ public class LocalStackConfig {
     }
 
     @Bean
-    @Scheduled(fixedRate = 600000L)
+    @Scheduled(fixedRate = 600_000L)
     public Supplier<List<IpAddressDTO>> producerSupplier() {
         return () ->
                 IntStream.range(1, 11)

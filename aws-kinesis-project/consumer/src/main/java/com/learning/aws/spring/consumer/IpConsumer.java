@@ -1,6 +1,9 @@
 package com.learning.aws.spring.consumer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.learning.aws.spring.model.IpAddressDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Consumer;
@@ -20,20 +23,38 @@ public class IpConsumer {
 
     @Bean
     public Consumer<Flux<List<Record>>> consumeEvent() {
-        Consumer<String> onNext =
-                ip -> log.info("IpAddess processed at {} and value is:{}", LocalDateTime.now(), ip);
         return recordFlux ->
                 recordFlux
                         .flatMap(Flux::fromIterable)
                         .map(
-                                record -> {
+                                kinessRecord -> {
                                     log.info(
-                                            "Sequence Number :{} and partitionKey :{}",
-                                            record.sequenceNumber(),
-                                            record.partitionKey());
-                                    return record.data().asUtf8String();
+                                            "Sequence Number :{}, partitionKey :{} and expected ArrivalTime :{}",
+                                            kinessRecord.sequenceNumber(),
+                                            kinessRecord.partitionKey(),
+                                            kinessRecord.approximateArrivalTimestamp());
+
+                                    String utf8String = kinessRecord.data().asUtf8String();
+                                    String substring =
+                                            utf8String.substring(utf8String.indexOf("[{"));
+                                    List<IpAddressDTO> ipAddressDTOS;
+                                    try {
+                                        ipAddressDTOS =
+                                                objectMapper.readValue(
+                                                        substring,
+                                                        new TypeReference<List<IpAddressDTO>>() {});
+                                    } catch (JsonProcessingException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    return ipAddressDTOS;
                                 })
-                        .doOnNext(onNext)
+                        .doOnNext(
+                                ipAddressDTOsList -> {
+                                    log.info(
+                                            "IpAddress processed at {} and value is:{}",
+                                            LocalDateTime.now(),
+                                            ipAddressDTOsList);
+                                })
                         .subscribe();
     }
 }

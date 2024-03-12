@@ -2,7 +2,7 @@ package com.learning.awspring.service;
 
 import com.learning.awspring.config.ApplicationProperties;
 import com.learning.awspring.config.logging.Loggable;
-import com.learning.awspring.domain.FileInfo;
+import com.learning.awspring.entities.FileInfo;
 import com.learning.awspring.exception.BucketNotFoundException;
 import com.learning.awspring.model.GenericResponse;
 import com.learning.awspring.model.SignedURLResponse;
@@ -12,17 +12,15 @@ import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.ObjectMetadata.Builder;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,12 +30,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkClientException;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.Bucket;
-import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
-import software.amazon.awssdk.services.s3.model.S3Object;
 
 @Service
 @Slf4j
@@ -45,41 +37,31 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 @Loggable
 public class AwsS3Service {
 
-    private final S3Template s3Template;
     private final ApplicationProperties applicationProperties;
     private final FileInfoRepository fileInfoRepository;
-    private final S3Client s3Client;
+    private final S3Template s3Template;
     private final RestTemplate restTemplate;
 
-    public byte[] downloadFileFromS3Bucket(
-            final String fileName, HttpServletResponse httpServletResponse) throws IOException {
+    public S3Resource downloadFileFromS3Bucket(final String fileName) throws IOException {
         log.info(
                 "Downloading file '{}' from bucket: '{}' ",
                 fileName,
                 applicationProperties.getBucketName());
-        if (this.fileInfoRepository.existsByFileName(fileName)) {
-            S3Resource s3Resource =
-                    this.s3Template.download(applicationProperties.getBucketName(), fileName);
-            httpServletResponse.setContentType(s3Resource.contentType());
-            InputStream inputStream = s3Resource.getInputStream();
-            return IOUtils.toByteArray(inputStream, s3Resource.contentLength());
+        if (this.s3Template.objectExists(applicationProperties.getBucketName(), fileName)) {
+            return this.s3Template.download(applicationProperties.getBucketName(), fileName);
         } else {
             throw new FileNotFoundException(fileName);
         }
     }
 
     public List<String> listObjects() {
-        Optional<String> bucketExists = getBucketExists();
-        if (bucketExists.isPresent()) {
+        if (getBucketExists()) {
             log.info(
                     "Retrieving object summaries for bucket '{}'",
                     applicationProperties.getBucketName());
-            ListObjectsV2Response response =
-                    this.s3Client.listObjectsV2(
-                            ListObjectsV2Request.builder()
-                                    .bucket(applicationProperties.getBucketName())
-                                    .build());
-            return response.contents().stream().map(S3Object::key).toList();
+            return this.s3Template.listObjects(applicationProperties.getBucketName(), "").stream()
+                    .map(s3Resource -> s3Resource.getLocation().getObject())
+                    .toList();
         } else {
             throw new BucketNotFoundException(applicationProperties.getBucketName());
         }
@@ -87,8 +69,7 @@ public class AwsS3Service {
 
     public FileInfo uploadObjectToS3(MultipartFile multipartFile)
             throws SdkClientException, IOException {
-        Optional<String> bucketExists = getBucketExists();
-        if (bucketExists.isEmpty()) {
+        if (!getBucketExists()) {
             String location = createBucket(applicationProperties.getBucketName());
             log.info("Created bucket at {}", location);
         }
@@ -151,12 +132,8 @@ public class AwsS3Service {
         }
     }
 
-    private Optional<String> getBucketExists() {
-        ListBucketsResponse listBucketsResponse = this.s3Client.listBuckets();
-        return listBucketsResponse.buckets().stream()
-                .map(Bucket::name)
-                .filter(bucketName -> applicationProperties.getBucketName().equals(bucketName))
-                .findAny();
+    private boolean getBucketExists() {
+        return this.s3Template.bucketExists(applicationProperties.getBucketName());
     }
 
     private String createBucket(String bucketName) {

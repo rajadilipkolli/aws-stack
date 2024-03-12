@@ -21,10 +21,12 @@
         <module>aws-dynamodb-project</module>
         <module>aws-kinesis-project/consumer</module>
         <module>aws-kinesis-project/producer</module>
+        <module>aws-lambda-project</module>
         <module>aws-parameterstore-project</module>
         <module>aws-s3-project</module>
         <module>aws-secretmanager-project</module>
         <module>aws-ses-project</module>
+        <module>aws-sns-project</module>
         <module>aws-sqs-project</module>
 
     </modules>

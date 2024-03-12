@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 awslocal s3 mb s3://testbucket
 echo "List of S3 buckets:"
 echo "-------------------------------"

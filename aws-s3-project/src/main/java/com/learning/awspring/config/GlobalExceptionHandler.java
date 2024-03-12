@@ -1,6 +1,7 @@
 package com.learning.awspring.config;
 
 import com.learning.awspring.exception.BucketNotFoundException;
+import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +48,15 @@ public class GlobalExceptionHandler {
                 ProblemDetail.forStatusAndDetail(
                         HttpStatusCode.valueOf(404), bucketNotFoundException.getMessage());
         problemDetail.setTitle("S3 Bucket NotFound");
+        return problemDetail;
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    ProblemDetail onFileNotFoundException(FileNotFoundException fileNotFoundException) {
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatusAndDetail(
+                        HttpStatusCode.valueOf(404), fileNotFoundException.getMessage());
+        problemDetail.setTitle("File NotFound");
         return problemDetail;
     }
 

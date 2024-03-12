@@ -63,8 +63,7 @@ class InboundLogServiceTest {
         assertThat(optionalInboundLog).isPresent();
         InboundLog inboundLog = optionalInboundLog.get();
         assertThat(inboundLog.getId()).isEqualTo(1L);
-        assertThat(inboundLog.getMessageId().toString())
-                .isEqualTo("4594f2c9-5f88-4472-9229-1b31d867ae71");
+        assertThat(inboundLog.getMessageId()).hasToString("4594f2c9-5f88-4472-9229-1b31d867ae71");
     }
 
     @Test
@@ -76,8 +75,8 @@ class InboundLogServiceTest {
         // then
         assertThat(persistedInboundLog).isNotNull();
         assertThat(persistedInboundLog.getId()).isEqualTo(1L);
-        assertThat(persistedInboundLog.getMessageId().toString())
-                .isEqualTo("4594f2c9-5f88-4472-9229-1b31d867ae71");
+        assertThat(persistedInboundLog.getMessageId())
+                .hasToString("4594f2c9-5f88-4472-9229-1b31d867ae71");
     }
 
     @Test

@@ -81,7 +81,7 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldFindInboundLogById() throws Exception {
-        InboundLog inboundLog = inboundLogList.get(0);
+        InboundLog inboundLog = inboundLogList.getFirst();
         Long inboundLogId = inboundLog.getId();
 
         this.mockMvc
@@ -135,7 +135,7 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldUpdateInboundLog() throws Exception {
-        InboundLog inboundLog = inboundLogList.get(0);
+        InboundLog inboundLog = inboundLogList.getFirst();
         inboundLog.setMessageId(UUID.randomUUID());
 
         this.mockMvc
@@ -149,7 +149,7 @@ class InboundLogControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldDeleteInboundLog() throws Exception {
-        InboundLog inboundLog = inboundLogList.get(0);
+        InboundLog inboundLog = inboundLogList.getFirst();
 
         this.mockMvc
                 .perform(delete("/api/inboundlog/{id}", inboundLog.getId()))

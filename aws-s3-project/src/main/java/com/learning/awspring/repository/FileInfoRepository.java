@@ -1,6 +1,6 @@
 package com.learning.awspring.repository;
 
-import com.learning.awspring.domain.FileInfo;
+import com.learning.awspring.entities.FileInfo;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

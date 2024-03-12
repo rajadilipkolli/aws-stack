@@ -17,6 +17,10 @@ jobs:
   build:
     name: Run Unit & Integration Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distribution: [ 'temurin' ]
+        java: [ '21' ]
     defaults:
       run:
         working-directory: "./aws-parameterstore-project"
@@ -25,14 +29,15 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3.13.0
+      - name: Setup Java ${{ matrix.java }}
+        uses: actions/setup-java@v4
         with:
-          java-version: 17
-          distribution: 'zulu'
+          java-version: ${{ matrix.java }}
+          distribution: ${{ matrix.distribution }}
           cache: 'maven'
-      - name: Build and analyze
-        run: ./mvnw clean verify
+  
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
 
-      - name: Codecov
-        uses: codecov/codecov-action@v3.1.4
+      - name: Build with Maven
+        run: ./mvnw clean verify

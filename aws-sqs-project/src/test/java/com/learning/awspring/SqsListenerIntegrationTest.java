@@ -1,6 +1,7 @@
 package com.learning.awspring;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.given;
 
 import com.learning.awspring.common.AbstractIntegrationTest;
 import com.learning.awspring.model.SQSMessagePayload;
@@ -12,21 +13,16 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import lombok.extern.slf4j.Slf4j;
-import org.awaitility.Awaitility;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
 import software.amazon.awssdk.services.sqs.model.CreateQueueResponse;
-import software.amazon.awssdk.services.sqs.model.GetQueueUrlResponse;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
 @Slf4j
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SqsListenerIntegrationTest extends AbstractIntegrationTest {
 
     private static final String QUEUE_NAME = "test_queue";
@@ -34,22 +30,16 @@ class SqsListenerIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired private SqsTemplate sqsTemplate;
 
-    @BeforeAll
-    void setUpQueue() throws ExecutionException, InterruptedException {
-        this.createQueue().get();
-    }
-
     @Test
     void shouldSendAndReceiveSqsMessageUsingSqsAsyncClient()
             throws ExecutionException, InterruptedException {
-        String queueURL = this.getQueueURL().thenApply(GetQueueUrlResponse::queueUrl).get();
+        String queueURL = this.createQueue().thenApply(CreateQueueResponse::queueUrl).get();
 
         this.sqsAsyncClient
                 .sendMessage(request -> request.messageBody("test message").queueUrl(queueURL))
                 .thenRun(() -> log.info("Message sent successfully to the Amazon sqs."));
 
-        Awaitility.given()
-                .atMost(Duration.ofSeconds(30))
+        given().atMost(Duration.ofSeconds(30))
                 .pollInterval(Duration.ofSeconds(3))
                 .await()
                 .untilAsserted(
@@ -65,12 +55,17 @@ class SqsListenerIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void shouldSendAndReceiveSqsMessageUsingSqsTemplate() {
+        this.createQueue()
+                .thenRun(
+                        () ->
+                                this.sqsTemplate.sendAsync(
+                                        to ->
+                                                to.queue(QUEUE_NAME)
+                                                        .payload(
+                                                                new SQSMessagePayload(
+                                                                        "1", "test message"))));
 
-        this.sqsTemplate.sendAsync(
-                to -> to.queue(QUEUE_NAME).payload(new SQSMessagePayload("1", "test message")));
-
-        Awaitility.given()
-                .atMost(Duration.ofSeconds(30))
+        given().atMost(Duration.ofSeconds(30))
                 .pollInterval(Duration.ofSeconds(3))
                 .await()
                 .untilAsserted(
@@ -95,9 +90,5 @@ class SqsListenerIntegrationTest extends AbstractIntegrationTest {
                         .build();
 
         return sqsAsyncClient.createQueue(createQueueRequest);
-    }
-
-    CompletableFuture<GetQueueUrlResponse> getQueueURL() {
-        return sqsAsyncClient.getQueueUrl(builder -> builder.queueName(QUEUE_NAME));
     }
 }

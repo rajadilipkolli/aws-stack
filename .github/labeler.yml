@@ -1,39 +1,57 @@
 "component: cloudwatch":
-  - aws-cloudwatch-project/**/*
-"component: s3":
-  - aws-s3-project/**/*
-"component: parameter-store":
-  - aws-parameter-store-project/**/*
-"component: secrets-manager":
-  - aws-secrets-manager-project/**/*
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-cloudwatch-project/**/*
 "component: dynamodb":
-  - aws-dynamodb-project/**/*
-"component: ses":
-  - aws-ses-project/**/*
-"component: sns":
-  - aws-sns-project/**/*
-"component: sqs":
-  - aws-sqs-project/**/*
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-dynamodb-project/**/*
 "component: kinesis":
-  - aws-kinesis-project/**/*
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-kinesis-project/**/*
+"component: lambda":
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-lambda-project/**/*
 "component: parameterstore":
-  - aws-parameterstore-project/**/*
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-parameterstore-project/**/*
+"component: s3":
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-s3-project/**/*
 "component: secretmanager":
-  - aws-secretmanager-project/**/*
-"status: waiting-for-triage":
-  - ./*
-  - ./**/*
-"type: documentation": docs/**/*
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-secretmanager-project/**/*
+"component: ses":
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-ses-project/**/*
+"component: sns":
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-sns-project/**/*
+"component: sqs":
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-sqs-project/**/*
+"type: documentation":
+  - changed-files:
+      - any-glob-to-any-file: 'docs/**/*'
 "type: dependency-upgrade":
-  - aws-cloudwatch-project/pom.xml
-  - aws-s3-project/pom.xml
-  - aws-parameter-store-project/pom.xml
-  - aws-secrets-manager-project/pom.xml
-  - aws-dynamodb-project/pom.xml
-  - aws-ses-project/pom.xml
-  - aws-sns-project/pom.xml
-  - aws-sqs-project/pom.xml
-  - aws-kinesis-project/consumer/pom.xml
-  - aws-kinesis-project/producer/pom.xml
-  - aws-parameterstore-project/pom.xml
-  - aws-secretmanager-project/pom.xml
+  - changed-files:
+      - any-glob-to-any-file: 
+          - aws-cloudwatch-project/pom.xml
+          - aws-dynamodb-project/pom.xml
+          - aws-kinesis-project/consumer/pom.xml
+          - aws-kinesis-project/producer/pom.xml
+          - aws-lambda-project/pom.xml
+          - aws-parameterstore-project/pom.xml
+          - aws-s3-project/pom.xml
+          - aws-secretmanager-project/pom.xml
+          - aws-ses-project/pom.xml
+          - aws-sns-project/pom.xml
+          - aws-sqs-project/pom.xml

@@ -19,7 +19,7 @@ public class TestS3Application {
     @ServiceConnection
     @RestartScope
     PostgreSQLContainer<?> postgresContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:16.1-alpine"))
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:16.2-alpine"))
                 .withReuse(true);
     }
 
@@ -27,7 +27,7 @@ public class TestS3Application {
     LocalStackContainer localstackContainer(DynamicPropertyRegistry registry) {
         LocalStackContainer localStackContainer =
                 new LocalStackContainer(
-                                DockerImageName.parse("localstack/localstack").withTag("3.1.0"))
+                                DockerImageName.parse("localstack/localstack").withTag("3.2.0"))
                         .withCopyFileToContainer(
                                 MountableFile.forHostPath(".localstack/"),
                                 "/etc/localstack/init/ready.d/")

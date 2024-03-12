@@ -21,6 +21,9 @@ public class IpConsumer {
 
     private final ObjectMapper objectMapper;
 
+    // As we are using useNativeDecoding = true along with the listenerMode = batch,
+    // there is no any out-of-the-box conversion happened and a result message contains a payload
+    // like List<software.amazon.awssdk.services.kinesis.model.Record>. hence manually manipulating
     @Bean
     public Consumer<Flux<List<Record>>> consumeEvent() {
         return recordFlux ->
@@ -41,8 +44,7 @@ public class IpConsumer {
                                     try {
                                         ipAddressDTOS =
                                                 objectMapper.readValue(
-                                                        substring,
-                                                        new TypeReference<List<IpAddressDTO>>() {});
+                                                        substring, new TypeReference<>() {});
                                     } catch (JsonProcessingException e) {
                                         throw new RuntimeException(e);
                                     }

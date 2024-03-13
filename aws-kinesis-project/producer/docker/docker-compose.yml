@@ -9,7 +9,7 @@ services:
       - SERVICES=kinesis, dynamodb, iam
       - DEFAULT_REGION=us-east-1
     volumes:
-      - localstack:/tmp/localstack
+      - "../.localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
 
 volumes:
   localstack:

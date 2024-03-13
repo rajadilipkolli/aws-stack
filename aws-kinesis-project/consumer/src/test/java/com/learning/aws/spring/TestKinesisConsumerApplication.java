@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.utility.MountableFile;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class TestKinesisConsumerApplication {
@@ -21,7 +23,13 @@ public class TestKinesisConsumerApplication {
     @Bean
     LocalStackContainer localStackContainer(DynamicPropertyRegistry dynamicPropertyRegistry) {
         LocalStackContainer localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:3.2.0"));
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack:3.2.0"))
+                        .withCopyFileToContainer(
+                                MountableFile.forHostPath(".localstack/"),
+                                "/etc/localstack/init/ready.d/")
+                        .waitingFor(
+                                Wait.forLogMessage(".*LocalStack initialized successfully\n", 1));
+        ;
         dynamicPropertyRegistry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
         dynamicPropertyRegistry.add(
                 "spring.cloud.aws.region.static", localStackContainer::getRegion);

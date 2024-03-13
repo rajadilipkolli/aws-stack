@@ -20,3 +20,5 @@ awslocal dynamodb create-table \
 
 awslocal dynamodb list-tables
 awslocal kinesis list-streams
+
+echo "LocalStack initialized successfully"

@@ -19,7 +19,7 @@ class ApplicationIntegrationTest extends AbstractIntegrationTest {
                 .pollDelay(Duration.ofSeconds(1))
                 .untilAsserted(
                         () ->
-                                assertThat(ipAddressEventRepository.count().block())
+                                assertThat(ipAddressEventRepository.count().block() + initialCount)
                                         .isGreaterThan(10));
     }
 }

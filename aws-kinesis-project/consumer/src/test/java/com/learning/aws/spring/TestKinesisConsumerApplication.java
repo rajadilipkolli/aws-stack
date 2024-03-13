@@ -29,7 +29,6 @@ public class TestKinesisConsumerApplication {
                                 "/etc/localstack/init/ready.d/")
                         .waitingFor(
                                 Wait.forLogMessage(".*LocalStack initialized successfully\n", 1));
-        ;
         dynamicPropertyRegistry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
         dynamicPropertyRegistry.add(
                 "spring.cloud.aws.region.static", localStackContainer::getRegion);

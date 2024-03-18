@@ -41,14 +41,15 @@ public class IpConsumer {
                                             kinessRecord.partitionKey(),
                                             kinessRecord.approximateArrivalTimestamp());
 
-                                    String utf8String = kinessRecord.data().asUtf8String();
-                                    String substring =
-                                            utf8String.substring(utf8String.indexOf("[{"));
+                                    String recordString =
+                                            new String(kinessRecord.data().asByteArray());
+                                    String payload =
+                                            recordString.substring(recordString.indexOf("[{"));
                                     List<IpAddressDTO> ipAddressDTOS;
                                     try {
                                         ipAddressDTOS =
                                                 objectMapper.readValue(
-                                                        substring, new TypeReference<>() {});
+                                                        payload, new TypeReference<>() {});
                                     } catch (JsonProcessingException e) {
                                         throw new RuntimeException(e);
                                     }

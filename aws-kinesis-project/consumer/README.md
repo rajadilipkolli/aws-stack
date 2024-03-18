@@ -13,6 +13,7 @@ $ ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 
  - Starting 4.0.0 kinesis steam binder works with aws v2 of dynamodb, cloudwatch and kinesis
  - The maximum size of a data blob (the data payload before Base64-encoding) is 1 megabyte (MB).
+ - Set DEFAULT_BOUNDED_ELASTIC_ON_VIRTUAL_THREADS=true for using virtual threads
 
 
 ### Useful Links

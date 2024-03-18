@@ -72,7 +72,8 @@ public class IpConsumer {
     }
 
     private void insertToDB(IpAddressDTO ipAddressDTO) {
-        IpAddressEvent ipAddressEvent = new IpAddressEvent(ipAddressDTO.ipAddress());
+        IpAddressEvent ipAddressEvent =
+                new IpAddressEvent(ipAddressDTO.ipAddress(), ipAddressDTO.eventProducedTime());
         // adds artificial latency
         try {
             TimeUnit.SECONDS.sleep(1);

@@ -21,6 +21,9 @@ public class IpAddressEvent {
     @Column("content")
     private String content;
 
+    @Column("content_created_at")
+    private LocalDateTime contentCreatedAt;
+
     @Column("created_at")
     @CreatedDate
     private LocalDateTime createdAt;
@@ -37,7 +40,8 @@ public class IpAddressEvent {
     @LastModifiedBy
     private String updatedBy;
 
-    public IpAddressEvent(String content) {
+    public IpAddressEvent(String content, LocalDateTime contentCreatedAt) {
         this.content = content;
+        this.contentCreatedAt = contentCreatedAt;
     }
 }

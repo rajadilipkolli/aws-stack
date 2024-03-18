@@ -32,6 +32,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: content_created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
                   name: created_at
                   type: timestamptz
               - column:

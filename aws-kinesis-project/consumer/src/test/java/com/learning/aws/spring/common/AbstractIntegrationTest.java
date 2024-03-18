@@ -15,7 +15,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @ActiveProfiles({PROFILE_TEST})
 @SpringBootTest(
         webEnvironment = RANDOM_PORT,
-        classes = {TestKinesisConsumerApplication.class, LocalStackConfig.class})
+        classes = {TestKinesisConsumerApplication.class})
 @AutoConfigureWebTestClient
 public abstract class AbstractIntegrationTest {
 

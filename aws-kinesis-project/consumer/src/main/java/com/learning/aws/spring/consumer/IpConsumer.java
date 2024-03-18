@@ -10,26 +10,32 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
 import software.amazon.awssdk.services.kinesis.model.Record;
 
-@Slf4j
-@Configuration
-@RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
 public class IpConsumer {
+
+    private static final Logger log = LoggerFactory.getLogger(IpConsumer.class);
 
     private final ObjectMapper objectMapper;
     private final IpAddressEventRepository ipAddressEventRepository;
+
+    public IpConsumer(
+            ObjectMapper objectMapper, IpAddressEventRepository ipAddressEventRepository) {
+        this.objectMapper = objectMapper;
+        this.ipAddressEventRepository = ipAddressEventRepository;
+    }
 
     // As we are using useNativeDecoding = true along with the listenerMode = batch,
     // there is no any out-of-the-box conversion happened and a result message contains a payload
     // like List<software.amazon.awssdk.services.kinesis.model.Record>. hence manually manipulating
     @Bean
-    public Consumer<Flux<List<Record>>> consumeEvent() {
+    Consumer<Flux<List<Record>>> consumeEvent() {
         return recordFlux ->
                 recordFlux
                         .flatMap(Flux::fromIterable)
@@ -41,10 +47,10 @@ public class IpConsumer {
                                             kinessRecord.partitionKey(),
                                             kinessRecord.approximateArrivalTimestamp());
 
-                                    String recordString =
+                                    String dataAsString =
                                             new String(kinessRecord.data().asByteArray());
                                     String payload =
-                                            recordString.substring(recordString.indexOf("[{"));
+                                            dataAsString.substring(dataAsString.indexOf("[{"));
                                     List<IpAddressDTO> ipAddressDTOS;
                                     try {
                                         ipAddressDTOS =

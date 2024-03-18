@@ -8,7 +8,7 @@ public class ApplicationProperties {
 
     @NestedConfigurationProperty private Cors cors = new Cors();
 
-    long eventProcessingDelaySeconds;
+    private Long eventProcessingDelaySeconds;
 
     public Cors getCors() {
         return cors;
@@ -19,11 +19,11 @@ public class ApplicationProperties {
         return this;
     }
 
-    public long getEventProcessingDelaySeconds() {
+    public Long getEventProcessingDelaySeconds() {
         return eventProcessingDelaySeconds;
     }
 
-    public void setEventProcessingDelaySeconds(long eventProcessingDelaySeconds) {
+    public void setEventProcessingDelaySeconds(Long eventProcessingDelaySeconds) {
         this.eventProcessingDelaySeconds = eventProcessingDelaySeconds;
     }
 

@@ -46,7 +46,7 @@ spring:
       max-request-size: 100MB
 
 management:
-  endpoints.web.exposure.include: configprops,env,health,info,logfile,loggers,metrics,prometheus
+  endpoints.web.exposure.include: configprops,env,health,info,logfile,loggers,metrics,prometheus,sbom
   endpoint.health.show-details: always
 
 logging:

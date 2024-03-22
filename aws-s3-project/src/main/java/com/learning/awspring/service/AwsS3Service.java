@@ -19,8 +19,8 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,23 +32,34 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkClientException;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
 @Loggable
 public class AwsS3Service {
+
+    private static final Logger log = LoggerFactory.getLogger(AwsS3Service.class);
 
     private final ApplicationProperties applicationProperties;
     private final FileInfoRepository fileInfoRepository;
     private final S3Template s3Template;
     private final RestTemplate restTemplate;
 
+    public AwsS3Service(
+            ApplicationProperties applicationProperties,
+            FileInfoRepository fileInfoRepository,
+            S3Template s3Template,
+            RestTemplate restTemplate) {
+        this.applicationProperties = applicationProperties;
+        this.fileInfoRepository = fileInfoRepository;
+        this.s3Template = s3Template;
+        this.restTemplate = restTemplate;
+    }
+
     public S3Resource downloadFileFromS3Bucket(final String fileName) throws IOException {
         log.info(
                 "Downloading file '{}' from bucket: '{}' ",
                 fileName,
-                applicationProperties.getBucketName());
-        if (this.s3Template.objectExists(applicationProperties.getBucketName(), fileName)) {
-            return this.s3Template.download(applicationProperties.getBucketName(), fileName);
+                applicationProperties.bucketName());
+        if (this.s3Template.objectExists(applicationProperties.bucketName(), fileName)) {
+            return this.s3Template.download(applicationProperties.bucketName(), fileName);
         } else {
             throw new FileNotFoundException(fileName);
         }
@@ -58,19 +69,19 @@ public class AwsS3Service {
         if (getBucketExists()) {
             log.info(
                     "Retrieving object summaries for bucket '{}'",
-                    applicationProperties.getBucketName());
-            return this.s3Template.listObjects(applicationProperties.getBucketName(), "").stream()
+                    applicationProperties.bucketName());
+            return this.s3Template.listObjects(applicationProperties.bucketName(), "").stream()
                     .map(s3Resource -> s3Resource.getLocation().getObject())
                     .toList();
         } else {
-            throw new BucketNotFoundException(applicationProperties.getBucketName());
+            throw new BucketNotFoundException(applicationProperties.bucketName());
         }
     }
 
     public FileInfo uploadObjectToS3(MultipartFile multipartFile)
             throws SdkClientException, IOException {
         if (!getBucketExists()) {
-            String location = createBucket(applicationProperties.getBucketName());
+            String location = createBucket(applicationProperties.bucketName());
             log.info("Created bucket at {}", location);
         }
         String fileName = multipartFile.getOriginalFilename();
@@ -78,10 +89,10 @@ public class AwsS3Service {
         log.info(
                 "Uploading file '{}' to bucket: '{}' ",
                 fileName,
-                applicationProperties.getBucketName());
+                applicationProperties.bucketName());
         S3Resource s3Resource =
                 this.s3Template.upload(
-                        applicationProperties.getBucketName(),
+                        applicationProperties.bucketName(),
                         fileName,
                         multipartFile.getInputStream(),
                         ObjectMetadata.builder()
@@ -133,7 +144,7 @@ public class AwsS3Service {
     }
 
     private boolean getBucketExists() {
-        return this.s3Template.bucketExists(applicationProperties.getBucketName());
+        return this.s3Template.bucketExists(applicationProperties.bucketName());
     }
 
     private String createBucket(String bucketName) {

@@ -10,7 +10,6 @@ import io.awspring.cloud.s3.S3Resource;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ContentDisposition;
@@ -25,11 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequiredArgsConstructor
 public class FileInfoController {
 
     private final AwsS3Service awsS3Service;
     private final FileInfoService fileInfoService;
+
+    public FileInfoController(AwsS3Service awsS3Service, FileInfoService fileInfoService) {
+        this.awsS3Service = awsS3Service;
+        this.fileInfoService = fileInfoService;
+    }
 
     @PostMapping(
             value = "/s3/upload",

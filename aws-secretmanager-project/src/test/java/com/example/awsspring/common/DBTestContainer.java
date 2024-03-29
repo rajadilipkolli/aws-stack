@@ -7,5 +7,5 @@ import org.testcontainers.junit.jupiter.Container;
 public interface DBTestContainer {
 
     @Container @ServiceConnection
-    PostgreSQLContainer<?> sqlContainer = new PostgreSQLContainer<>("postgres:16.1-alpine");
+    PostgreSQLContainer<?> sqlContainer = new PostgreSQLContainer<>("postgres:16.2-alpine");
 }

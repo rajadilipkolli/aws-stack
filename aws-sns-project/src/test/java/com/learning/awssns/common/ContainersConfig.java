@@ -11,8 +11,8 @@ public class ContainersConfig {
 
     @Bean
     LocalStackContainer localstackContainer(DynamicPropertyRegistry registry) {
-        LocalStackContainer localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("3.3.0"));
+        LocalStackContainer localStackContainer = new LocalStackContainer(
+                DockerImageName.parse("localstack/localstack").withTag("3.3.0"));
         registry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
         registry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
         registry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);

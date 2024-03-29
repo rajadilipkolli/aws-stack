@@ -14,13 +14,13 @@ public class TestcontainersConfig {
     @Bean
     @ServiceConnection
     public PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>("postgres:16.1-alpine");
+        return new PostgreSQLContainer<>("postgres:16.2-alpine");
     }
 
     @Bean
     LocalStackContainer localstackContainer(DynamicPropertyRegistry registry) {
         LocalStackContainer localStackContainer =
-                new LocalStackContainer(DockerImageName.parse("localstack/localstack:3.1.0"))
+                new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("3.3.0"))
                         .withReuse(true);
         registry.add("spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
         registry.add("spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);

@@ -1,4 +1,4 @@
-package com.learning.awspring;
+package com.learning.awspring.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

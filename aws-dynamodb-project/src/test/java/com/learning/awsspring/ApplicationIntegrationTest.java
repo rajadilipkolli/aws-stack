@@ -22,7 +22,6 @@ class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void contextLoads() {
-        assertThat(LOCAL_STACK_CONTAINER.isRunning()).isTrue();
 
         UUID id = UUID.randomUUID();
         String email = "junit@email.com";

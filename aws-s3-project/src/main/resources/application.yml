@@ -44,6 +44,9 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  threads:
+    virtual:
+      enabled: true
 
 management:
   endpoints.web.exposure.include: configprops,env,health,info,logfile,loggers,metrics,prometheus,sbom

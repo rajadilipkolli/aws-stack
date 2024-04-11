@@ -79,7 +79,8 @@ class ApplicationIntegrationTest extends AbstractIntegrationTest {
                             assertThat(response.metricDataResults()).hasSize(1);
                             assertThat(response.metricDataResults().getFirst().label())
                                     .isEqualTo("http.server.requests.count");
-                            assertThat(response.metricDataResults().getFirst().values()).contains(5d);
+                            assertThat(response.metricDataResults().getFirst().values())
+                                    .contains(5d);
                         });
     }
 }

@@ -78,7 +78,7 @@ class ApplicationIntegrationTest {
                         DockerClientFactory.DEFAULT_LABELS.entrySet().stream(),
                         ResourceReaper.instance().getLabels().entrySet().stream())
                 .flatMap(Function.identity())
-                .map(entry -> String.format("-l %s=%s", entry.getKey(), entry.getValue()))
+                .map(entry -> "-l %s=%s".formatted(entry.getKey(), entry.getValue()))
                 .collect(Collectors.joining(" "));
     }
 
@@ -96,7 +96,7 @@ class ApplicationIntegrationTest {
                 Map.entry("SPRING_DATASOURCE_PASSWORD", postgres.getPassword()));
         CreateFunctionRequest createFunctionRequest = CreateFunctionRequest.builder()
                 .functionName(fnName)
-                .runtime(Runtime.JAVA17)
+                .runtime(Runtime.JAVA21)
                 .role("arn:aws:iam::123456789012:role/irrelevant")
                 .packageType(PackageType.ZIP)
                 .code(FunctionCode.builder()

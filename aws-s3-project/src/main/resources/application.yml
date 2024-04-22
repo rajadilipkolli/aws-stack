@@ -15,7 +15,7 @@ spring:
   datasource:
     password: secret
     url: jdbc:postgresql://localhost:5432/appdb
-    username: user
+    username: appuser
     hikari:
       auto-commit: false
   jpa:
@@ -44,9 +44,12 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  threads:
+    virtual:
+      enabled: true
 
 management:
-  endpoints.web.exposure.include: configprops,env,health,info,logfile,loggers,metrics,prometheus
+  endpoints.web.exposure.include: configprops,env,health,info,logfile,loggers,metrics,prometheus,sbom
   endpoint.health.show-details: always
 
 logging:

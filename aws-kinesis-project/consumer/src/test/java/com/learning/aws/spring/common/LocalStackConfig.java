@@ -19,7 +19,8 @@ public class LocalStackConfig {
     private static final Logger log = LoggerFactory.getLogger(LocalStackConfig.class);
 
     static LocalStackContainer localStackContainer =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack:3.2.0"));
+            new LocalStackContainer(
+                    DockerImageName.parse("localstack/localstack").withTag("3.3.0"));
 
     static {
         localStackContainer.start();

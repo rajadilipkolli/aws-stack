@@ -6,18 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Objects;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.hibernate.proxy.HibernateProxy;
 
-@Getter
-@Setter
-@Accessors(chain = true)
 @Table(name = "file_info")
 @Entity
-@NoArgsConstructor
 public class FileInfo {
 
     @Id
@@ -28,10 +20,48 @@ public class FileInfo {
     private String fileUrl;
     private boolean isUploadSuccessFull;
 
+    public FileInfo() {}
+
     public FileInfo(String fileName, String fileUrl, boolean isUploadSuccessFull) {
         this.fileName = fileName;
         this.fileUrl = fileUrl;
         this.isUploadSuccessFull = isUploadSuccessFull;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public FileInfo setId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public FileInfo setFileName(String fileName) {
+        this.fileName = fileName;
+        return this;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public FileInfo setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+        return this;
+    }
+
+    public boolean isUploadSuccessFull() {
+        return isUploadSuccessFull;
+    }
+
+    public FileInfo setUploadSuccessFull(boolean isUploadSuccessFull) {
+        this.isUploadSuccessFull = isUploadSuccessFull;
+        return this;
     }
 
     @Override

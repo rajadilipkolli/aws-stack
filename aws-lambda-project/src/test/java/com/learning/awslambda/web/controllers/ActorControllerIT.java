@@ -34,7 +34,7 @@ class ActorControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldFindActorById() throws Exception {
-        Actor actor = actorList.get(0);
+        Actor actor = actorList.getFirst();
         String actorName = actor.getName();
 
         this.mockMvc

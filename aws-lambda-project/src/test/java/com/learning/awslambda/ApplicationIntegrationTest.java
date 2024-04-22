@@ -57,14 +57,14 @@ class ApplicationIntegrationTest {
     static Network network = Network.newNetwork();
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.1-alpine")
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.2-alpine")
             .withNetwork(network)
             .withNetworkAliases("postgres")
             .withReuse(true);
 
     @Container
     static LocalStackContainer localstack = new LocalStackContainer(
-                    DockerImageName.parse("localstack/localstack:3.1.0"))
+                    DockerImageName.parse("localstack/localstack").withTag("3.3.0"))
             .withNetwork(network)
             .withEnv("LOCALSTACK_HOST", "localhost.localstack.cloud")
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())
@@ -78,7 +78,7 @@ class ApplicationIntegrationTest {
                         DockerClientFactory.DEFAULT_LABELS.entrySet().stream(),
                         ResourceReaper.instance().getLabels().entrySet().stream())
                 .flatMap(Function.identity())
-                .map(entry -> String.format("-l %s=%s", entry.getKey(), entry.getValue()))
+                .map(entry -> "-l %s=%s".formatted(entry.getKey(), entry.getValue()))
                 .collect(Collectors.joining(" "));
     }
 
@@ -96,7 +96,7 @@ class ApplicationIntegrationTest {
                 Map.entry("SPRING_DATASOURCE_PASSWORD", postgres.getPassword()));
         CreateFunctionRequest createFunctionRequest = CreateFunctionRequest.builder()
                 .functionName(fnName)
-                .runtime(Runtime.JAVA17)
+                .runtime(Runtime.JAVA21)
                 .role("arn:aws:iam::123456789012:role/irrelevant")
                 .packageType(PackageType.ZIP)
                 .code(FunctionCode.builder()

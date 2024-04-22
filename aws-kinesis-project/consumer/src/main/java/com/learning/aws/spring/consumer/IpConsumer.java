@@ -1,90 +1,91 @@
 package com.learning.aws.spring.consumer;
 
+import com.amazonaws.util.BinaryUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.learning.aws.spring.config.ApplicationProperties;
 import com.learning.aws.spring.entities.IpAddressEvent;
 import com.learning.aws.spring.model.IpAddressDTO;
 import com.learning.aws.spring.repository.IpAddressEventRepository;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import software.amazon.awssdk.services.kinesis.model.Record;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.ParallelFlux;
+import reactor.core.scheduler.Schedulers;
+import reactor.util.retry.Retry;
+import software.amazon.kinesis.retrieval.KinesisClientRecord;
 
-@Configuration(proxyBeanMethods = false)
+@Service
 public class IpConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(IpConsumer.class);
 
     private final ObjectMapper objectMapper;
     private final IpAddressEventRepository ipAddressEventRepository;
+    private final ApplicationProperties applicationProperties;
 
     public IpConsumer(
-            ObjectMapper objectMapper, IpAddressEventRepository ipAddressEventRepository) {
+            ObjectMapper objectMapper,
+            IpAddressEventRepository ipAddressEventRepository,
+            ApplicationProperties applicationProperties) {
         this.objectMapper = objectMapper;
         this.ipAddressEventRepository = ipAddressEventRepository;
+        this.applicationProperties = applicationProperties;
     }
 
-    // As we are using useNativeDecoding = true along with the listenerMode = batch,
-    // there is no any out-of-the-box conversion happened and a result message contains a payload
-    // like List<software.amazon.awssdk.services.kinesis.model.Record>. hence manually manipulating
-    @Bean
-    Consumer<Flux<List<Record>>> consumeEvent() {
-        return recordFlux ->
-                recordFlux
-                        .flatMap(Flux::fromIterable)
-                        .map(
-                                kinessRecord -> {
-                                    log.info(
-                                            "Sequence Number :{}, partitionKey :{} and expected ArrivalTime :{}",
-                                            kinessRecord.sequenceNumber(),
-                                            kinessRecord.partitionKey(),
-                                            kinessRecord.approximateArrivalTimestamp());
+    public ParallelFlux<IpAddressEvent> process(KinesisClientRecord kinesisClientRecord) {
+        return Flux.just(kinesisClientRecord)
+                .flatMap(
+                        kinesisRecord -> {
+                            log.info(
+                                    "Sequence Number :{}, partitionKey :{} and expected ArrivalTime :{}",
+                                    kinesisRecord.sequenceNumber(),
+                                    kinesisRecord.partitionKey(),
+                                    kinesisRecord.approximateArrivalTimestamp());
 
-                                    String dataAsString =
-                                            new String(kinessRecord.data().asByteArray());
-                                    String payload =
-                                            dataAsString.substring(dataAsString.indexOf("[{"));
-                                    List<IpAddressDTO> ipAddressDTOS;
-                                    try {
-                                        ipAddressDTOS =
-                                                objectMapper.readValue(
-                                                        payload, new TypeReference<>() {});
-                                    } catch (JsonProcessingException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    return Flux.fromIterable(ipAddressDTOS);
-                                })
-                        .doOnNext(
-                                ipAddressDTOsList -> {
-                                    log.info(
-                                            "IpAddress processed at {} and value is:{}",
-                                            LocalDateTime.now(),
-                                            ipAddressDTOsList);
-                                    this.processEvents(ipAddressDTOsList);
-                                })
-                        .subscribe();
-    }
+                            String dataAsString =
+                                    new String(BinaryUtils.copyBytesFrom(kinesisRecord.data()));
+                            String payload = dataAsString.substring(dataAsString.indexOf("[{"));
 
-    private void processEvents(Flux<IpAddressDTO> ipAddressDTOFlux) {
-        ipAddressDTOFlux
-                .map(
-                        ipAddressDTO ->
-                                new IpAddressEvent(
-                                        ipAddressDTO.ipAddress(), ipAddressDTO.eventProducedTime()))
-                .delayElements(Duration.ofSeconds(1)) // Adds artificial latency
-                .subscribe(
-                        ipAddressEvent ->
-                                ipAddressEventRepository
-                                        .save(ipAddressEvent)
-                                        .subscribe(
-                                                savedEvent ->
-                                                        log.info("Saved Event :{}", savedEvent)));
+                            try {
+                                List<IpAddressDTO> ipAddressDTOS =
+                                        objectMapper.readValue(payload, new TypeReference<>() {});
+                                return Flux.fromIterable(ipAddressDTOS);
+                            } catch (JsonProcessingException e) {
+                                return Flux.error(e);
+                            }
+                        })
+                .parallel() // Parallelize processing
+                .runOn(Schedulers.boundedElastic()) // Run processing on boundedElastic
+                // Scheduler
+                .flatMap(
+                        ipAddressDTO -> {
+                            IpAddressEvent ipAddressEvent =
+                                    new IpAddressEvent(
+                                            ipAddressDTO.ipAddress(),
+                                            ipAddressDTO.eventProducedTime());
+                            return Mono.just(ipAddressEvent)
+                                    .delayElement(
+                                            Duration.ofSeconds(
+                                                    applicationProperties
+                                                            .getEventProcessingDelaySeconds())) // Adds artificial latency
+                                    .flatMap(ipAddressEventRepository::save)
+                                    .retryWhen(
+                                            Retry.backoff(
+                                                    3,
+                                                    Duration.ofSeconds(
+                                                            1))) // Retry strategy for save errors
+                                    .onErrorContinue(
+                                            (throwable, obj) ->
+                                                    log.error(
+                                                            "Error processing record: {}",
+                                                            obj,
+                                                            throwable)); // Continue on error
+                        });
     }
 }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -39,66 +38,66 @@
         <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
     </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-configuration-processor</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>io.awspring.cloud</groupId>
-      <artifactId>spring-cloud-aws-starter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.awspring.cloud</groupId>
-      <artifactId>spring-cloud-aws-starter-sns</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.awspring.cloud</groupId>
-      <artifactId>spring-cloud-aws-starter-sqs</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter-sns</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter-sqs</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-      <version>${springdoc-openapi.version}</version>
-    </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi.version}</version>
+        </dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.awspring.cloud</groupId>
-      <artifactId>spring-cloud-aws-testcontainers</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -213,7 +212,7 @@
                 <configuration>
                     <java>
                         <palantirJavaFormat>
-                            <version>2.38.0</version>
+                            <version>2.47.0</version>
                         </palantirJavaFormat>
                         <importOrder />
                         <removeUnusedImports />
@@ -267,7 +266,8 @@
                             <destFile>${jacoco.utReportFile}</destFile>
                         </configuration>
                     </execution>
-                    <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
+                    <!-- Ensures that the code coverage report for unit tests is created after unit
+                    tests have been run -->
                     <execution>
                         <id>post-unit-test</id>
                         <phase>test</phase>
@@ -289,7 +289,8 @@
                             <destFile>${jacoco.itReportFile}</destFile>
                         </configuration>
                     </execution>
-                    <!-- Ensures that the code coverage report for integration tests is created after integration tests have been run -->
+                    <!-- Ensures that the code coverage report for integration tests is created
+                    after integration tests have been run -->
                     <execution>
                         <id>post-integration-tests</id>
                         <phase>post-integration-test</phase>

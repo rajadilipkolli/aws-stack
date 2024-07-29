@@ -14,7 +14,7 @@ public class LocalStackContainerConfig {
 
     @Container
     private static final LocalStackContainer localStackContainer =
-            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("3.3.0"))
+            new LocalStackContainer(DockerImageName.parse("localstack/localstack").withTag("3.6.0"))
                     .withCopyFileToContainer(
                             MountableFile.forHostPath("localstack/"),
                             "/etc/localstack/init/ready.d/")

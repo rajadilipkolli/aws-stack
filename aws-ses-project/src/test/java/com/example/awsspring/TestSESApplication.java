@@ -18,7 +18,7 @@ public class TestSESApplication {
     LocalStackContainer localStackContainer() {
         LocalStackContainer localStackContainer =
                 new LocalStackContainer(
-                        DockerImageName.parse("localstack/localstack").withTag("3.3.0"));
+                        DockerImageName.parse("localstack/localstack").withTag("3.6.0"));
         localStackContainer.start();
         Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(log);
         localStackContainer.followOutput(logConsumer);

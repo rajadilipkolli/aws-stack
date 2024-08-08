@@ -13,7 +13,7 @@ services:
       - "../.localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
 
   postgresqldb:
-    image: postgres:16.3-alpine
+    image: postgres:16.4-alpine
     hostname: postgresqldb
     extra_hosts: [ 'host.docker.internal:host-gateway' ]
     environment:

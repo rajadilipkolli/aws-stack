@@ -15,7 +15,7 @@ public class TestKinesisConsumerApplication {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>("postgres:16.3-alpine");
+        return new PostgreSQLContainer<>("postgres:16.4-alpine");
     }
 
     public static void main(String[] args) {

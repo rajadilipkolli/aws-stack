@@ -14,6 +14,6 @@ public class ContainersConfig {
     @ServiceConnection
     LocalStackContainer localstackContainer(DynamicPropertyRegistry registry) {
         return new LocalStackContainer(
-                DockerImageName.parse("localstack/localstack").withTag("3.6.0"));
+                DockerImageName.parse("localstack/localstack").withTag("3.7.0"));
     }
 }

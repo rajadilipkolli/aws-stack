@@ -22,10 +22,10 @@ class SpringAsyncConfig implements AsyncConfigurer {
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return (throwable, method, params) -> {
-            log.error("Exception message - " + throwable.getMessage());
-            log.error("Method name - " + method.getName());
+            log.error("Exception message - {}", throwable.getMessage());
+            log.error("Method name - {}", method.getName());
             for (Object param : params) {
-                log.error("Parameter value - " + param);
+                log.error("Parameter value - {}", param);
             }
         };
     }

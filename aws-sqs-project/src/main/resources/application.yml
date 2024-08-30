@@ -1,6 +1,6 @@
 logging:
   file:
-    name: logs/aws-sqs-project.log
+    name: logs/${spring.application.name}.log
   level:
     com:
       amazonaws:

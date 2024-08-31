@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -168,7 +168,7 @@ class ApplicationIntegrationTest {
                 defaultInvocationRequest.setMavenHome(new File(System.getenv("MAVEN_HOME")));
             }
             defaultInvocationRequest.setJavaHome(new File(System.getenv("JAVA_HOME")));
-            defaultInvocationRequest.setPomFile(Paths.get("pom.xml").toFile());
+            defaultInvocationRequest.setPomFile(Path.of("pom.xml").toFile());
             defaultInvocationRequest.setGoals(List.of("package"));
             defaultInvocationRequest.setProperties(properties);
             var appInvoker = new DefaultInvoker();

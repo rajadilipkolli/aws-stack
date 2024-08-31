@@ -7,6 +7,7 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
 @Import(LocalStackConfig.class)
@@ -15,7 +16,7 @@ public class TestKinesisConsumerApplication {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>("postgres:16.4-alpine");
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:16.4-alpine"));
     }
 
     public static void main(String[] args) {

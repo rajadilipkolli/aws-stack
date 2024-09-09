@@ -19,7 +19,7 @@ public class TestApplication {
     @ServiceConnection
     LocalStackContainer localStackContainer() {
         return new LocalStackContainer(
-                        DockerImageName.parse("localstack/localstack").withTag("3.7.1"))
+                        DockerImageName.parse("localstack/localstack").withTag("3.7.2"))
                 .withCopyFileToContainer(
                         MountableFile.forHostPath("localstack/"), "/etc/localstack/init/ready.d/")
                 .waitingFor(Wait.forLogMessage(".*LocalStack initialized successfully\n", 1));

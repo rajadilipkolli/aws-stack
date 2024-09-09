@@ -20,7 +20,7 @@ public class TestKinesisProducerApplication {
     LocalStackContainer localStackContainer(DynamicPropertyRegistry dynamicPropertyRegistry) {
         LocalStackContainer localStackContainer =
                 new LocalStackContainer(
-                        DockerImageName.parse("localstack/localstack").withTag("3.7.1"));
+                        DockerImageName.parse("localstack/localstack").withTag("3.7.2"));
         dynamicPropertyRegistry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
         dynamicPropertyRegistry.add(
                 "spring.cloud.aws.region.static", localStackContainer::getRegion);

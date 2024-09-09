@@ -20,7 +20,7 @@ public class TestApplication {
     LocalStackContainer localstackContainer() {
         LocalStackContainer localstackContainer =
                 new LocalStackContainer(
-                                DockerImageName.parse("localstack/localstack").withTag("3.7.1"))
+                                DockerImageName.parse("localstack/localstack").withTag("3.7.2"))
                         .withCopyFileToContainer(
                                 MountableFile.forHostPath(".localstack/"),
                                 "/etc/localstack/init/ready.d/")

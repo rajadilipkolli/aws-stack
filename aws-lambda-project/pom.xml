@@ -21,7 +21,7 @@
 
         <java.version>21</java.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
-        <spring-cloud-aws.version>3.2.0-M1</spring-cloud-aws.version>
+        <spring-cloud-aws.version>3.2.0</spring-cloud-aws.version>
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
         <wrapper.version>1.0.31.RELEASE</wrapper.version>
 

@@ -21,7 +21,7 @@ public class TestApplication {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres").withTag("16.4-alpine"));
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres").withTag("17.0-alpine"));
     }
 
     public static void main(String[] args) {

@@ -19,7 +19,7 @@ public class TestS3Application {
     @ServiceConnection
     @RestartScope
     PostgreSQLContainer<?> postgresContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:16.4-alpine"))
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:17.0-alpine"))
                 .withReuse(true);
     }
 

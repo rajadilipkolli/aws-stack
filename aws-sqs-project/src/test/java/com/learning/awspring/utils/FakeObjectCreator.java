@@ -9,6 +9,7 @@ public class FakeObjectCreator {
 
     public static SQSMessagePayload createMessage() {
         return new SQSMessagePayload(
-                RandomStringUtils.randomNumeric(3), RandomStringUtils.randomAlphanumeric(100));
+                RandomStringUtils.secure().nextNumeric(3),
+                RandomStringUtils.secure().nextAlphanumeric(100));
     }
 }

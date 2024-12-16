@@ -12,6 +12,10 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 
+/**
+ * Test configuration for AWS services using LocalStack. This class centralizes the LocalStack
+ * container configuration and provides necessary beans for AWS integration testing.
+ */
 @TestConfiguration(proxyBeanMethods = false)
 public class ContainerConfig {
 

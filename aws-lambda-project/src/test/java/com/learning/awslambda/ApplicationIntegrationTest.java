@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.restassured.RestAssured;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -57,14 +57,14 @@ class ApplicationIntegrationTest {
     static Network network = Network.newNetwork();
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.2-alpine")
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17.2-alpine")
             .withNetwork(network)
             .withNetworkAliases("postgres")
             .withReuse(true);
 
     @Container
     static LocalStackContainer localstack = new LocalStackContainer(
-                    DockerImageName.parse("localstack/localstack").withTag("3.3.0"))
+                    DockerImageName.parse("localstack/localstack").withTag("4.0.3"))
             .withNetwork(network)
             .withEnv("LOCALSTACK_HOST", "localhost.localstack.cloud")
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())
@@ -168,7 +168,7 @@ class ApplicationIntegrationTest {
                 defaultInvocationRequest.setMavenHome(new File(System.getenv("MAVEN_HOME")));
             }
             defaultInvocationRequest.setJavaHome(new File(System.getenv("JAVA_HOME")));
-            defaultInvocationRequest.setPomFile(Paths.get("pom.xml").toFile());
+            defaultInvocationRequest.setPomFile(Path.of("pom.xml").toFile());
             defaultInvocationRequest.setGoals(List.of("package"));
             defaultInvocationRequest.setProperties(properties);
             var appInvoker = new DefaultInvoker();

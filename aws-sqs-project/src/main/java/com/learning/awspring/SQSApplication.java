@@ -1,15 +1,15 @@
-package com.example.awsspring;
+package com.learning.awspring;
 
-import com.example.awsspring.config.ApplicationProperties;
+import com.learning.awspring.config.ApplicationProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ApplicationProperties.class})
-public class Application {
+public class SQSApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(SQSApplication.class, args);
     }
 }

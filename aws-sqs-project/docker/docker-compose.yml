@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   postgresqldb:
-    image: postgres:16.3-alpine
+    image: postgres:17.2-alpine
     environment:
       - POSTGRES_USER=appuser
       - POSTGRES_PASSWORD=secret
@@ -10,13 +10,13 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -U appuser" ]
       interval: 10s
       timeout: 5s
       retries: 5
 
   localstack:
-    image: localstack/localstack:3.6.0
+    image: localstack/localstack:4.0.3
     environment:
       - AWS_DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566

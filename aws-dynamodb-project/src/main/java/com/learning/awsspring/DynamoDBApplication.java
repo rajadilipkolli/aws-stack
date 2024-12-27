@@ -1,15 +1,15 @@
-package com.learning.awssns;
+package com.learning.awsspring;
 
-import com.learning.awssns.config.ApplicationProperties;
+import com.learning.awsspring.config.ApplicationProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ApplicationProperties.class})
-public class Application {
+public class DynamoDBApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(DynamoDBApplication.class, args);
     }
 }

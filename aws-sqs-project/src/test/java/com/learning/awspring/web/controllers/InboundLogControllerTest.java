@@ -1,6 +1,5 @@
 package com.learning.awspring.web.controllers;
 
-import static com.learning.awspring.utils.AppConstants.PROFILE_TEST;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
@@ -27,20 +26,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = InboundLogController.class)
-@ActiveProfiles(PROFILE_TEST)
 class InboundLogControllerTest {
 
     @Autowired private MockMvc mockMvc;
 
-    @MockBean private InboundLogService inboundLogService;
+    @MockitoBean private InboundLogService inboundLogService;
 
     @Autowired private ObjectMapper objectMapper;
 

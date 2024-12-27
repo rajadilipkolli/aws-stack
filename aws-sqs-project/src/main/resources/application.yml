@@ -1,6 +1,6 @@
 logging:
   file:
-    name: logs/aws-sqs-project.log
+    name: logs/${spring.application.name}.log
   level:
     com:
       amazonaws:
@@ -38,11 +38,6 @@ spring:
         connection:
           provider_disables_autocommit: true
         generate_statistics: false
-        id:
-          new_generator_mappings: true
-          optimizer:
-            pooled:
-              preferred: pooled-lo
         jdbc:
           batch_size: 25
           time_zone: UTC

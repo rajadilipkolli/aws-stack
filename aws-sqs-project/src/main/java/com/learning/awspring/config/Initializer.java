@@ -9,7 +9,7 @@ import org.springframework.util.Assert;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class Initializer implements CommandLineRunner {
+class Initializer implements CommandLineRunner {
 
     private final ApplicationProperties properties;
 

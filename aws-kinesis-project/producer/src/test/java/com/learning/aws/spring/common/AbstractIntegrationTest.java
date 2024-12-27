@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
             "spring.cloud.stream.kinesis.binder.headers = event.eventType",
             "spring.cloud.stream.kinesis.binder.autoAddShards = true"
         },
-        classes = TestKinesisProducerApplication.class)
+        classes = ContainerConfig.class)
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest {
 

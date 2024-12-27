@@ -17,24 +17,10 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
+import com.learning.aws.spring.common.ContainerConfig;
+import org.springframework.boot.SpringApplication;
 
-@TestConfiguration(proxyBeanMethods = false)
 public class TestKinesisProducerApplication {
-
-    @Bean
-    LocalStackContainer localStackContainer(DynamicPropertyRegistry dynamicPropertyRegistry) {
-        LocalStackContainer localStackContainer =
-                new LocalStackContainer(
-                        DockerImageName.parse("localstack/localstack").withTag("3.6.0"));
-        dynamicPropertyRegistry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
-        dynamicPropertyRegistry.add(
-                "spring.cloud.aws.region.static", localStackContainer::getRegion);
-        dynamicPropertyRegistry.add(
-                "spring.cloud.aws.access-key", localStackContainer::getAccessKey);
-        dynamicPropertyRegistry.add(
-                "spring.cloud.aws.secret-key", localStackContainer::getSecretKey);
-        return localStackContainer;
-    }
 
     @Bean
     KinesisAsyncClient amazonKinesis(LocalStackContainer localStackContainer) {
@@ -69,7 +55,7 @@ public class TestKinesisProducerApplication {
 
     public static void main(String[] args) {
         SpringApplication.from(KinesisProducerApplication::main)
-                .with(TestKinesisProducerApplication.class)
+                .with(ContainerConfig.class)
                 .run(args);
     }
 }

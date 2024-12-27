@@ -4,7 +4,6 @@ import static com.learning.aws.spring.utils.AppConstants.PROFILE_TEST;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learning.aws.spring.TestKinesisProducerApplication;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;

@@ -2,20 +2,12 @@ package com.learning.awsspring.entities;
 
 import jakarta.validation.constraints.NotEmpty;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @DynamoDbBean
-@ToString
-@Builder
 public class Customer {
 
     private UUID id;
@@ -25,6 +17,14 @@ public class Customer {
 
     @NotEmpty(message = "Email cannot be empty")
     private String email;
+
+    public Customer() {}
+
+    public Customer(UUID id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
 
     // Partition key
     @DynamoDbPartitionKey

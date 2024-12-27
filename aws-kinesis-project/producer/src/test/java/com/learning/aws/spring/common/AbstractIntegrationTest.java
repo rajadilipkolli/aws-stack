@@ -14,19 +14,12 @@ import org.springframework.messaging.Message;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
+import software.amazon.awssdk.services.kinesis.model.Record;
 
 @ActiveProfiles({PROFILE_TEST})
 @SpringBootTest(
         webEnvironment = RANDOM_PORT,
-        properties = {
-            "spring.cloud.stream.kinesis.bindings.eventConsumerBatchProcessingWithHeaders-in-0.consumer.idleBetweenPolls = 1",
-            "spring.cloud.stream.kinesis.bindings.eventConsumerBatchProcessingWithHeaders-in-0.consumer.listenerMode = batch",
-            "spring.cloud.stream.kinesis.bindings.eventConsumerBatchProcessingWithHeaders-in-0.consumer.checkpointMode = manual",
-            "spring.cloud.stream.bindings.eventConsumerBatchProcessingWithHeaders-in-0.consumer.useNativeDecoding = true",
-            "spring.cloud.stream.kinesis.binder.headers = event.eventType",
-            "spring.cloud.stream.kinesis.binder.autoAddShards = true"
-        },
-        classes = ContainerConfig.class)
+        classes = {ContainerConfig.class, ConsumerConfig.class})
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest {
 
@@ -38,5 +31,5 @@ public abstract class AbstractIntegrationTest {
 
     @Autowired protected CountDownLatch messageBarrier;
 
-    @Autowired protected AtomicReference<Message<List<?>>> messageHolder;
+    @Autowired protected AtomicReference<Message<List<Record>>> messageHolder;
 }

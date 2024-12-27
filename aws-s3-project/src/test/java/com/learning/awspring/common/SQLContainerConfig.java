@@ -17,18 +17,4 @@ public class SQLContainerConfig {
         return new PostgreSQLContainer<>(DockerImageName.parse("postgres:17.2-alpine"))
                 .withReuse(true);
     }
-
-    // @Bean
-    // DynamicPropertyRegistrar dynamicPropertyRegistrar(LocalStackContainer localStackContainer) {
-    //     return registry -> {
-    //         registry.add(
-    //                 "spring.cloud.aws.credentials.access-key",
-    // localStackContainer::getAccessKey);
-    //         registry.add(
-    //                 "spring.cloud.aws.credentials.secret-key",
-    // localStackContainer::getSecretKey);
-    //         registry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);
-    //         registry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
-    //     };
-    // }
 }

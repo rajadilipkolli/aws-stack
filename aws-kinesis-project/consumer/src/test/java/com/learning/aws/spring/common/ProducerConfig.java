@@ -10,28 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.testcontainers.containers.localstack.LocalStackContainer;
-import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
-public class LocalStackConfig {
+public class ProducerConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(LocalStackConfig.class);
-
-    static LocalStackContainer localStackContainer =
-            new LocalStackContainer(
-                    DockerImageName.parse("localstack/localstack").withTag("4.0.3"));
-
-    static {
-        localStackContainer.start();
-        System.setProperty(
-                "spring.cloud.aws.endpoint", localStackContainer.getEndpoint().toString());
-        System.setProperty("spring.cloud.aws.region.static", localStackContainer.getRegion());
-        System.setProperty(
-                "spring.cloud.aws.credentials.access-key", localStackContainer.getAccessKey());
-        System.setProperty(
-                "spring.cloud.aws.credentials.secret-key", localStackContainer.getSecretKey());
-    }
+    private static final Logger log = LoggerFactory.getLogger(ProducerConfig.class);
 
     @Bean
     @Scheduled(fixedRate = 6_000_000L)

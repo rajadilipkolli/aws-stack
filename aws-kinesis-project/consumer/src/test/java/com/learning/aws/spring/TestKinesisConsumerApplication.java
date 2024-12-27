@@ -16,7 +16,7 @@ public class TestKinesisConsumerApplication {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:17.0-alpine"));
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:17.2-alpine"));
     }
 
     public static void main(String[] args) {

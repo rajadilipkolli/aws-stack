@@ -6,8 +6,9 @@ import com.learning.awsspring.common.AbstractIntegrationTest;
 import com.learning.awsspring.entities.Customer;
 import io.awspring.cloud.dynamodb.DynamoDbOperations;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
@@ -15,8 +16,9 @@ import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
-@Slf4j
 class ApplicationIntegrationTest extends AbstractIntegrationTest {
+
+    private static final Logger log = LoggerFactory.getLogger(ApplicationIntegrationTest.class);
 
     @Autowired private DynamoDbOperations dynamoDbOperations;
 
@@ -26,7 +28,7 @@ class ApplicationIntegrationTest extends AbstractIntegrationTest {
         UUID id = UUID.randomUUID();
         String email = "junit@email.com";
         String name = "junit";
-        Customer customer = Customer.builder().id(id).name(name).email(email).build();
+        Customer customer = new Customer(id, name, email);
         // Saving Customer
         dynamoDbOperations.save(customer);
 

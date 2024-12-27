@@ -3,17 +3,21 @@ package com.learning.awsspring.config;
 import com.learning.awsspring.entities.Customer;
 import com.learning.awsspring.repositories.CustomerRepository;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class Initializer implements CommandLineRunner {
 
+    private static final Logger log = LoggerFactory.getLogger(Initializer.class);
+
     private final CustomerRepository customerRepository;
+
+    public Initializer(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     @Override
     public void run(String... args) {

@@ -5,7 +5,6 @@ import io.awspring.cloud.dynamodb.DynamoDbTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
@@ -16,11 +15,16 @@ import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 import software.amazon.awssdk.enhanced.dynamodb.model.WriteBatch;
 
 @Repository
-@RequiredArgsConstructor
 public class CustomerRepository {
 
     private final DynamoDbTemplate dynamoDbTemplate;
     private final DynamoDbEnhancedClient dynamoDbEnhancedClient;
+
+    public CustomerRepository(
+            DynamoDbTemplate dynamoDbTemplate, DynamoDbEnhancedClient dynamoDbEnhancedClient) {
+        this.dynamoDbTemplate = dynamoDbTemplate;
+        this.dynamoDbEnhancedClient = dynamoDbEnhancedClient;
+    }
 
     public List<Customer> findAll() {
         return dynamoDbTemplate.scanAll(Customer.class).stream()

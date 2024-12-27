@@ -5,14 +5,16 @@ import com.learning.awsspring.repositories.CustomerRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     public Customer saveCustomer(Customer customer) {
         return customerRepository.saveEntity(customer);

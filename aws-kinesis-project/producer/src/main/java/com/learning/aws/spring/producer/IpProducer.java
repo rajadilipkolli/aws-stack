@@ -16,7 +16,7 @@ public class IpProducer {
 
     @Scheduled(fixedDelay = 3000L)
     @Bean
-    public Supplier<List<IpAddressDTO>> producerSupplier() {
+    Supplier<List<IpAddressDTO>> producerSupplier() {
         return () ->
                 IntStream.range(1, 255)
                         .mapToObj(

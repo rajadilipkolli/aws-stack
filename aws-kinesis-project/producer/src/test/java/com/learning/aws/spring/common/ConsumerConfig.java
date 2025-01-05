@@ -41,17 +41,17 @@ public class ConsumerConfig {
     }
 
     @Bean
-    public AtomicReference<Message<List<Record>>> messageHolder() {
+    AtomicReference<Message<List<Record>>> messageHolder() {
         return new AtomicReference<>();
     }
 
     @Bean
-    public CountDownLatch messageBarrier() {
+    CountDownLatch messageBarrier() {
         return new CountDownLatch(1);
     }
 
     @Bean
-    public Consumer<Message<List<Record>>> consumeEvent() {
+    Consumer<Message<List<Record>>> consumeEvent() {
         return eventMessages -> {
             messageHolder().set(eventMessages);
             messageBarrier().countDown();

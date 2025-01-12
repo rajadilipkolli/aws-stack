@@ -36,8 +36,7 @@ public class InboundLog {
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb", name = "received_json", nullable = false)
-    @NotBlank(message = "receivedJson cant be Blank")
-    private String receivedJson;
+    @NotBlank(message = "receivedJson cant be Blank") private String receivedJson;
 
     private LocalDateTime receivedAt;
 

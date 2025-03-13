@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 class SchemaValidationTest {
 
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
 
     @Test
     void validateJpaMappingsWithDbSchema() {

@@ -14,13 +14,13 @@ public class ContainersConfig {
     @Bean
     LocalStackContainer localStackContainer() {
         return new LocalStackContainer(
-                DockerImageName.parse("localstack/localstack").withTag("4.0.3"));
+                DockerImageName.parse("localstack/localstack").withTag("4.2.0"));
     }
 
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:17.2-alpine"));
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:17.4-alpine"));
     }
 
     @Bean

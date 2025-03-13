@@ -57,14 +57,14 @@ class ApplicationIntegrationTest {
     static Network network = Network.newNetwork();
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17.2-alpine")
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17.4-alpine")
             .withNetwork(network)
             .withNetworkAliases("postgres")
             .withReuse(true);
 
     @Container
     static LocalStackContainer localstack = new LocalStackContainer(
-                    DockerImageName.parse("localstack/localstack").withTag("4.0.3"))
+                    DockerImageName.parse("localstack/localstack").withTag("4.2.0"))
             .withNetwork(network)
             .withEnv("LOCALSTACK_HOST", "localhost.localstack.cloud")
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())

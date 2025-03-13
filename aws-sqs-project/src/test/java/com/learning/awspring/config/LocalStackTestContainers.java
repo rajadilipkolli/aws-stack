@@ -13,7 +13,7 @@ public class LocalStackTestContainers {
     @ServiceConnection
     LocalStackContainer localstackContainer() {
         return new LocalStackContainer(
-                        DockerImageName.parse("localstack/localstack").withTag("4.0.3"))
+                        DockerImageName.parse("localstack/localstack").withTag("4.2.0"))
                 .withReuse(true);
     }
 }

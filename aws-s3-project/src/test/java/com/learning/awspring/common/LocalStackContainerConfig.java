@@ -14,7 +14,7 @@ public class LocalStackContainerConfig {
     @Bean
     LocalStackContainer localstackContainer() {
         return new LocalStackContainer(
-                        DockerImageName.parse("localstack/localstack").withTag("4.0.3"))
+                        DockerImageName.parse("localstack/localstack").withTag("4.2.0"))
                 .withCopyFileToContainer(
                         MountableFile.forHostPath(".localstack/"), "/etc/localstack/init/ready.d/")
                 .waitingFor(Wait.forLogMessage(".*LocalStack initialized successfully\n", 1));

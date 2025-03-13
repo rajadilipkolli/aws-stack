@@ -1,19 +1,14 @@
 package com.learning.awssns.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.learning.awssns.common.AbstractIntegrationTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.FileCopyUtils;
-import software.amazon.awssdk.services.sns.SnsClient;
-import software.amazon.awssdk.services.sns.model.ConfirmSubscriptionRequest;
 
 class NotificationMappingControllerIntegrationTest extends AbstractIntegrationTest {
 
@@ -39,5 +34,4 @@ class NotificationMappingControllerIntegrationTest extends AbstractIntegrationTe
         assertThat(this.controller.getMessage()).isEqualTo("testMessage");
         assertThat(this.controller.getSubject()).isEqualTo("hello");
     }
-
 }

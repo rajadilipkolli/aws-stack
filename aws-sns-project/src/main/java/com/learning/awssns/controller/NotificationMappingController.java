@@ -15,6 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/testTopic")
 public class NotificationMappingController {
 
+    private String subject;
+
+    private String message;
+
+    String getSubject() {
+        return this.subject;
+    }
+
+    String getMessage() {
+        return this.message;
+    }
+
     @NotificationSubscriptionMapping
     public void handleSubscriptionMessage(NotificationStatus status) {
         log.info("confirming subscription");
@@ -23,6 +35,8 @@ public class NotificationMappingController {
 
     @NotificationMessageMapping
     public void handleNotificationMessage(@NotificationSubject String subject, @NotificationMessage String message) {
+        this.subject = subject;
+        this.message = message;
         log.info("NotificationMessageMapping message is: {}", message);
         log.info("NotificationMessageMapping subject is: {}", subject);
     }

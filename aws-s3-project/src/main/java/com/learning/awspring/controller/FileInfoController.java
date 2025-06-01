@@ -9,6 +9,7 @@ import com.learning.awspring.service.FileInfoService;
 import io.awspring.cloud.s3.S3Resource;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.List;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.CacheControl;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,8 +75,15 @@ public class FileInfoController {
 
     @GetMapping("/s3/download/signed/{bucketName}/{name}")
     SignedURLResponse downloadFileUsingSignedURL(
-            @PathVariable String bucketName, @PathVariable("name") String fileName) {
-        return awsS3Service.downloadFileUsingSignedURL(bucketName, fileName);
+            @PathVariable String bucketName,
+            @PathVariable("name") String fileName,
+            @RequestParam(value = "durationSeconds", required = false) Integer durationSeconds) {
+        if (durationSeconds != null) {
+            return awsS3Service.downloadFileUsingSignedURL(
+                    bucketName, fileName, Duration.ofSeconds(durationSeconds));
+        } else {
+            return awsS3Service.downloadFileUsingSignedURL(bucketName, fileName);
+        }
     }
 
     @GetMapping("/s3/view-all")

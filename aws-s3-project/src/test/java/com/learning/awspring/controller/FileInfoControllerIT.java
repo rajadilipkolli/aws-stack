@@ -140,4 +140,44 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", containsString("File uploaded successfully!")));
     }
+
+    @Test
+    @Order(8)
+    void signedUrlShouldExpireAfterShortDuration() throws Exception {
+        // Store a file in the bucket
+        this.s3Template.store("testbucket", "expire.txt", "Short expiry test");
+
+        // Get a signed URL with a short expiry (2 seconds)
+        var response =
+                this.mockMvc
+                        .perform(
+                                get(
+                                        "/s3/download/signed/{bucketName}/{name}?durationSeconds=2",
+                                        "testbucket",
+                                        "expire.txt"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+        String url =
+                objectMapper
+                        .readTree(response.getResponse().getContentAsString())
+                        .get("url")
+                        .asText();
+
+        // Wait for the URL to expire
+        Thread.sleep(2500); // 2.5 seconds
+
+        // Try to access the expired URL
+        int statusCode = -1;
+        try {
+            var conn = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
+            conn.setRequestMethod("GET");
+            statusCode = conn.getResponseCode();
+        } catch (Exception e) {
+            // Expected: URL should be expired
+        }
+        // AWS S3 returns 403 Forbidden for expired signed URLs
+        org.junit.jupiter.api.Assertions.assertTrue(
+                statusCode == 403 || statusCode == 400 || statusCode == -1,
+                "Expected forbidden or error for expired signed URL, got: " + statusCode);
+    }
 }

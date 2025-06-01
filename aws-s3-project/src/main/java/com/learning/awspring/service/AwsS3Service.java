@@ -102,13 +102,18 @@ public class AwsS3Service {
         return fileInfoRepository.save(fileInfo);
     }
 
+    public SignedURLResponse downloadFileUsingSignedURL(
+            String bucketName, String fileName, Duration duration) {
+        return new SignedURLResponse(s3Template.createSignedGetURL(bucketName, fileName, duration));
+    }
+
+    // Overload for backward compatibility
     public SignedURLResponse downloadFileUsingSignedURL(String bucketName, String fileName) {
-        return new SignedURLResponse(
-                s3Template.createSignedGetURL(bucketName, fileName, Duration.ofMinutes(1)));
+        return downloadFileUsingSignedURL(bucketName, fileName, Duration.ofMinutes(1));
     }
 
     public GenericResponse uploadFileWithPreSignedUrl(
-            MultipartFile multipartFile, SignedUploadRequest signedUploadRequest)
+            MultipartFile multipartFile, SignedUploadRequest signedUploadRequest, Duration duration)
             throws IOException, URISyntaxException {
         // Step 1: Get UploadFile SignedURL
         Builder objectMetadataBuilder =
@@ -120,7 +125,7 @@ public class AwsS3Service {
                 s3Template.createSignedPutURL(
                         signedUploadRequest.bucketName(),
                         Objects.requireNonNull(multipartFile.getOriginalFilename()),
-                        Duration.ofMinutes(1),
+                        duration,
                         metadata,
                         multipartFile.getContentType());
         // Step 2: Upload the file using the pre-signed URL
@@ -141,6 +146,14 @@ public class AwsS3Service {
         } else {
             return new GenericResponse("File upload failed!");
         }
+    }
+
+    // Overload for backward compatibility
+    public GenericResponse uploadFileWithPreSignedUrl(
+            MultipartFile multipartFile, SignedUploadRequest signedUploadRequest)
+            throws IOException, URISyntaxException {
+        return uploadFileWithPreSignedUrl(
+                multipartFile, signedUploadRequest, Duration.ofMinutes(1));
     }
 
     private boolean getBucketExists() {

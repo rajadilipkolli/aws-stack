@@ -1,4 +1,4 @@
-package com.learning.awspring.model;
+package com.learning.awspring.model.response;
 
 import java.net.URL;
 

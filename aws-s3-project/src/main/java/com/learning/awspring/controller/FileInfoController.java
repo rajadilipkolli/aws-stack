@@ -1,9 +1,9 @@
 package com.learning.awspring.controller;
 
 import com.learning.awspring.entities.FileInfo;
-import com.learning.awspring.model.GenericResponse;
-import com.learning.awspring.model.SignedURLResponse;
-import com.learning.awspring.model.SignedUploadRequest;
+import com.learning.awspring.model.request.SignedUploadRequest;
+import com.learning.awspring.model.response.GenericResponse;
+import com.learning.awspring.model.response.SignedURLResponse;
 import com.learning.awspring.service.AwsS3Service;
 import com.learning.awspring.service.FileInfoService;
 import io.awspring.cloud.s3.S3Resource;

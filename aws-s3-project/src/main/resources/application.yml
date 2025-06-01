@@ -1,5 +1,8 @@
 application:
   bucket-name: testbucket
+  enable-server-side-encryption: true
+  server-side-encryption-algorithm: AES256
+  enable-versioning: true
 
 spring:
   cloud:

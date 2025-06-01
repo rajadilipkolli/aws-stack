@@ -52,5 +52,27 @@ public class S3TaggingControllerIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.tags.confidential").value("yes"))
                 .andExpect(jsonPath("$.tags.department").value("finance"))
                 .andExpect(jsonPath("$.success").value(true));
+
+        // Then test retrieving the tags
+        mockMvc.perform(get("/s3/tags/" + fileName))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.fileName").value(fileName))
+                .andExpect(jsonPath("$.tags.category").value("document"))
+                .andExpect(jsonPath("$.success").value(true));
+    }
+
+    @Test
+    void getObjectTags_WithNonexistentFile_ShouldReturnFailureResponse() throws Exception {
+        // Arrange
+        String fileName = "nonexistent-file.pdf";
+
+        // Act & Assert
+        mockMvc.perform(get("/s3/tags/{fileName}", fileName))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.fileName").value(fileName))
+                .andExpect(jsonPath("$.tags").isEmpty())
+                .andExpect(jsonPath("$.success").value(false));
     }
 }

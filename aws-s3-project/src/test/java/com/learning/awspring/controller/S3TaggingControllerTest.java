@@ -43,9 +43,6 @@ class S3TaggingControllerTest {
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockResponse, response.getBody());
-        assertEquals(true, response.getBody().success());
-        assertEquals("test-file.pdf", response.getBody().fileName());
-        assertEquals(tags, response.getBody().tags());
     }
 
     @Test
@@ -67,8 +64,5 @@ class S3TaggingControllerTest {
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockResponse, response.getBody());
-        assertEquals(true, response.getBody().success());
-        assertEquals(fileName, response.getBody().fileName());
-        assertEquals(tags, response.getBody().tags());
     }
 }

@@ -3,6 +3,8 @@ package com.learning.awspring.controller;
 import com.learning.awspring.model.request.ObjectTaggingRequest;
 import com.learning.awspring.model.response.ObjectTaggingResponse;
 import com.learning.awspring.service.AwsS3Service;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +31,7 @@ public class S3TaggingController {
      */
     @PostMapping
     public ResponseEntity<ObjectTaggingResponse> tagObject(
-            @RequestBody ObjectTaggingRequest taggingRequest) {
+            @RequestBody @Valid ObjectTaggingRequest taggingRequest) {
         ObjectTaggingResponse response = awsS3Service.tagObject(taggingRequest);
         return ResponseEntity.ok(response);
     }
@@ -41,7 +43,8 @@ public class S3TaggingController {
      * @return Response with the object's tags
      */
     @GetMapping("/{fileName}")
-    public ResponseEntity<ObjectTaggingResponse> getObjectTags(@PathVariable String fileName) {
+    public ResponseEntity<ObjectTaggingResponse> getObjectTags(
+            @PathVariable @Valid @NotBlank String fileName) {
         ObjectTaggingResponse response = awsS3Service.getObjectTags(fileName);
         return ResponseEntity.ok(response);
     }

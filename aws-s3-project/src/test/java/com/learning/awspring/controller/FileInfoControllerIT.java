@@ -151,31 +151,33 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
     @Test
     @Order(8)
     void signedUrlShouldExpireAfterShortDuration() throws Exception {
-        // Store a file in the bucket
-        this.s3Template.store("testbucket", "expire.txt", "Short expiry test");
-
-        // Get a signed URL with a short expiry (2 seconds)
-        var response =
-                this.mockMvc
-                        .perform(
-                                get(
-                                        "/s3/download/signed/{bucketName}/{name}?durationSeconds=2",
-                                        "testbucket",
-                                        "expire.txt"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-        String url =
-                objectMapper
-                        .readTree(response.getResponse().getContentAsString())
-                        .get("url")
-                        .asText();
 
         boolean isLocalStack =
                 Optional.ofNullable(System.getenv("AWS_ENDPOINT")).orElse("").contains("localhost");
+        // Skip this test if running against LocalStack, as it does not support URL expiration
         if (isLocalStack) {
             // LocalStack does not expire presigned URLs—skip or adjust assertion
             Assumptions.assumeFalse(true, "Skipping URL expiration test on LocalStack");
         } else {
+            // Store a file in the bucket
+            this.s3Template.store("testbucket", "expire.txt", "Short expiry test");
+
+            // Get a signed URL with a short expiry (2 seconds)
+            var response =
+                    this.mockMvc
+                            .perform(
+                                    get(
+                                            "/s3/download/signed/{bucketName}/{name}?durationSeconds=2",
+                                            "testbucket",
+                                            "expire.txt"))
+                            .andExpect(status().isOk())
+                            .andReturn();
+            String url =
+                    objectMapper
+                            .readTree(response.getResponse().getContentAsString())
+                            .get("url")
+                            .asText();
+
             // For real S3, wait and assert expiration
             Awaitility.await()
                     .atMost(Duration.ofSeconds(10))

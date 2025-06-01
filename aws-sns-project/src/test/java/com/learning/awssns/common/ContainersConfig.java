@@ -13,6 +13,6 @@ public class ContainersConfig {
     @ServiceConnection
     LocalStackContainer localstackContainer() {
         return new LocalStackContainer(
-                DockerImageName.parse("localstack/localstack").withTag("4.2.0"));
+                DockerImageName.parse("localstack/localstack").withTag("4.4.0"));
     }
 }

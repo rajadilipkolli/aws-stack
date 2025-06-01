@@ -12,6 +12,7 @@ import io.awspring.cloud.sns.sms.SmsMessageAttributes;
 import io.awspring.cloud.sns.sms.SmsType;
 import io.awspring.cloud.sns.sms.SnsSmsTemplate;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -28,6 +29,7 @@ import software.amazon.awssdk.services.sns.model.SubscribeRequest;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
 import software.amazon.awssdk.services.sqs.model.CreateQueueResponse;
+import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
@@ -52,33 +54,49 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
     LocalStackContainer localStackContainer;
 
     @Test
-    void shouldSendAndReceiveSqsMessage() {
+    void shouldSendAndReceiveSqsMessage() throws InterruptedException, ExecutionException {
+        // Create a queue to receive messages
+        String queueName = "test-topic-queue";
+        String queueURL = this.createQueue(queueName)
+                .thenApply(CreateQueueResponse::queueUrl)
+                .get();
+        String queueArn = this.sqsAsyncClient
+                .getQueueAttributes(r -> r.queueUrl(queueURL).attributeNames(QueueAttributeName.QUEUE_ARN))
+                .thenApply(t -> t.attributes().get(QueueAttributeName.QUEUE_ARN))
+                .get();
+
+        // Create a topic and subscribe the queue to it
         String topicName = "testTopic";
         String topicArn = this.createTopic(topicName);
 
         snsClient.subscribe(SubscribeRequest.builder()
-                .protocol("http")
-                .endpoint("http://localhost:8080/testTopic")
+                .protocol("sqs")
+                .endpoint(queueArn)
                 .topicArn(topicArn)
                 .build());
 
+        // Send a message to the topic
         snsTemplate.send(
                 topicArn,
                 MessageBuilder.withPayload("Spring Cloud AWS SNS Sample!")
                         .setHeader(NOTIFICATION_SUBJECT_HEADER, "Junit Header!")
                         .build());
 
-        //        given()
-        //                .atMost(Duration.ofSeconds(30))
-        //                .pollInterval(Duration.ofSeconds(3))
-        //                .await()
-        //                .untilAsserted(() -> {
-        //                    List<Message> messages = snsAsyncClient
-        //                            .receiveMessage(builder -> builder.queueUrl(topicArn))
-        //                            .thenApply(ReceiveTopicResponse::messages)
-        //                            .get();
-        //                    assertThat(messages).isNotEmpty();
-        //                });
+        // Wait for and verify the message is received in the queue
+        await().atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(3))
+                .untilAsserted(() -> {
+                    ReceiveMessageResponse response = sqsAsyncClient
+                            .receiveMessage(builder -> builder.queueUrl(queueURL))
+                            .get();
+                    List<Message> messages = response.messages();
+                    assertThat(messages).isNotEmpty();
+                    JsonNode body = objectMapper.readTree(messages.getFirst().body());
+                    assertThat(body.get("Message").asText()).isEqualTo("Spring Cloud AWS SNS Sample!");
+                    if (body.has("Subject")) {
+                        assertThat(body.get("Subject").asText()).isEqualTo("Junit Header!");
+                    }
+                });
     }
 
     @Test

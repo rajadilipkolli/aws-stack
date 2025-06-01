@@ -4,12 +4,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import io.awspring.cloud.s3.S3Template;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+import software.amazon.awssdk.http.SdkHttpResponse;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
@@ -60,7 +61,6 @@ class S3ConfigTest {
     }
 
     @Test
-    @Disabled("till mocking of PutBucketVersioningResponse is fixed")
     void setupBucketOnStartup_shouldEnableVersioningIfConfigured() {
         // Arrange
         String bucketName = "testBucket";
@@ -75,8 +75,13 @@ class S3ConfigTest {
                         .build();
         when(s3Client.getBucketVersioning(any(GetBucketVersioningRequest.class)))
                 .thenReturn(versioningResponse);
+        PutBucketVersioningResponse bucketVersioningResponse =
+                PutBucketVersioningResponse.builder().build();
+        SdkHttpResponse sdkHttpResponse =
+                SdkHttpResponse.builder().statusCode(200).statusText("OK").build();
+        ReflectionTestUtils.setField(bucketVersioningResponse, "sdkHttpResponse", sdkHttpResponse);
         when(s3Client.putBucketVersioning(any(PutBucketVersioningRequest.class)))
-                .thenReturn(PutBucketVersioningResponse.builder().build());
+                .thenReturn(bucketVersioningResponse);
 
         // Act
         s3Config.setupBucketOnStartup();

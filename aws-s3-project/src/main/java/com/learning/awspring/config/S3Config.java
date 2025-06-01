@@ -6,12 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 @Configuration
-@EnableJpaAuditing
 public class S3Config {
 
     private static final Logger log = LoggerFactory.getLogger(S3Config.class);

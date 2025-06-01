@@ -1,12 +1,16 @@
 package com.learning.awspring.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Table(name = "file_info")
 @Entity
@@ -16,16 +20,45 @@ public class FileInfo {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
+    @Column(length = 64)
     private String fileName;
+
+    @Column(length = 328)
     private String fileUrl;
+
     private boolean isUploadSuccessFull;
+
+    private Long fileSize;
+
+    private String contentType;
+
+    @Column(length = 1024)
+    private String metadata;
+
+    @Column(nullable = false)
+    private String bucketName;
+
+    @CreatedDate private LocalDateTime createdAt;
+
+    @LastModifiedDate private LocalDateTime updatedAt;
 
     public FileInfo() {}
 
-    public FileInfo(String fileName, String fileUrl, boolean isUploadSuccessFull) {
+    public FileInfo(
+            String fileName,
+            String fileUrl,
+            boolean isUploadSuccessFull,
+            Long fileSize,
+            String contentType,
+            String metadata,
+            String bucketName) {
         this.fileName = fileName;
         this.fileUrl = fileUrl;
         this.isUploadSuccessFull = isUploadSuccessFull;
+        this.fileSize = fileSize;
+        this.contentType = contentType;
+        this.metadata = metadata;
+        this.bucketName = bucketName;
     }
 
     public Integer getId() {
@@ -64,6 +97,60 @@ public class FileInfo {
         return this;
     }
 
+    public Long getFileSize() {
+        return fileSize;
+    }
+
+    public FileInfo setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+        return this;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public FileInfo setContentType(String contentType) {
+        this.contentType = contentType;
+        return this;
+    }
+
+    public String getMetadata() {
+        return metadata;
+    }
+
+    public FileInfo setMetadata(String metadata) {
+        this.metadata = metadata;
+        return this;
+    }
+
+    public String getBucketName() {
+        return bucketName;
+    }
+
+    public FileInfo setBucketName(String bucketName) {
+        this.bucketName = bucketName;
+        return this;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public FileInfo setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public FileInfo setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) {
@@ -72,7 +159,7 @@ public class FileInfo {
         if (o == null) {
             return false;
         }
-        Class<?> oEffectiveClass =
+        Class<?> effectiveOClass =
                 o instanceof HibernateProxy hibernateProxy
                         ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
                         : o.getClass();
@@ -80,7 +167,7 @@ public class FileInfo {
                 this instanceof HibernateProxy hibernateProxy
                         ? hibernateProxy.getHibernateLazyInitializer().getPersistentClass()
                         : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) {
+        if (thisEffectiveClass != effectiveOClass) {
             return false;
         }
         FileInfo fileInfo = (FileInfo) o;

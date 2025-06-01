@@ -175,19 +175,20 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
         if (isLocalStack) {
             // LocalStack does not expire presigned URLs—skip or adjust assertion
             Assumptions.assumeFalse(true, "Skipping URL expiration test on LocalStack");
+        } else {
+            // For real S3, wait and assert expiration
+            Awaitility.await()
+                    .atMost(Duration.ofSeconds(10))
+                    .pollInterval(Duration.ofMillis(500))
+                    .untilAsserted(
+                            () -> {
+                                var conn = (HttpURLConnection) new URL(url).openConnection();
+                                conn.setRequestMethod("GET");
+                                int code = conn.getResponseCode();
+                                Assertions.assertTrue(
+                                        code != 200,
+                                        "Expected non-200 after expiration, got " + code);
+                            });
         }
-
-        // For real S3, wait and assert expiration
-        Awaitility.await()
-                .atMost(Duration.ofSeconds(10))
-                .pollInterval(Duration.ofMillis(500))
-                .untilAsserted(
-                        () -> {
-                            var conn = (HttpURLConnection) new URL(url).openConnection();
-                            conn.setRequestMethod("GET");
-                            int code = conn.getResponseCode();
-                            Assertions.assertTrue(
-                                    code != 200, "Expected non-200 after expiration, got " + code);
-                        });
     }
 }

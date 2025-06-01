@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.learning.awspring.common.SQLContainerConfig;
 import com.learning.awspring.entities.FileInfo;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ class FileInfoRepositoryTest {
         FileInfo fileInfo = new FileInfo();
         fileInfo.setFileName("test");
         fileInfo.setFileUrl("testUrl");
+        fileInfo.setFileSize(512L);
+        fileInfo.setBucketName("testBucket");
+        fileInfo.setCreatedAt(LocalDateTime.now());
         entityManager.persist(fileInfo);
         entityManager.flush();
         List<FileInfo> fileInfoList = fileInfoRepository.findByFileName("test");
@@ -35,6 +39,9 @@ class FileInfoRepositoryTest {
         FileInfo fileInfo = new FileInfo();
         fileInfo.setFileName("test");
         fileInfo.setFileUrl("testUrl");
+        fileInfo.setFileSize(512L);
+        fileInfo.setBucketName("testBucket");
+        fileInfo.setCreatedAt(LocalDateTime.now());
         entityManager.persist(fileInfo);
         entityManager.flush();
         boolean exists = fileInfoRepository.existsByFileName("test");

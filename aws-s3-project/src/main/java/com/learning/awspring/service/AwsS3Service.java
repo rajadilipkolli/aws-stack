@@ -101,15 +101,44 @@ public class AwsS3Service {
                 "Uploading file '{}' to bucket: '{}' ",
                 fileName,
                 applicationProperties.bucketName());
+
+        String contentType =
+                multipartFile.getContentType() != null
+                        ? multipartFile.getContentType()
+                        : "application/octet-stream";
+
+        // Add more metadata to the object and apply encryption if enabled
+        ObjectMetadata.Builder metadataBuilder = ObjectMetadata.builder();
+        metadataBuilder.contentType(contentType);
+
+        metadataBuilder.metadata("originalFilename", fileName);
+
+        metadataBuilder.metadata("uploadTimestamp", String.valueOf(System.currentTimeMillis()));
+
+        // Apply server-side encryption if enabled
+        metadataBuilder = applyEncryptionIfEnabled(metadataBuilder);
+        ObjectMetadata objectMetadata = metadataBuilder.build();
+
         S3Resource s3Resource =
                 this.s3Template.upload(
                         applicationProperties.bucketName(),
                         fileName,
                         multipartFile.getInputStream(),
-                        ObjectMetadata.builder()
-                                .contentType(multipartFile.getContentType())
-                                .build());
-        var fileInfo = new FileInfo(fileName, s3Resource.getURL().toString(), s3Resource.exists());
+                        objectMetadata);
+        // Create enhanced FileInfo entity with more metadata
+        var fileInfo =
+                new FileInfo(
+                        fileName,
+                        s3Resource.getURL().toString(),
+                        s3Resource.exists(),
+                        multipartFile.getSize(),
+                        contentType,
+                        "{\"originalFilename\":\""
+                                + fileName
+                                + "\",\"uploadTimestamp\":"
+                                + System.currentTimeMillis()
+                                + "}",
+                        applicationProperties.bucketName());
         return fileInfoRepository.save(fileInfo);
     }
 
@@ -130,6 +159,9 @@ public class AwsS3Service {
         Builder objectMetadataBuilder =
                 ObjectMetadata.builder().contentType(multipartFile.getContentType());
         signedUploadRequest.metadata().forEach(objectMetadataBuilder::metadata);
+
+        // Apply server-side encryption if enabled
+        objectMetadataBuilder = applyEncryptionIfEnabled(objectMetadataBuilder);
         ObjectMetadata metadata = objectMetadataBuilder.build();
 
         URL preSignedUrl =
@@ -233,6 +265,17 @@ public class AwsS3Service {
             log.error("Error getting tags for object: {}", e.getMessage(), e);
             return new ObjectTaggingResponse(fileName, Map.of(), false);
         }
+    }
+
+    // Helper method to apply server-side encryption settings if enabled
+    private ObjectMetadata.Builder applyEncryptionIfEnabled(ObjectMetadata.Builder builder) {
+        if (applicationProperties.enableServerSideEncryption()) {
+            log.info(
+                    "Applying server-side encryption with algorithm: {}",
+                    applicationProperties.serverSideEncryptionAlgorithm());
+            builder.serverSideEncryption(applicationProperties.serverSideEncryptionAlgorithm());
+        }
+        return builder;
     }
 
     private void checkIfFileExists(String fileName) throws FileNotFoundException {

@@ -59,6 +59,8 @@ public class S3TaggingControllerIT extends AbstractIntegrationTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.fileName").value(fileName))
                 .andExpect(jsonPath("$.tags.category").value("document"))
+                .andExpect(jsonPath("$.tags.confidential").value("yes"))
+                .andExpect(jsonPath("$.tags.department").value("finance"))
                 .andExpect(jsonPath("$.success").value(true));
     }
 

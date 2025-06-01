@@ -1,4 +1,4 @@
-package com.learning.awspring.model;
+package com.learning.awspring.model.request;
 
 import java.io.Serializable;
 import java.util.Map;

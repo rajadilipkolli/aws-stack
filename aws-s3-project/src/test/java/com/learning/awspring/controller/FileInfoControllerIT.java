@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.learning.awspring.common.AbstractIntegrationTest;
-import com.learning.awspring.model.SignedUploadRequest;
+import com.learning.awspring.model.request.SignedUploadRequest;
 import io.awspring.cloud.s3.S3Template;
 import java.util.Map;
 import org.junit.jupiter.api.MethodOrderer;

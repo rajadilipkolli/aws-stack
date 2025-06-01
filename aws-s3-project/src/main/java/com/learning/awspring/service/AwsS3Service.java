@@ -4,9 +4,11 @@ import com.learning.awspring.config.ApplicationProperties;
 import com.learning.awspring.config.logging.Loggable;
 import com.learning.awspring.entities.FileInfo;
 import com.learning.awspring.exception.BucketNotFoundException;
-import com.learning.awspring.model.GenericResponse;
-import com.learning.awspring.model.SignedURLResponse;
-import com.learning.awspring.model.SignedUploadRequest;
+import com.learning.awspring.model.request.ObjectTaggingRequest;
+import com.learning.awspring.model.request.SignedUploadRequest;
+import com.learning.awspring.model.response.GenericResponse;
+import com.learning.awspring.model.response.ObjectTaggingResponse;
+import com.learning.awspring.model.response.SignedURLResponse;
 import com.learning.awspring.repository.FileInfoRepository;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.ObjectMetadata.Builder;
@@ -18,7 +20,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -30,6 +34,10 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkClientException;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectTaggingResponse;
+import software.amazon.awssdk.services.s3.model.Tag;
+import software.amazon.awssdk.services.s3.model.Tagging;
 
 @Service
 @Loggable
@@ -41,16 +49,19 @@ public class AwsS3Service {
     private final FileInfoRepository fileInfoRepository;
     private final S3Template s3Template;
     private final RestTemplate restTemplate;
+    private final S3Client s3Client;
 
     public AwsS3Service(
             ApplicationProperties applicationProperties,
             FileInfoRepository fileInfoRepository,
             S3Template s3Template,
-            RestTemplate restTemplate) {
+            RestTemplate restTemplate,
+            S3Client s3Client) {
         this.applicationProperties = applicationProperties;
         this.fileInfoRepository = fileInfoRepository;
         this.s3Template = s3Template;
         this.restTemplate = restTemplate;
+        this.s3Client = s3Client;
     }
 
     public S3Resource downloadFileFromS3Bucket(final String fileName) throws IOException {
@@ -154,6 +165,84 @@ public class AwsS3Service {
             throws IOException, URISyntaxException {
         return uploadFileWithPreSignedUrl(
                 multipartFile, signedUploadRequest, Duration.ofMinutes(1));
+    }
+
+    // Add or update tags for an object in S3
+    public ObjectTaggingResponse tagObject(ObjectTaggingRequest taggingRequest) {
+        String fileName = taggingRequest.fileName();
+        Map<String, String> tags = taggingRequest.tags();
+
+        try {
+            checkIfFileExists(fileName);
+
+            // Convert map to AWS SDK tagging
+            Tagging tagging =
+                    Tagging.builder()
+                            .tagSet(
+                                    tags.entrySet().stream()
+                                            .map(
+                                                    entry ->
+                                                            Tag.builder()
+                                                                    .key(entry.getKey())
+                                                                    .value(entry.getValue())
+                                                                    .build())
+                                            .toList())
+                            .build();
+
+            // Put the object tagging
+            PutObjectTaggingResponse putObjectTaggingResponse =
+                    s3Client.putObjectTagging(
+                            request ->
+                                    request.bucket(applicationProperties.bucketName())
+                                            .key(fileName)
+                                            .tagging(tagging));
+
+            log.info(
+                    "Added tags to object {} in bucket {}",
+                    fileName,
+                    applicationProperties.bucketName());
+            return new ObjectTaggingResponse(
+                    fileName, tags, putObjectTaggingResponse.sdkHttpResponse().isSuccessful());
+
+        } catch (Exception e) {
+            log.error("Error adding tags to object: {}", e.getMessage(), e);
+            return new ObjectTaggingResponse(fileName, tags, false);
+        }
+    }
+
+    // Get tags for an object in S3
+    public ObjectTaggingResponse getObjectTags(String fileName) {
+        try {
+            checkIfFileExists(fileName);
+
+            // Get the object tagging
+            var taggingResponse =
+                    s3Client.getObjectTagging(
+                            request ->
+                                    request.bucket(applicationProperties.bucketName())
+                                            .key(fileName));
+
+            // Convert AWS SDK tags to a map
+            Map<String, String> tags =
+                    taggingResponse.tagSet().stream()
+                            .collect(Collectors.toMap(Tag::key, Tag::value));
+
+            return new ObjectTaggingResponse(fileName, tags, true);
+
+        } catch (Exception e) {
+            log.error("Error getting tags for object: {}", e.getMessage(), e);
+            return new ObjectTaggingResponse(fileName, Map.of(), false);
+        }
+    }
+
+    private void checkIfFileExists(String fileName) throws FileNotFoundException {
+        if (!this.s3Template.objectExists(applicationProperties.bucketName(), fileName)) {
+            log.error(
+                    "File not found in bucket: {} - {}",
+                    applicationProperties.bucketName(),
+                    fileName);
+            throw new FileNotFoundException(fileName);
+        }
     }
 
     private boolean getBucketExists() {

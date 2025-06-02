@@ -77,7 +77,7 @@ public class FileInfoController {
     SignedURLResponse downloadFileUsingSignedURL(
             @PathVariable String bucketName,
             @PathVariable("name") String fileName,
-            @RequestParam(value = "durationSeconds", required = false) Integer durationSeconds) {
+            @RequestParam(value = "durationSeconds", required = false) Long durationSeconds) {
         if (durationSeconds != null) {
             return awsS3Service.downloadFileUsingSignedURL(
                     bucketName, fileName, Duration.ofSeconds(durationSeconds));

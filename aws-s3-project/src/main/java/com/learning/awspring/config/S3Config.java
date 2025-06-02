@@ -62,7 +62,7 @@ public class S3Config {
                                     .build());
 
             log.info(
-                    "Versioning enabling status for bucket: {} is {}",
+                    "Versioning status for bucket: {} is {}",
                     bucketName,
                     putBucketVersioningResponse.sdkHttpResponse().isSuccessful());
         } else {

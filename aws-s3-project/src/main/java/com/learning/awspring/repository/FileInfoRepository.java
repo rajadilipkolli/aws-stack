@@ -8,4 +8,6 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, Integer> {
     List<FileInfo> findByFileName(String name);
 
     boolean existsByFileName(String fileName);
+
+    List<FileInfo> findByBucketName(String bucketName);
 }

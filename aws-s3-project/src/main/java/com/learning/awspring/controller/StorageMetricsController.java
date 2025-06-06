@@ -1,6 +1,8 @@
 package com.learning.awspring.controller;
 
 import com.learning.awspring.service.StorageMetricsService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +37,11 @@ public class StorageMetricsController {
      * @return A map of storage metrics for the bucket
      */
     @GetMapping("/bucket/{bucketName}")
-    public ResponseEntity<Map<String, Object>> getBucketMetrics(@PathVariable String bucketName) {
+    public ResponseEntity<Map<String, Object>> getBucketMetrics(
+            @PathVariable
+                    @Valid
+                    @Pattern(regexp = "^[a-z0-9.-]+$", message = "Invalid bucket name format")
+                    String bucketName) {
         return ResponseEntity.ok(storageMetricsService.getBucketMetrics(bucketName));
     }
 }

@@ -4,16 +4,18 @@ import com.learning.awspring.entities.FileInfo;
 import com.learning.awspring.repository.FileInfoRepository;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class StorageMetricsService {
 
     private static final Logger log = LoggerFactory.getLogger(StorageMetricsService.class);
+    private static final double BYTES_TO_MB = 1024.0 * 1024.0;
 
     private final FileInfoRepository fileInfoRepository;
 
@@ -27,6 +29,7 @@ public class StorageMetricsService {
      * @return A map containing storage metrics
      */
     public Map<String, Object> getStorageMetrics() {
+        log.debug("Calculating overall storage metrics");
         Map<String, Object> metrics = new HashMap<>();
 
         List<FileInfo> allFiles = fileInfoRepository.findAll();
@@ -41,7 +44,8 @@ public class StorageMetricsService {
                         .mapToLong(FileInfo::getFileSize)
                         .sum();
         metrics.put("totalStorageBytes", totalStorageBytes);
-        metrics.put("totalStorageMB", totalStorageBytes / (1024.0 * 1024.0));
+        metrics.put(
+                "totalStorageMB", totalStorageBytes > 0 ? totalStorageBytes / BYTES_TO_MB : 0.0);
 
         // Files uploaded in the last 24 hours
         LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
@@ -55,29 +59,24 @@ public class StorageMetricsService {
         metrics.put("filesUploadedLast24Hours", recentFileCount);
 
         // Content type distribution
-        Map<String, Long> contentTypeDistribution = new HashMap<>();
-        allFiles.stream()
-                .filter(f -> f.getContentType() != null)
-                .forEach(
-                        f ->
-                                contentTypeDistribution.put(
-                                        f.getContentType(),
-                                        contentTypeDistribution.getOrDefault(f.getContentType(), 0L)
-                                                + 1));
+        Map<String, Long> contentTypeDistribution =
+                allFiles.stream()
+                        .filter(f -> f.getContentType() != null)
+                        .collect(
+                                Collectors.groupingBy(
+                                        FileInfo::getContentType, Collectors.counting()));
         metrics.put("contentTypeDistribution", contentTypeDistribution);
 
         // Bucket distribution
-        Map<String, Long> bucketDistribution = new HashMap<>();
-        allFiles.stream()
-                .filter(f -> f.getBucketName() != null)
-                .forEach(
-                        f ->
-                                bucketDistribution.put(
-                                        f.getBucketName(),
-                                        bucketDistribution.getOrDefault(f.getBucketName(), 0L)
-                                                + 1));
+        Map<String, Long> bucketDistribution =
+                allFiles.stream()
+                        .filter(f -> f.getBucketName() != null)
+                        .collect(
+                                Collectors.groupingBy(
+                                        FileInfo::getBucketName, Collectors.counting()));
         metrics.put("bucketDistribution", bucketDistribution);
 
+        log.debug("Calculated metrics for {} files", allFiles.size());
         return metrics;
     }
 
@@ -101,7 +100,9 @@ public class StorageMetricsService {
                         .mapToLong(FileInfo::getFileSize)
                         .sum();
         metrics.put("totalStorageBytes", totalBucketStorageBytes);
-        metrics.put("totalStorageMB", totalBucketStorageBytes / (1024.0 * 1024.0));
+        metrics.put(
+                "totalStorageMB",
+                totalBucketStorageBytes > 0 ? totalBucketStorageBytes / BYTES_TO_MB : 0.0);
 
         // Get the largest file in bucket
         Optional<FileInfo> largestFile =

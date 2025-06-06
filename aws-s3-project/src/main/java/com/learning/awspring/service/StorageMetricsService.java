@@ -29,11 +29,18 @@ public class StorageMetricsService {
      */
     public Map<String, Object> getStorageMetrics() {
         log.debug("Calculating overall storage metrics using database aggregation");
+
+        // Check if any files exist in the repository
+        Long totalFileCount = fileInfoRepository.getTotalFileCount();
+        if (totalFileCount == null || totalFileCount == 0) {
+            log.debug("No files found, returning empty metrics");
+            return Collections.emptyMap();
+        }
+
         Map<String, Object> metrics = new HashMap<>();
 
         // Total file count - using direct query
-        Long totalFileCount = fileInfoRepository.getTotalFileCount();
-        metrics.put("totalFileCount", totalFileCount != null ? totalFileCount : 0);
+        metrics.put("totalFileCount", totalFileCount);
 
         // Total storage used (in bytes) - using direct query
         Long totalStorageBytes = fileInfoRepository.getTotalStorageBytes();

@@ -4,14 +4,13 @@ import com.learning.awspring.entities.FileInfo;
 import com.learning.awspring.repository.FileInfoRepository;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class StorageMetricsService {
 
     private static final Logger log = LoggerFactory.getLogger(StorageMetricsService.class);
@@ -29,54 +28,46 @@ public class StorageMetricsService {
      * @return A map containing storage metrics
      */
     public Map<String, Object> getStorageMetrics() {
-        log.debug("Calculating overall storage metrics");
+        log.debug("Calculating overall storage metrics using database aggregation");
         Map<String, Object> metrics = new HashMap<>();
 
-        List<FileInfo> allFiles = fileInfoRepository.findAll();
+        // Total file count - using direct query
+        Long totalFileCount = fileInfoRepository.getTotalFileCount();
+        metrics.put("totalFileCount", totalFileCount != null ? totalFileCount : 0);
 
-        // Total file count
-        metrics.put("totalFileCount", allFiles.size());
-
-        // Total storage used (in bytes)
-        long totalStorageBytes =
-                allFiles.stream()
-                        .filter(f -> f.getFileSize() != null)
-                        .mapToLong(FileInfo::getFileSize)
-                        .sum();
+        // Total storage used (in bytes) - using direct query
+        Long totalStorageBytes = fileInfoRepository.getTotalStorageBytes();
+        totalStorageBytes = totalStorageBytes != null ? totalStorageBytes : 0L;
         metrics.put("totalStorageBytes", totalStorageBytes);
         metrics.put(
                 "totalStorageMB", totalStorageBytes > 0 ? totalStorageBytes / BYTES_TO_MB : 0.0);
 
-        // Files uploaded in the last 24 hours
+        // Files uploaded in the last 24 hours - using direct query
         LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
-        long recentFileCount =
-                allFiles.stream()
-                        .filter(
-                                f ->
-                                        f.getCreatedAt() != null
-                                                && f.getCreatedAt().isAfter(oneDayAgo))
-                        .count();
-        metrics.put("filesUploadedLast24Hours", recentFileCount);
+        Long recentFileCount = fileInfoRepository.getRecentFileCount(oneDayAgo);
+        metrics.put("filesUploadedLast24Hours", recentFileCount != null ? recentFileCount : 0);
 
-        // Content type distribution
-        Map<String, Long> contentTypeDistribution =
-                allFiles.stream()
-                        .filter(f -> f.getContentType() != null)
-                        .collect(
-                                Collectors.groupingBy(
-                                        FileInfo::getContentType, Collectors.counting()));
+        // Content type distribution - using direct query
+        Map<String, Long> contentTypeDistribution = new HashMap<>();
+        List<Object[]> contentTypeResults = fileInfoRepository.getContentTypeDistribution();
+        for (Object[] result : contentTypeResults) {
+            if (result[0] != null) {
+                contentTypeDistribution.put((String) result[0], (Long) result[1]);
+            }
+        }
         metrics.put("contentTypeDistribution", contentTypeDistribution);
 
-        // Bucket distribution
-        Map<String, Long> bucketDistribution =
-                allFiles.stream()
-                        .filter(f -> f.getBucketName() != null)
-                        .collect(
-                                Collectors.groupingBy(
-                                        FileInfo::getBucketName, Collectors.counting()));
+        // Bucket distribution - using direct query
+        Map<String, Long> bucketDistribution = new HashMap<>();
+        List<Object[]> bucketResults = fileInfoRepository.getBucketDistribution();
+        for (Object[] result : bucketResults) {
+            if (result[0] != null) {
+                bucketDistribution.put((String) result[0], (Long) result[1]);
+            }
+        }
         metrics.put("bucketDistribution", bucketDistribution);
 
-        log.debug("Calculated metrics for {} files", allFiles.size());
+        log.debug("Calculated metrics using database aggregation");
         return metrics;
     }
 
@@ -87,38 +78,35 @@ public class StorageMetricsService {
      * @return A map containing storage metrics for the bucket
      */
     public Map<String, Object> getBucketMetrics(String bucketName) {
+        log.debug("Calculating bucket metrics for {} using database aggregation", bucketName);
         Map<String, Object> metrics = new HashMap<>();
 
-        List<FileInfo> bucketFiles = fileInfoRepository.findByBucketName(bucketName);
-
         metrics.put("bucketName", bucketName);
-        metrics.put("fileCount", bucketFiles.size());
 
-        long totalBucketStorageBytes =
-                bucketFiles.stream()
-                        .filter(f -> f.getFileSize() != null)
-                        .mapToLong(FileInfo::getFileSize)
-                        .sum();
+        // Get file count using direct query
+        Long fileCount = fileInfoRepository.getFileCountByBucket(bucketName);
+        metrics.put("fileCount", fileCount != null ? fileCount : 0);
+
+        // Get total storage size using direct query
+        Long totalBucketStorageBytes = fileInfoRepository.getTotalSizeByBucket(bucketName);
+        totalBucketStorageBytes = totalBucketStorageBytes != null ? totalBucketStorageBytes : 0L;
         metrics.put("totalStorageBytes", totalBucketStorageBytes);
         metrics.put(
                 "totalStorageMB",
                 totalBucketStorageBytes > 0 ? totalBucketStorageBytes / BYTES_TO_MB : 0.0);
 
-        // Get the largest file in bucket
-        Optional<FileInfo> largestFile =
-                bucketFiles.stream()
-                        .filter(f -> f.getFileSize() != null)
-                        .max(Comparator.comparing(FileInfo::getFileSize));
+        // Get the largest file in bucket using direct query
+        List<FileInfo> largestFiles = fileInfoRepository.findLargestFileInBucket(bucketName);
+        if (!largestFiles.isEmpty()) {
+            FileInfo fileInfo = largestFiles.getFirst();
+            Map<String, Object> largestFileInfo = new HashMap<>();
+            largestFileInfo.put("fileName", fileInfo.getFileName());
+            largestFileInfo.put("fileSize", fileInfo.getFileSize());
+            largestFileInfo.put("contentType", fileInfo.getContentType());
+            metrics.put("largestFile", largestFileInfo);
+        }
 
-        largestFile.ifPresent(
-                fileInfo -> {
-                    Map<String, Object> largestFileInfo = new HashMap<>();
-                    largestFileInfo.put("fileName", fileInfo.getFileName());
-                    largestFileInfo.put("fileSize", fileInfo.getFileSize());
-                    largestFileInfo.put("contentType", fileInfo.getContentType());
-                    metrics.put("largestFile", largestFileInfo);
-                });
-
+        log.debug("Calculated bucket metrics for {} using database aggregation", bucketName);
         return metrics;
     }
 }

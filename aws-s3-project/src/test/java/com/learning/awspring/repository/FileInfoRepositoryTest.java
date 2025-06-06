@@ -6,6 +6,8 @@ import com.learning.awspring.common.SQLContainerConfig;
 import com.learning.awspring.entities.FileInfo;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,30 +99,19 @@ class FileInfoRepositoryTest {
     @Test
     void testGetContentTypeDistribution() {
         List<Object[]> distribution = fileInfoRepository.getContentTypeDistribution();
-        assertThat(distribution).hasSize(3);
 
-        // Convert to a more easily testable format
-        boolean foundJpeg = false;
-        boolean foundPdf = false;
-        boolean foundText = false;
+        // More concise with AssertJ
+        Map<String, Long> typeMap =
+                distribution.stream()
+                        .collect(
+                                Collectors.toMap(
+                                        result -> (String) result[0], result -> (Long) result[1]));
 
-        for (Object[] result : distribution) {
-            String contentType = (String) result[0];
-            Long count = (Long) result[1];
-
-            if ("image/jpeg".equals(contentType)) {
-                assertThat(count).isEqualTo(1L);
-                foundJpeg = true;
-            } else if ("application/pdf".equals(contentType)) {
-                assertThat(count).isEqualTo(1L);
-                foundPdf = true;
-            } else if ("text/plain".equals(contentType)) {
-                assertThat(count).isEqualTo(1L);
-                foundText = true;
-            }
-        }
-
-        assertThat(foundJpeg && foundPdf && foundText).isTrue();
+        assertThat(typeMap)
+                .containsEntry("image/jpeg", 1L)
+                .containsEntry("application/pdf", 1L)
+                .containsEntry("text/plain", 1L)
+                .hasSize(3);
     }
 
     @Test

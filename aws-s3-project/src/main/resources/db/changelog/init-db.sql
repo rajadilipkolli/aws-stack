@@ -14,3 +14,6 @@ CREATE TABLE IF NOT EXISTS file_info (
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Create composite index on bucket_name and file_size
+CREATE INDEX idx_bucket_file_size ON file_info(bucket_name, file_size);

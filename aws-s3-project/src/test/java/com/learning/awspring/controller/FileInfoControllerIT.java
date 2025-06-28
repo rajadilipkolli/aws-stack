@@ -65,8 +65,10 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
         mockMvc.perform(get("/s3/download/{name}", fileName))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-                .andExpect(jsonPath("$.type").value("about:blank"))
-                .andExpect(jsonPath("$.title").value("File NotFound"))
+                .andExpect(
+                        jsonPath("$.type")
+                                .value("https://api.s3project.example.com/errors/file-not-found"))
+                .andExpect(jsonPath("$.title").value("File Not Found"))
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.detail").value("test.pdf"))
                 .andExpect(jsonPath("$.instance").value("/s3/download/test.pdf"));

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
-public class S3TaggingControllerIT extends AbstractIntegrationTest {
+class S3TaggingControllerIT extends AbstractIntegrationTest {
 
     @Test
     void tagObject_WithValidRequest_ShouldReturnSuccessResponse() throws Exception {
@@ -62,6 +62,30 @@ public class S3TaggingControllerIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.tags.confidential").value("yes"))
                 .andExpect(jsonPath("$.tags.department").value("finance"))
                 .andExpect(jsonPath("$.success").value(true));
+    }
+
+    @Test
+    void tagObject_WithEmptyTags_ShouldFailWithValidation() throws Exception {
+        // Arrange
+        String fileName = "test-file.txt";
+        Map<String, String> emptyTags = new HashMap<>();
+
+        ObjectTaggingRequest request = new ObjectTaggingRequest(fileName, emptyTags);
+
+        // Act & Assert
+        mockMvc.perform(
+                        post("/s3/tags")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(
+                        jsonPath("$.type")
+                                .value("https://api.s3project.example.com/errors/validation-error"))
+                .andExpect(jsonPath("$.title").value("Constraint Violation"))
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.detail").value("Invalid request content."))
+                .andExpect(jsonPath("$.instance").value("/s3/tags"));
     }
 
     @Test

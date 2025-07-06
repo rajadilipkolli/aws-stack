@@ -17,7 +17,7 @@ public class LocalStackTestContainer {
     LocalStackContainer localStackContainer() {
         LocalStackContainer localStackContainer =
                 new LocalStackContainer(
-                        DockerImageName.parse("localstack/localstack").withTag("4.5.0"));
+                        DockerImageName.parse("localstack/localstack").withTag("4.6.0"));
         localStackContainer.start();
         Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(log);
         localStackContainer.followOutput(logConsumer);

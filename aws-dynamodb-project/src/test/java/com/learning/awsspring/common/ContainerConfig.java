@@ -21,7 +21,7 @@ public class ContainerConfig {
     LocalStackContainer localstackContainer() {
         LocalStackContainer localstackContainer =
                 new LocalStackContainer(
-                                DockerImageName.parse("localstack/localstack").withTag("4.6.0"))
+                                DockerImageName.parse("localstack/localstack").withTag("4.9.2"))
                         .withCopyFileToContainer(
                                 MountableFile.forHostPath(".localstack/"),
                                 "/etc/localstack/init/ready.d/")

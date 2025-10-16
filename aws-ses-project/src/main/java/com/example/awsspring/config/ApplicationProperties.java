@@ -2,6 +2,7 @@ package com.example.awsspring.config;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @ConfigurationProperties("application")
 public class ApplicationProperties {
@@ -11,7 +12,7 @@ public class ApplicationProperties {
     @NotBlank(message = "Region cant be Blank")
     private String region;
 
-    private Cors cors = new Cors();
+    @NestedConfigurationProperty private Cors cors = new Cors();
 
     public String getEndpointUri() {
         return endpointUri;

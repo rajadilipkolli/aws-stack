@@ -1,11 +1,12 @@
 package com.example.awsspring.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @ConfigurationProperties("application")
 public class ApplicationProperties {
 
-    private Cors cors = new Cors();
+    @NestedConfigurationProperty private Cors cors = new Cors();
 
     public Cors getCors() {
         return cors;

@@ -23,14 +23,13 @@ jobs:
     strategy:
       matrix:
         distribution: [ 'temurin' ]
-        java: [ '21' ]
     steps:
       - uses: actions/checkout@v5
 
-      - name: Setup Java ${{ matrix.java }}
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
-          java-version: ${{ matrix.java }}
+          java-version: 25
           distribution: ${{ matrix.distribution }}
           cache: 'maven'
 

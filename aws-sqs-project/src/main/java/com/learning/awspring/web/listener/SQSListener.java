@@ -11,17 +11,20 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class SQSListener {
 
+    private static final Logger log = LoggerFactory.getLogger(SQSListener.class);
     private final InboundLogService inboundLogService;
+
+    public SQSListener(InboundLogService inboundLogService) {
+        this.inboundLogService = inboundLogService;
+    }
 
     // @SqsListener listens to the message from the specified queue.
     // Here in this example we are printing the message on the console and the message will be

@@ -19,7 +19,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<java.version>25</java.version>
+		<java.version>21</java.version>
 		<commons-io.version>2.20.0</commons-io.version>
 		<spring-cloud-aws.version>3.4.0</spring-cloud-aws.version>
 		<org.mapstruct.version>1.6.3</org.mapstruct.version>
@@ -57,11 +57,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -166,14 +161,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.hibernate.orm.tooling</groupId>
@@ -203,16 +190,6 @@
 							<artifactId>mapstruct-processor</artifactId>
 							<version>${org.mapstruct.version}</version>
 						</path>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-							<version>${lombok.version}</version>
-						</path>
-						<dependency>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok-mapstruct-binding</artifactId>
-							<version>0.2.0</version>
-						</dependency>
 					</annotationProcessorPaths>
 					<compilerArgs>
 						<compilerArg>

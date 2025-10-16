@@ -3,7 +3,8 @@ package com.example.awsspring.service;
 import io.awspring.cloud.ses.SimpleEmailServiceJavaMailSender;
 import io.awspring.cloud.ses.SimpleEmailServiceMailSender;
 import java.nio.charset.StandardCharsets;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,8 +13,8 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.ses.SesClient;
 
 @Service
-@Slf4j
 public class NotificationService {
+    private static final Logger log = LoggerFactory.getLogger(NotificationService.class);
 
     private final SimpleEmailServiceMailSender mailSender;
 

@@ -1,7 +1,8 @@
 package com.learning.awspring.config;
 
 import java.util.concurrent.Executor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -10,8 +11,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration(proxyBeanMethods = false)
 @EnableAsync
-@Slf4j
 class SpringAsyncConfig implements AsyncConfigurer {
+
+    private static final Logger log = LoggerFactory.getLogger(SpringAsyncConfig.class);
 
     @Override
     public Executor getAsyncExecutor() {

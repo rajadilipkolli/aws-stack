@@ -11,20 +11,12 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "inbound_logs")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class InboundLog {
 
     @Id
@@ -41,6 +33,61 @@ public class InboundLog {
     private LocalDateTime receivedAt;
 
     @CreatedDate private LocalDateTime createdDate = LocalDateTime.now();
+
+    public InboundLog() {}
+
+    public InboundLog(
+            Long id,
+            UUID messageId,
+            String receivedJson,
+            LocalDateTime receivedAt,
+            LocalDateTime createdDate) {
+        this.id = id;
+        this.messageId = messageId;
+        this.receivedJson = receivedJson;
+        this.receivedAt = receivedAt;
+        this.createdDate = createdDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UUID getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(UUID messageId) {
+        this.messageId = messageId;
+    }
+
+    public String getReceivedJson() {
+        return receivedJson;
+    }
+
+    public void setReceivedJson(String receivedJson) {
+        this.receivedJson = receivedJson;
+    }
+
+    public LocalDateTime getReceivedAt() {
+        return receivedAt;
+    }
+
+    public void setReceivedAt(LocalDateTime receivedAt) {
+        this.receivedAt = receivedAt;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
 
     @Override
     public boolean equals(Object o) {

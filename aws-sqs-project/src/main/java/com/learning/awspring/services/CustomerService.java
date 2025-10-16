@@ -6,17 +6,20 @@ import com.learning.awspring.repositories.CustomerRepository;
 import com.learning.awspring.web.mapper.CustomerMapper;
 import java.util.List;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+        this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
+    }
 
     public List<Customer> findAllCustomers() {
         return customerRepository.findAll();

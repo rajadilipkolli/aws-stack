@@ -2,7 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/alpine
 {
 	"name": "Java",
-	"image": "mcr.microsoft.com/devcontainers/java:21",
+	"image": "mcr.microsoft.com/devcontainers/java:25",
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {
 			"version": "none",

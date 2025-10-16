@@ -1,11 +1,13 @@
 package com.learning.awspring.utils;
 
 import com.learning.awspring.model.SQSMessagePayload;
-import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.RandomStringUtils;
 
-@UtilityClass
-public class FakeObjectCreator {
+public final class FakeObjectCreator {
+
+    private FakeObjectCreator() {
+        // private constructor to prevent instantiation
+    }
 
     public static SQSMessagePayload createMessage() {
         return new SQSMessagePayload(

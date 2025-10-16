@@ -6,8 +6,8 @@ import com.learning.awspring.model.SQSMessagePayload;
 import io.awspring.cloud.sqs.operations.SendResult;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/sqs")
-@Slf4j
-@RequiredArgsConstructor
 public class SqsController {
 
+    private static final Logger log = LoggerFactory.getLogger(SqsController.class);
     private final SqsTemplate sqsTemplate;
+
+    public SqsController(SqsTemplate sqsTemplate) {
+        this.sqsTemplate = sqsTemplate;
+    }
 
     // HTTP POST url - http://localhost:8080/api/sqs/send
     @PostMapping("/send")

@@ -6,14 +6,16 @@ import io.awspring.cloud.sns.annotation.endpoint.NotificationUnsubscribeConfirma
 import io.awspring.cloud.sns.annotation.handlers.NotificationMessage;
 import io.awspring.cloud.sns.annotation.handlers.NotificationSubject;
 import io.awspring.cloud.sns.handlers.NotificationStatus;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@Slf4j
 @RequestMapping("/testTopic")
 public class NotificationMappingController {
+
+    private static final Logger log = LoggerFactory.getLogger(NotificationMappingController.class);
 
     private String subject;
 

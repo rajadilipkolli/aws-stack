@@ -1,18 +1,21 @@
 package com.example.awsspring.config;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.ses.SesClient;
 import software.amazon.awssdk.services.ses.model.VerifyEmailAddressRequest;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class Initializer implements CommandLineRunner {
+    private static final Logger log = LoggerFactory.getLogger(Initializer.class);
 
     private final SesClient sesClient;
+
+    public Initializer(SesClient sesClient) {
+        this.sesClient = sesClient;
+    }
 
     @Override
     public void run(String... args) {

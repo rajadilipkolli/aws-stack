@@ -16,8 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
 import org.testcontainers.containers.localstack.LocalStackContainer;
@@ -33,8 +34,9 @@ import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
-@Slf4j
 class SnsTopicIntegrationTest extends AbstractIntegrationTest {
+
+    private static final Logger log = LoggerFactory.getLogger(SnsTopicIntegrationTest.class);
 
     private static final String QUEUE_NAME = "my-test-queue";
 

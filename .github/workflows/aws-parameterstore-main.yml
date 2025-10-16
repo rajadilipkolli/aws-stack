@@ -20,7 +20,6 @@ jobs:
     strategy:
       matrix:
         distribution: [ 'temurin' ]
-        java: [ '21' ]
     defaults:
       run:
         working-directory: "./aws-parameterstore-project"
@@ -29,10 +28,10 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Setup Java ${{ matrix.java }}
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
-          java-version: ${{ matrix.java }}
+          java-version: 25
           distribution: ${{ matrix.distribution }}
           cache: 'maven'
   

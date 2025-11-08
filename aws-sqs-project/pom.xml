@@ -20,7 +20,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<java.version>21</java.version>
-		<commons-io.version>2.20.0</commons-io.version>
+		<commons-io.version>2.21.0</commons-io.version>
 		<spring-cloud-aws.version>3.4.0</spring-cloud-aws.version>
 		<org.mapstruct.version>1.6.3</org.mapstruct.version>
 		<spotless.version>3.0.0</spotless.version>

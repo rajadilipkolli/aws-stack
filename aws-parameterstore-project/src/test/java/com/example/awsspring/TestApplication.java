@@ -13,7 +13,7 @@ public class TestApplication {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> sqlContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:18.0-alpine"));
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:18.1-alpine"));
     }
 
     public static void main(String[] args) {

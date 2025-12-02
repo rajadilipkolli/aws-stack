@@ -17,7 +17,7 @@ services:
       - "9300:9300"
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:9.2.1
+    image: docker.elastic.co/logstash/logstash:9.2.2
     container_name: logstash
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:

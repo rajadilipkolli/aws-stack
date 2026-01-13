@@ -28,7 +28,7 @@ services:
       - elasticsearch
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:9.2.3
+    image: docker.elastic.co/kibana/kibana:9.2.4
     container_name: kibana
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200

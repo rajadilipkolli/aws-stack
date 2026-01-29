@@ -24,7 +24,7 @@
 		<spring-cloud-aws.version>3.4.2</spring-cloud-aws.version>
 		<org.mapstruct.version>1.6.3</org.mapstruct.version>
 		<spotless.version>3.2.1</spotless.version>
-		<springdoc-openapi.version>2.8.15</springdoc-openapi.version>
+		<springdoc-openapi.version>3.0.1</springdoc-openapi.version>
 
 		<project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
 		<maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>

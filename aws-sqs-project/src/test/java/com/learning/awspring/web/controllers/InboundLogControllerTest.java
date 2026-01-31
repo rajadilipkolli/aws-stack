@@ -132,7 +132,8 @@ class InboundLogControllerTest {
                                 .content(objectMapper.writeValueAsString(inboundLog)))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("Content-Type", is("application/problem+json")))
-                .andExpect(jsonPath("$.type", is("about:blank")))
+                .andExpect(
+                        jsonPath("$.type", is("http://api.aws-sqs-project.com/errors/validation")))
                 .andExpect(jsonPath("$.title", is("Constraint Violation")))
                 .andExpect(jsonPath("$.status", is(400)))
                 .andExpect(jsonPath("$.detail", is("Invalid request content.")))

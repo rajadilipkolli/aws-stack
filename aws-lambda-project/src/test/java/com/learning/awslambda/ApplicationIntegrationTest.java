@@ -72,7 +72,7 @@ class ApplicationIntegrationTest {
             .withNetwork(network)
             .withEnv("LOCALSTACK_HOST", "localhost.localstack.cloud")
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())
-            .withEnv("LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT", "30")
+            .withEnv("LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT", "60")
             .withEnv("LAMBDA_REMOVE_CONTAINERS", "false")
             .withEnv("LAMBDA_TRUNCATE_STDOUT", "2000")
             .withNetworkAliases("localstack")

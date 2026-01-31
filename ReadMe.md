@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/rajadileepkolli/aws-stack/branch/main/graph/badge.svg?token=V1TAITDKBK)](https://codecov.io/gh/rajadileepkolli/aws-stack) [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/rajadilipkolli/aws-stack)
+[![codecov](https://codecov.io/gh/rajadileepkolli/aws-stack/branch/main/graph/badge.svg?token=V1TAITDKBK)](https://codecov.io/gh/rajadileepkolli/aws-stack)
 
 
 ## Getting Started

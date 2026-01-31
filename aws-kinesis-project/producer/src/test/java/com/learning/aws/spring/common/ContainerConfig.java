@@ -1,12 +1,11 @@
 package com.learning.aws.spring.common;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.KINESIS;
-
 import java.time.Duration;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistrar;
-import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -23,29 +22,16 @@ import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 public class ContainerConfig {
 
     @Bean
+    @ServiceConnection
     LocalStackContainer localStackContainer() {
         return new LocalStackContainer(
-                DockerImageName.parse("localstack/localstack").withTag("4.10.0"));
-    }
-
-    @Bean
-    DynamicPropertyRegistrar dynamicPropertyRegistrar(LocalStackContainer localStackContainer) {
-        return dynamicPropertyRegistry -> {
-            dynamicPropertyRegistry.add(
-                    "spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
-            dynamicPropertyRegistry.add(
-                    "spring.cloud.aws.region.static", localStackContainer::getRegion);
-            dynamicPropertyRegistry.add(
-                    "spring.cloud.aws.access-key", localStackContainer::getAccessKey);
-            dynamicPropertyRegistry.add(
-                    "spring.cloud.aws.secret-key", localStackContainer::getSecretKey);
-        };
+                DockerImageName.parse("localstack/localstack").withTag("4.13.0"));
     }
 
     @Bean
     KinesisAsyncClient amazonKinesis(LocalStackContainer localStackContainer) {
         return KinesisAsyncClient.builder()
-                .endpointOverride(localStackContainer.getEndpointOverride(KINESIS))
+                .endpointOverride(localStackContainer.getEndpoint())
                 .region(Region.of(localStackContainer.getRegion()))
                 .credentialsProvider(
                         StaticCredentialsProvider.create(
@@ -58,5 +44,17 @@ public class ContainerConfig {
                                 .retryPolicy(RetryPolicy.builder().numRetries(3).build())
                                 .build())
                 .build();
+    }
+
+    @Bean
+    DynamicPropertyRegistrar dynamicPropertyRegistrar(LocalStackContainer localStackContainer) {
+        return registry -> {
+            registry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
+            registry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);
+            registry.add(
+                    "spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
+            registry.add(
+                    "spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
+        };
     }
 }

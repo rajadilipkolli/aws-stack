@@ -1,7 +1,5 @@
 package com.learning.aws.spring.common;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.DYNAMODB;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -10,7 +8,7 @@ import java.util.function.Consumer;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
-import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.localstack.LocalStackContainer;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
@@ -25,7 +23,7 @@ public class ConsumerConfig {
     @Bean
     DynamoDbAsyncClient dynamoDbAsyncClient(LocalStackContainer localStackContainer) {
         return DynamoDbAsyncClient.builder()
-                .endpointOverride(localStackContainer.getEndpointOverride(DYNAMODB))
+                .endpointOverride(localStackContainer.getEndpoint())
                 .region(Region.of(localStackContainer.getRegion()))
                 .credentialsProvider(
                         StaticCredentialsProvider.create(

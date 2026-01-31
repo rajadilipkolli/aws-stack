@@ -2,10 +2,10 @@ package com.example.awsspring.common;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
@@ -15,7 +15,7 @@ public class LocalStackContainerConfig {
     @Container
     private static final LocalStackContainer localStackContainer =
             new LocalStackContainer(
-                            DockerImageName.parse("localstack/localstack").withTag("4.10.0"))
+                            DockerImageName.parse("localstack/localstack").withTag("4.13.0"))
                     .withCopyFileToContainer(
                             MountableFile.forHostPath("localstack/"),
                             "/etc/localstack/init/ready.d/")

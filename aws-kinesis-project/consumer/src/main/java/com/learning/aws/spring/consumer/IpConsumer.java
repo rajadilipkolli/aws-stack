@@ -1,6 +1,5 @@
 package com.learning.aws.spring.consumer;
 
-import com.amazonaws.util.BinaryUtils;
 import com.learning.aws.spring.config.ApplicationProperties;
 import com.learning.aws.spring.entities.IpAddressEvent;
 import com.learning.aws.spring.model.IpAddressDTO;
@@ -15,6 +14,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.retry.Retry;
+import software.amazon.awssdk.utils.BinaryUtils;
 import software.amazon.kinesis.retrieval.KinesisClientRecord;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;

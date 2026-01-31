@@ -3,8 +3,7 @@ package com.learning.aws.spring;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.amazonaws.util.BinaryUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import tools.jackson.core.type.TypeReference;
 import com.learning.aws.spring.common.AbstractIntegrationTest;
 import com.learning.aws.spring.model.IpAddressDTO;
 import java.time.Instant;
@@ -15,11 +14,12 @@ import org.springframework.integration.aws.support.AwsHeaders;
 import org.springframework.messaging.Message;
 import software.amazon.awssdk.services.kinesis.model.Record;
 import software.amazon.kinesis.retrieval.KinesisClientRecord;
+import tools.jackson.core.JacksonException;
 
 class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
-    void contextLoads() throws InterruptedException, JsonProcessingException {
+    void contextLoads() throws InterruptedException, JacksonException {
 
         assertThat(this.messageBarrier.await(30, TimeUnit.SECONDS)).isTrue();
 

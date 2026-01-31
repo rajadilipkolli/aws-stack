@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import com.learning.awssns.common.AbstractIntegrationTest;
 import io.awspring.cloud.sns.core.SnsTemplate;
 import io.awspring.cloud.sns.sms.SmsMessageAttributes;
@@ -21,9 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
-import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.output.OutputFrame;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.localstack.LocalStackContainer;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
 import software.amazon.awssdk.services.sns.model.SubscribeRequest;
@@ -94,9 +94,9 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
                     List<Message> messages = response.messages();
                     assertThat(messages).isNotEmpty();
                     JsonNode body = objectMapper.readTree(messages.getFirst().body());
-                    assertThat(body.get("Message").asText()).isEqualTo("Spring Cloud AWS SNS Sample!");
+                    assertThat(body.get("Message").asString()).isEqualTo("Spring Cloud AWS SNS Sample!");
                     if (body.has("Subject")) {
-                        assertThat(body.get("Subject").asText()).isEqualTo("Junit Header!");
+                        assertThat(body.get("Subject").asString()).isEqualTo("Junit Header!");
                     }
                 });
     }
@@ -123,7 +123,7 @@ class SnsTopicIntegrationTest extends AbstractIntegrationTest {
                     sqsAsyncClient.receiveMessage(r -> r.queueUrl(queueURL)).get();
             assertThat(response.hasMessages()).isTrue();
             JsonNode body = objectMapper.readTree(response.messages().getFirst().body());
-            assertThat(body.get("Message").asText()).isEqualTo("Spring Cloud AWS SNS Sample!");
+            assertThat(body.get("Message").asString()).isEqualTo("Spring Cloud AWS SNS Sample!");
         });
     }
 

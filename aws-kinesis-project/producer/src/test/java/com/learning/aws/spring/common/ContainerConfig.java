@@ -1,12 +1,12 @@
 package com.learning.aws.spring.common;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.KINESIS;
+import static org.testcontainers.localstack.LocalStackContainer.Service.KINESIS;
 
 import java.time.Duration;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistrar;
-import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -25,7 +25,7 @@ public class ContainerConfig {
     @Bean
     LocalStackContainer localStackContainer() {
         return new LocalStackContainer(
-                DockerImageName.parse("localstack/localstack").withTag("4.10.0"));
+                DockerImageName.parse("localstack/localstack").withTag("4.13.0"));
     }
 
     @Bean

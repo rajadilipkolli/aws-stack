@@ -22,11 +22,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.Network;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.localstack.LocalStackContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.ResourceReaper;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -57,14 +57,14 @@ class ApplicationIntegrationTest {
     static Network network = Network.newNetwork();
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18.1-alpine")
+    static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.1-alpine")
             .withNetwork(network)
             .withNetworkAliases("postgres")
             .withReuse(true);
 
     @Container
     static LocalStackContainer localstack = new LocalStackContainer(
-                    DockerImageName.parse("localstack/localstack").withTag("4.10.0"))
+                    DockerImageName.parse("localstack/localstack").withTag("4.13.0"))
             .withNetwork(network)
             .withEnv("LOCALSTACK_HOST", "localhost.localstack.cloud")
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())

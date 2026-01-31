@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import tools.jackson.databind.JsonNode;
 import com.learning.awssns.common.AbstractIntegrationTest;
 import io.awspring.cloud.sns.core.SnsTemplate;
 import io.awspring.cloud.sns.sms.SmsMessageAttributes;
@@ -33,6 +32,7 @@ import software.amazon.awssdk.services.sqs.model.CreateQueueResponse;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
+import tools.jackson.databind.JsonNode;
 
 class SnsTopicIntegrationTest extends AbstractIntegrationTest {
 

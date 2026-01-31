@@ -1,7 +1,7 @@
 package com.learning.awspring.utils;
 
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 public final class MessageDeserializationUtil {
 

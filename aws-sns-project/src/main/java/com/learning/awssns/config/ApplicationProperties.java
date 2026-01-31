@@ -1,6 +1,5 @@
 package com.learning.awssns.config;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -18,7 +17,6 @@ public class ApplicationProperties {
         this.cors = cors;
     }
 
-    @Data
     public static class Cors {
         private String pathPattern = "/api/**";
         private String allowedMethods = "*";

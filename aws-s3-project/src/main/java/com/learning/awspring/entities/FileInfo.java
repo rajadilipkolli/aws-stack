@@ -20,14 +20,15 @@ public class FileInfo {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(length = 64)
+    @Column(length = 64, nullable = false)
     private String fileName;
 
-    @Column(length = 328)
+    @Column(length = 328, nullable = false)
     private String fileUrl;
 
     private boolean isUploadSuccessFull;
 
+    @Column(nullable = false)
     private Long fileSize;
 
     private String contentType;

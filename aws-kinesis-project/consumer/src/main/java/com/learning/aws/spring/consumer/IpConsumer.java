@@ -1,9 +1,5 @@
 package com.learning.aws.spring.consumer;
 
-import com.amazonaws.util.BinaryUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.aws.spring.config.ApplicationProperties;
 import com.learning.aws.spring.entities.IpAddressEvent;
 import com.learning.aws.spring.model.IpAddressDTO;
@@ -18,7 +14,11 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.retry.Retry;
+import software.amazon.awssdk.utils.BinaryUtils;
 import software.amazon.kinesis.retrieval.KinesisClientRecord;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class IpConsumer {
@@ -56,7 +56,7 @@ public class IpConsumer {
                                 List<IpAddressDTO> ipAddressDTOS =
                                         objectMapper.readValue(payload, new TypeReference<>() {});
                                 return Flux.fromIterable(ipAddressDTOS);
-                            } catch (JsonProcessingException e) {
+                            } catch (JacksonException e) {
                                 return Flux.error(e);
                             }
                         })

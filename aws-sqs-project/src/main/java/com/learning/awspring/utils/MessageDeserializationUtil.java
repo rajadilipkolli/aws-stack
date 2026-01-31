@@ -1,7 +1,7 @@
 package com.learning.awspring.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 public final class MessageDeserializationUtil {
 
@@ -14,7 +14,7 @@ public final class MessageDeserializationUtil {
     public static String getMessageBodyAsJson(Object payload) {
         try {
             return OBJECT_MAPPER.writeValueAsString(payload);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new IllegalArgumentException("Error converting payload: " + payload, e);
         }
     }

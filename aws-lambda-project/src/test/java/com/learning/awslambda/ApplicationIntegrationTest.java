@@ -22,16 +22,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.Network;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.localstack.LocalStackContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.ResourceReaper;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.core.waiters.WaiterResponse;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.lambda.LambdaClient;
@@ -46,6 +47,9 @@ import software.amazon.awssdk.services.lambda.model.GetFunctionConfigurationRequ
 import software.amazon.awssdk.services.lambda.model.GetFunctionConfigurationResponse;
 import software.amazon.awssdk.services.lambda.model.PackageType;
 import software.amazon.awssdk.services.lambda.model.Runtime;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Testcontainers(parallel = true)
 class ApplicationIntegrationTest {
@@ -57,18 +61,20 @@ class ApplicationIntegrationTest {
     static Network network = Network.newNetwork();
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18.1-alpine")
+    static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.1-alpine")
             .withNetwork(network)
             .withNetworkAliases("postgres")
             .withReuse(true);
 
     @Container
     static LocalStackContainer localstack = new LocalStackContainer(
-                    DockerImageName.parse("localstack/localstack").withTag("4.10.0"))
+                    DockerImageName.parse("localstack/localstack").withTag("4.13.0"))
             .withNetwork(network)
             .withEnv("LOCALSTACK_HOST", "localhost.localstack.cloud")
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())
-            .withEnv("LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT", "30")
+            .withEnv("LAMBDA_RUNTIME_ENVIRONMENT_TIMEOUT", "60")
+            .withEnv("LAMBDA_REMOVE_CONTAINERS", "false")
+            .withEnv("LAMBDA_TRUNCATE_STDOUT", "2000")
             .withNetworkAliases("localstack")
             .withEnv("LAMBDA_DOCKER_FLAGS", testContainersLabels())
             .withReuse(true);
@@ -94,25 +100,70 @@ class ApplicationIntegrationTest {
                 Map.entry("SPRING_DATASOURCE_URL", "jdbc:postgresql://postgres:5432/test"),
                 Map.entry("SPRING_DATASOURCE_USERNAME", postgres.getUsername()),
                 Map.entry("SPRING_DATASOURCE_PASSWORD", postgres.getPassword()));
-        CreateFunctionRequest createFunctionRequest = CreateFunctionRequest.builder()
-                .functionName(fnName)
-                .runtime(Runtime.JAVA21)
-                .role("arn:aws:iam::123456789012:role/irrelevant")
-                .packageType(PackageType.ZIP)
-                .code(FunctionCode.builder()
-                        .zipFile(SdkBytes.fromByteArray(FileUtils.readFileToByteArray(new File(jar))))
-                        .build())
-                .timeout(10)
-                .handler("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest")
-                .environment(Environment.builder().variables(envVars).build())
-                .description("Spring Cloud Function AWS Adapter Example")
-                .build();
+
+        File jarFile = new File(jar);
+        long jarSizeInMB = jarFile.length() / (1024 * 1024);
+        LOGGER.info("JAR file size: {} MB", jarSizeInMB);
 
         LambdaClient lambdaClient = LambdaClient.builder()
                 .region(Region.of(localstack.getRegion()))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(localstack.getAccessKey(), localstack.getSecretKey())))
                 .endpointOverride(localstack.getEndpoint())
+                .build();
+
+        FunctionCode functionCode;
+
+        // If JAR is larger than 50MB, use S3 upload; otherwise use direct ZIP upload
+        if (jarSizeInMB > 50) {
+            LOGGER.info("JAR size exceeds 50MB, using S3 upload");
+
+            // Create S3 client
+            S3Client s3Client = S3Client.builder()
+                    .region(Region.of(localstack.getRegion()))
+                    .credentialsProvider(StaticCredentialsProvider.create(
+                            AwsBasicCredentials.create(localstack.getAccessKey(), localstack.getSecretKey())))
+                    .endpointOverride(localstack.getEndpoint())
+                    .build();
+
+            // Create bucket
+            String bucketName = "lambda-deployment-bucket";
+            String key = "lambda-functions/" + fnName + ".jar";
+
+            try {
+                s3Client.createBucket(
+                        CreateBucketRequest.builder().bucket(bucketName).build());
+                LOGGER.info("Created S3 bucket: {}", bucketName);
+            } catch (Exception e) {
+                LOGGER.info("Bucket might already exist: {}", e.getMessage());
+            }
+
+            // Upload JAR to S3
+            s3Client.putObject(
+                    PutObjectRequest.builder().bucket(bucketName).key(key).build(), RequestBody.fromFile(jarFile));
+
+            LOGGER.info("Uploaded JAR to S3: s3://{}/{}", bucketName, key);
+
+            functionCode =
+                    FunctionCode.builder().s3Bucket(bucketName).s3Key(key).build();
+        } else {
+            LOGGER.info("Using direct ZIP upload");
+            functionCode = FunctionCode.builder()
+                    .zipFile(SdkBytes.fromByteArray(FileUtils.readFileToByteArray(jarFile)))
+                    .build();
+        }
+
+        CreateFunctionRequest createFunctionRequest = CreateFunctionRequest.builder()
+                .functionName(fnName)
+                .runtime(Runtime.JAVA25)
+                .role("arn:aws:iam::123456789012:role/irrelevant")
+                .packageType(PackageType.ZIP)
+                .code(functionCode)
+                .timeout(30)
+                .memorySize(512)
+                .handler("org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest")
+                .environment(Environment.builder().variables(envVars).build())
+                .description("Spring Cloud Function AWS Adapter Example")
                 .build();
 
         CreateFunctionResponse createFunctionResponse = lambdaClient.createFunction(createFunctionRequest);

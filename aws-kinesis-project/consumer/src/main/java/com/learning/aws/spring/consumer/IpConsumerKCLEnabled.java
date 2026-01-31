@@ -13,8 +13,7 @@ import software.amazon.kinesis.retrieval.KinesisClientRecord;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(
         value = "spring.cloud.stream.kinesis.binder.kpl-kcl-enabled",
-        havingValue = "true",
-        matchIfMissing = false)
+        havingValue = "true")
 public class IpConsumerKCLEnabled {
 
     private static final Logger log = LoggerFactory.getLogger(IpConsumerKCLEnabled.class);

@@ -5,18 +5,16 @@ import static org.awaitility.Awaitility.await;
 
 import com.learning.aws.spring.common.AbstractIntegrationTest;
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 class ApplicationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
-    void contextLoads() throws InterruptedException {
-        // awaiting consumer to start processing
-        TimeUnit.SECONDS.sleep(3);
+    void contextLoads() {
         Long initialCount = ipAddressEventRepository.count().block();
         await().atMost(Duration.ofSeconds(30))
-                .pollDelay(Duration.ofSeconds(1))
+                .pollInterval(Duration.ofMillis(200))
+                .pollDelay(Duration.ofSeconds(3))
                 .untilAsserted(
                         () ->
                                 assertThat(ipAddressEventRepository.count().block() + initialCount)

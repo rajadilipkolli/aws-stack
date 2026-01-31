@@ -4,6 +4,7 @@ import java.time.Duration;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -43,5 +44,17 @@ public class ContainerConfig {
                                 .retryPolicy(RetryPolicy.builder().numRetries(3).build())
                                 .build())
                 .build();
+    }
+
+    @Bean
+    DynamicPropertyRegistrar dynamicPropertyRegistrar(LocalStackContainer localStackContainer) {
+        return registry -> {
+            registry.add("spring.cloud.aws.endpoint", localStackContainer::getEndpoint);
+            registry.add("spring.cloud.aws.region.static", localStackContainer::getRegion);
+            registry.add(
+                    "spring.cloud.aws.credentials.access-key", localStackContainer::getAccessKey);
+            registry.add(
+                    "spring.cloud.aws.credentials.secret-key", localStackContainer::getSecretKey);
+        };
     }
 }

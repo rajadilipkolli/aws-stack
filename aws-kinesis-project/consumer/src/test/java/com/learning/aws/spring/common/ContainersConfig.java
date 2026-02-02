@@ -15,7 +15,7 @@ public class ContainersConfig {
     @ServiceConnection
     LocalStackContainer localStackContainer() {
         return new LocalStackContainer(
-                DockerImageName.parse("localstack/localstack").withTag("4.13.0"));
+                DockerImageName.parse("localstack/localstack").withTag("4.13.1"));
     }
 
     @Bean

@@ -16,7 +16,7 @@ services:
       retries: 5
 
   localstack:
-    image: localstack/localstack:4.13.1
+    image: localstack/localstack:4.14.0
     environment:
       - AWS_DEFAULT_REGION=us-east-1
       - EDGE_PORT=4566

@@ -61,7 +61,7 @@ class ApplicationIntegrationTest {
     static Network network = Network.newNetwork();
 
     @Container
-    static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.1-alpine")
+    static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.3-alpine")
             .withNetwork(network)
             .withNetworkAliases("postgres")
             .withReuse(true);

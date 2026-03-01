@@ -68,7 +68,7 @@ class ApplicationIntegrationTest {
 
     @Container
     static LocalStackContainer localstack = new LocalStackContainer(
-                    DockerImageName.parse("localstack/localstack").withTag("4.13.1"))
+                    DockerImageName.parse("localstack/localstack").withTag("4.14.0"))
             .withNetwork(network)
             .withEnv("LOCALSTACK_HOST", "localhost.localstack.cloud")
             .withEnv("LAMBDA_DOCKER_NETWORK", ((Network.NetworkImpl) network).getName())

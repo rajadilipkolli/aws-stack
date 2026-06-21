@@ -32,6 +32,6 @@ class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(@NonNull List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(getNotificationHandlerMethodArgumentResolver(snsClient));
+        argumentResolvers.add(getNotificationHandlerMethodArgumentResolver(snsClient, null));
     }
 }

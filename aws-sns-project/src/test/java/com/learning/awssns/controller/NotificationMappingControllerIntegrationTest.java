@@ -56,7 +56,11 @@ class NotificationMappingControllerIntegrationTest extends AbstractIntegrationTe
                         .header("x-amz-sns-message-type", "Notification")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithoutSubjectAndMessage))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isNoContent());
+
+        // Assert
+        assertThat(this.controller.getMessage()).isEmpty();
+        assertThat(this.controller.getSubject()).isEmpty();
     }
 
     @Test

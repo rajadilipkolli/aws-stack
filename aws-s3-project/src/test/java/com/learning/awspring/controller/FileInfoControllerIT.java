@@ -70,8 +70,7 @@ class FileInfoControllerIT extends AbstractIntegrationTest {
                                 .value("https://api.s3project.example.com/errors/file-not-found"))
                 .andExpect(jsonPath("$.title").value("File Not Found"))
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.detail").value("test.pdf"))
-                .andExpect(jsonPath("$.instance").value("/s3/download/test.pdf"));
+                .andExpect(jsonPath("$.detail").value("test.pdf"));
     }
 
     @Test

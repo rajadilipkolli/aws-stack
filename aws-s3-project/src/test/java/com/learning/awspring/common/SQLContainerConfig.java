@@ -14,7 +14,7 @@ public class SQLContainerConfig {
     @ServiceConnection
     @RestartScope
     PostgreSQLContainer postgresContainer() {
-        return new PostgreSQLContainer(DockerImageName.parse("postgres:18.3-alpine"))
+        return new PostgreSQLContainer(DockerImageName.parse("postgres:19.0-alpine"))
                 .withReuse(true);
     }
 }

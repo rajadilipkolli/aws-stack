@@ -9,5 +9,5 @@ public interface DBTestContainer {
 
     @Container @ServiceConnection
     PostgreSQLContainer sqlContainer =
-            new PostgreSQLContainer(DockerImageName.parse("postgres").withTag("18.3-alpine"));
+            new PostgreSQLContainer(DockerImageName.parse("postgres").withTag("19.0-alpine"));
 }

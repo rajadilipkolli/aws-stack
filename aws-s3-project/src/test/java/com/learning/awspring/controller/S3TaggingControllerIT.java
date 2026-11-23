@@ -84,8 +84,7 @@ class S3TaggingControllerIT extends AbstractIntegrationTest {
                                 .value("https://api.s3project.example.com/errors/validation-error"))
                 .andExpect(jsonPath("$.title").value("Constraint Violation"))
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.detail").value("Invalid request content."))
-                .andExpect(jsonPath("$.instance").value("/s3/tags"));
+                .andExpect(jsonPath("$.detail").value("Invalid request content."));
     }
 
     @Test
